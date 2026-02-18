@@ -1,7 +1,4 @@
-stages:
-  - lint
-  - test
-  - build
+stages: [lint, test, build]
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -16,9 +13,6 @@ cache:
     - python -V
     - python -m pip install --upgrade pip
 
-# -----------------------
-# Lint (ruff)
-# -----------------------
 lint:
   stage: lint
   image: python:3.14
@@ -26,12 +20,7 @@ lint:
   script:
     - pip install ruff
     - ruff check .
-  rules:
-    - if: $CI_PIPELINE_SOURCE
 
-# -----------------------
-# Tests (pytest) - matrix for Python >= 3.9
-# -----------------------
 test:py39:
   stage: test
   image: python:3.9
@@ -97,7 +86,6 @@ test:py313:
     reports:
       junit: junit.xml
 
-
 test:py314:
   stage: test
   image: python:3.14
@@ -110,9 +98,7 @@ test:py314:
     when: always
     reports:
       junit: junit.xml
-# -----------------------
-# Build wheel + sdist
-# -----------------------
+
 build:
   stage: build
   image: python:3.14
