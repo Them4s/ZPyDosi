@@ -25,5 +25,8 @@ license = "MIT"
 license-files = ["LICEN[CS]E*"]
 
 [project.urls]
-Homepage = "https://github.com/pypa/sampleproject"
-Issues = "https://github.com/pypa/sampleproject/issues"
+Homepage = "https://gitlab.epfl.ch/zero-power-dosimetry/zpydosi"
+Issues = "https://gitlab.epfl.ch/zero-power-dosimetry/zpydosi/issues"
+
+[tool.ruff.lint]
+ignore = ["E701"]
