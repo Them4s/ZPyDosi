@@ -29,4 +29,4 @@ Homepage = "https://gitlab.epfl.ch/zero-power-dosimetry/zpydosi"
 Issues = "https://gitlab.epfl.ch/zero-power-dosimetry/zpydosi/issues"
 
 [tool.ruff.lint]
-ignore = ["E701"]
+ignore = ["E701","E741"]
