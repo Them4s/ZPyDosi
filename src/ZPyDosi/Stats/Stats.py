@@ -3,7 +3,7 @@
 import numpy as np
 from numpy.random import rand
 import time
-
+from ..Prints.PrintnSave import aff_decription_s_v_cov
 def imoyvar_list(l_v, l_w = None):
     """
     Compute the weighted mean and standard deviation of a list of values.
