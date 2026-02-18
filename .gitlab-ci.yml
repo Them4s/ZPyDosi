@@ -65,9 +65,7 @@ test:
     reports:
       junit: junit.xml
   after_script:
-    # Create junit report if your pytest.ini doesn't already
-    # If you already generate junit.xml elsewhere, you can remove this.
-    - echo "If you want JUnit XML: run pytest --junitxml=junit.xml"
+    - echo "done"
 
 # -----------------------
 # Build distributions
