@@ -1,6 +1,7 @@
-from ..Common.utils_general import *
-from ..Stats.Stats import *
+from ..Common.utils_general import lmap
+from ..Stats.Stats import cor_sig_to_cov
 import numpy as np
+import os
 class EfficiencyCalibrationG2K:
     ''' Class to compute and store efficiency calibration of the Genie-2000 software'''
     def __init__(self, key):

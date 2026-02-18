@@ -1,7 +1,8 @@
 ############################################################################################################
 ############################################################################################## variance & co
-from ..Common.utils_general import *
 import numpy as np
+from numpy.random import rand
+import time
 
 def imoyvar_list(l_v, l_w = None):
     """

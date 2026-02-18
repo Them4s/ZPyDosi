@@ -1,4 +1,4 @@
-from ..Common.utils_general import *
+import os
 import numpy as np
 def get_irdff_iaea(path, e_min=None):
     """

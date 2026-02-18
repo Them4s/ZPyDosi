@@ -1,4 +1,4 @@
-from ..Common.utils_general import *
+from ..Common.utils_general import get_aff_size
 import numpy as np
 variable_cachee_pas_bien = 0
 def my_sub6(fig,i,j,p, mg=0.2,md=0.05, mb=0.15, mh=0.05, 

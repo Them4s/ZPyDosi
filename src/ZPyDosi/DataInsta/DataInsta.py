@@ -1,7 +1,6 @@
-from ..Common.utils_general import *
-from ..Common.CsvSeeker import *
-from ..Prints.PrintnSave import *
-import numpy as np
+from ..Common.utils_general import lmap, formule2val
+from ..Common.CsvSeeker import CsvSeeker
+from ..Prints.PrintnSave import aff_list
 class DataInsta:
     """
     Container for instrumentation and geometry data loaded from CSV files.

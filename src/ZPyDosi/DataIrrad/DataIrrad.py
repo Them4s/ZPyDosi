@@ -1,13 +1,19 @@
-from ..Common.utils_general import *
-from ..Common.CsvSeeker import *
-from ..Common.ExcelSheet import *
-from ..EfficiencyCalibration.EfficiencyCalibration import *
-from ..Serpent2_utils.sss2_utils import *
-from ..XSnFlux.Aggregate import *
-from ..Prints.PrintnSave import *
-from ..DosiFunctions.Dictionaries import *
-from ..DosiFunctions.Functions import *
+from ..Common.utils_general import lmap, formule2val, time2str
+from ..Common.CsvSeeker import CsvSeeker
+from ..Common.ExcelSheet import ExcelSheet
+from ..Stats.Stats import cor_sig_to_cov
+from ..EfficiencyCalibration.EfficiencyCalibration import EfficiencyCalibration
+from ..Serpent2_utils.sss2_utils import get_sss_res
+from ..Prints.PrintnSave import aff, load_dict_from_file, aff_list, aff_decription_s_v_cov
+from ..DosiFunctions.Dictionaries import d_spectro, d_mt2name
+from ..DosiFunctions.Functions import get_at_density, mass_rad_mat_2_ep
 import numpy as np
+import datetime
+from os.path import expanduser
+from scipy.optimize import curve_fit
+import hashlib
+import os 
+import sys
 class DataIrrad:
     '''
     Container for the iradiation data from a csv/xlsx file prior

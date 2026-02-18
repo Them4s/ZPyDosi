@@ -1,6 +1,7 @@
 ###########################################################################################################
 ############################################################################################ get param input
-from .utils_general import *
+from .utils_general import convtype
+import sys
 import numpy as np
 def_forbiden = "hfispdg"
 def _get_param(nom, defaut=def_forbiden):

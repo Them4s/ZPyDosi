@@ -1,6 +1,10 @@
-from ..Prints.PrintnSave import *
-from .Dictionaries import *
+from ..Prints.PrintnSave import aff
+from ..Common.utils_general import lmap, path_xsdata
+from .Dictionaries import d_matdosi_2_data
 import numpy as np
+from math import pi
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 d_iso2mass = None
 mode_irdff_only = False
 
