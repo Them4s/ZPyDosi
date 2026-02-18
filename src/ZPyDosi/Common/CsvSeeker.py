@@ -1,6 +1,7 @@
 # All CSV related Class and function
 from ..Common.ExcelSheet import *
 from ..Common.utils_general import *
+import numpy as np
 
 class CsvSeeker: 
     '''

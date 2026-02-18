@@ -1,5 +1,5 @@
 from ..Common.utils_general import *
-
+import numpy as np
 variable_cachee_pas_bien = 0
 def my_sub6(fig,i,j,p, mg=0.2,md=0.05, mb=0.15, mh=0.05, 
         list_rx=[0.5,0.25,0.25], list_ry=[0.5,0.25,0.25],

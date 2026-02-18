@@ -1,6 +1,6 @@
 from ..Common.utils_general import *
 from ..Stats.Stats import *
-
+import numpy as np
 class EfficiencyCalibrationG2K:
     ''' Class to compute and store efficiency calibration of the Genie-2000 software'''
     def __init__(self, key):

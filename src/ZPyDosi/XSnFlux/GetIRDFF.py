@@ -1,4 +1,5 @@
 from ..Common.utils_general import *
+import numpy as np
 def get_irdff_iaea(path, e_min=None):
     """
     Load IRDFF/IAEA cross-section data and correlation information from files.

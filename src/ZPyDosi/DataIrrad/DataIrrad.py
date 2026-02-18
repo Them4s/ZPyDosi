@@ -7,7 +7,7 @@ from ..XSnFlux.Aggregate import *
 from ..Prints.PrintnSave import *
 from ..DosiFunctions.Dictionaries import *
 from ..DosiFunctions.Functions import *
-
+import numpy as np
 class DataIrrad:
     '''
     Container for the iradiation data from a csv/xlsx file prior

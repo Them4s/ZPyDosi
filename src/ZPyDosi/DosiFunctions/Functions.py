@@ -1,5 +1,6 @@
 from ..Prints.PrintnSave import *
 from .Dictionaries import *
+import numpy as np
 d_iso2mass = None
 mode_irdff_only = False
 

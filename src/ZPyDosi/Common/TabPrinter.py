@@ -1,5 +1,6 @@
 from ..Common.utils_general import *
 from ..Prints.PrintnSave import *
+import numpy as np
 class TabPrinter:
     """
     Utility class for building and formatting tabular text output.

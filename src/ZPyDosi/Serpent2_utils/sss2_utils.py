@@ -1,4 +1,5 @@
 from ..Common.utils_general import *
+import numpy as np
 def get_sss_res(path, key):   #key : get_res
     """
     Extract a result value (and uncertainty, if available) from an Serpent2 result file.

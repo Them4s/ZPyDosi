@@ -1,4 +1,5 @@
 from ..Common.utils_general import *
+import numpy as np
 # https://www-nds.iaea.org/IRDFFtest/IRDFF_v1-05.pdf -> IRDFF covar
 # p722 https://books.google.ch/books?id=oa8gh4wA1nUC&pg=PA722&lpg=PA722&dq=48Ti+neutron+dosimeter+efficiency&source=bl&ots=73JeIhUCu_&sig=AsZkFv0EMwsZU9Ka_M9PSGvrEII&hl=fr&sa=X&ved=2ahUKEwi1ueDDqdvdAhUCCuwKHUPbDmYQ6AEwBHoECAUQAQ#v=onepage&q=48Ti%20neutron%20dosimeter%20efficiency&f=false
 # https://nucleonica.com/Application/ReducedDecaySchemes/Na24_TXT.htm

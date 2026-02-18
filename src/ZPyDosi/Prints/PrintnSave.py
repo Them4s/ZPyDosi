@@ -1,6 +1,6 @@
 # from ..Common.utils_general import *
 from ..Stats.Stats import *
-
+import numpy as np
 def aff(v, l=10, rev=False):
     """
     Format a value as a fixed-width string.
