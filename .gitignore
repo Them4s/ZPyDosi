@@ -13,4 +13,3 @@ htmlcov/
 .idea/
 .vscode/
 .DS_Store
-tests/
