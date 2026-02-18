@@ -3,85 +3,123 @@ stages:
   - test
   - build
 
-# Pick the Python versions you care about (you can add/remove).
-# If you only want one, delete the others.
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  VENV_DIR: ".venv"
   PYTHONUNBUFFERED: "1"
 
 cache:
-  key: "$CI_JOB_NAME"
   paths:
     - .cache/pip
-    - .venv
 
-.default_python_job:
-  image: python:3.14
+.default_job:
   before_script:
     - python -V
-    - python -m venv "$VENV_DIR"
-    - . "$VENV_DIR/bin/activate"
-    - python -m pip install --upgrade pip wheel setuptools
-    # If you keep dev deps in requirements-dev.txt, this will use it.
-    # Otherwise it will just install your package and test tools below.
-    - |
-      if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - |
-      if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-    # Install your package (editable is nice for tests)
-    - pip install -e .
-  interruptible: true
+    - python -m pip install --upgrade pip
 
 # -----------------------
-# Lint (optional)
+# Lint (ruff)
 # -----------------------
 lint:
   stage: lint
-  extends: .default_python_job
+  image: python:3.14
+  extends: .default_job
   script:
-    - . "$VENV_DIR/bin/activate"
-    # Install linters if not in requirements-dev.txt
-    - pip show ruff >/dev/null 2>&1 || pip install ruff
-    - ruff --version
+    - pip install ruff
     - ruff check .
   rules:
     - if: $CI_PIPELINE_SOURCE
 
 # -----------------------
-# Tests (pytest)
+# Tests (pytest) - matrix for Python >= 3.9
 # -----------------------
-test:
+test:py39:
   stage: test
-  extends: .default_python_job
+  image: python:3.9
+  extends: .default_job
   script:
-    - . "$VENV_DIR/bin/activate"
-    # Install pytest if not in requirements-dev.txt
-    - pip show pytest >/dev/null 2>&1 || pip install pytest
-    - pytest -q
+    - pip install -e .
+    - pip install pytest
+    - pytest -q --junitxml=junit.xml
   artifacts:
     when: always
-    expire_in: 7 days
     reports:
       junit: junit.xml
-  after_script:
-    - echo "done"
 
+test:py310:
+  stage: test
+  image: python:3.10
+  extends: .default_job
+  script:
+    - pip install -e .
+    - pip install pytest
+    - pytest -q --junitxml=junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
+
+test:py311:
+  stage: test
+  image: python:3.11
+  extends: .default_job
+  script:
+    - pip install -e .
+    - pip install pytest
+    - pytest -q --junitxml=junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
+
+test:py312:
+  stage: test
+  image: python:3.12
+  extends: .default_job
+  script:
+    - pip install -e .
+    - pip install pytest
+    - pytest -q --junitxml=junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
+
+test:py313:
+  stage: test
+  image: python:3.13
+  extends: .default_job
+  script:
+    - pip install -e .
+    - pip install pytest
+    - pytest -q --junitxml=junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
+
+
+test:py314:
+  stage: test
+  image: python:3.14
+  extends: .default_job
+  script:
+    - pip install -e .
+    - pip install pytest
+    - pytest -q --junitxml=junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
 # -----------------------
-# Build distributions
+# Build wheel + sdist
 # -----------------------
 build:
   stage: build
-  extends: .default_python_job
+  image: python:3.14
+  extends: .default_job
   script:
-    - . "$VENV_DIR/bin/activate"
-    - pip show build >/dev/null 2>&1 || pip install build
+    - pip install build
     - python -m build
   artifacts:
-    expire_in: 14 days
     paths:
       - dist/*
-  rules:
-    # Build on main and on tags
-    - if: '$CI_COMMIT_BRANCH == "main"'
-    - if: '$CI_COMMIT_TAG'
