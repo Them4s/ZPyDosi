@@ -1,5 +1,5 @@
 import numpy as np
-def aggregate_spectrum(arr, G):
+def aggregate_spectrum(arr:np.ndarray, G):
     """
     Aggregates a 2D array by summing over bins of size 2^G along the columns.
 
