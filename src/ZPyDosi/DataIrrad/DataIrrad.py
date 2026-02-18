@@ -1019,6 +1019,8 @@ class DataIrrad:
                 self.ll_fv    = []
                 self.ll_fs    = []
                 for idosi in range(self.nb_dosi):
+                    def get_sss_out_det(a,b) #dummy
+                    return a,b
                     l_fv_tmp, l_fs_tmp = get_sss_out_det(self.l_path_case[idosi]+"_det0.m", "dos_"+self.l_name[idosi]+"_spectrum")
                     l_fs_tmp = np.array(l_fs_tmp) * np.array(l_fv_tmp)
                     l_fe_tmp1, l_fe_tmp2 = get_sss_out_det(self.l_path_case[idosi]+"_det0.m", "dos_"+self.l_name[idosi]+"_spectrumE", 0, 1)
