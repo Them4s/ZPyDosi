@@ -1,0 +1,89 @@
+stages:
+  - lint
+  - test
+  - build
+
+# Pick the Python versions you care about (you can add/remove).
+# If you only want one, delete the others.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  VENV_DIR: ".venv"
+  PYTHONUNBUFFERED: "1"
+
+cache:
+  key: "$CI_JOB_NAME"
+  paths:
+    - .cache/pip
+    - .venv
+
+.default_python_job:
+  image: python:3.14
+  before_script:
+    - python -V
+    - python -m venv "$VENV_DIR"
+    - . "$VENV_DIR/bin/activate"
+    - python -m pip install --upgrade pip wheel setuptools
+    # If you keep dev deps in requirements-dev.txt, this will use it.
+    # Otherwise it will just install your package and test tools below.
+    - |
+      if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - |
+      if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+    # Install your package (editable is nice for tests)
+    - pip install -e .
+  interruptible: true
+
+# -----------------------
+# Lint (optional)
+# -----------------------
+lint:
+  stage: lint
+  extends: .default_python_job
+  script:
+    - . "$VENV_DIR/bin/activate"
+    # Install linters if not in requirements-dev.txt
+    - pip show ruff >/dev/null 2>&1 || pip install ruff
+    - ruff --version
+    - ruff check .
+  rules:
+    - if: $CI_PIPELINE_SOURCE
+
+# -----------------------
+# Tests (pytest)
+# -----------------------
+test:
+  stage: test
+  extends: .default_python_job
+  script:
+    - . "$VENV_DIR/bin/activate"
+    # Install pytest if not in requirements-dev.txt
+    - pip show pytest >/dev/null 2>&1 || pip install pytest
+    - pytest -q
+  artifacts:
+    when: always
+    expire_in: 7 days
+    reports:
+      junit: junit.xml
+  after_script:
+    # Create junit report if your pytest.ini doesn't already
+    # If you already generate junit.xml elsewhere, you can remove this.
+    - echo "If you want JUnit XML: run pytest --junitxml=junit.xml"
+
+# -----------------------
+# Build distributions
+# -----------------------
+build:
+  stage: build
+  extends: .default_python_job
+  script:
+    - . "$VENV_DIR/bin/activate"
+    - pip show build >/dev/null 2>&1 || pip install build
+    - python -m build
+  artifacts:
+    expire_in: 14 days
+    paths:
+      - dist/*
+  rules:
+    # Build on main and on tags
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_TAG'
