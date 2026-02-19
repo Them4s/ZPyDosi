@@ -106,6 +106,4 @@ build:
   script:
     - pip install build
     - python -m build
-  artifacts:
-    paths:
-      - dist/*
+  artifacts: {}
