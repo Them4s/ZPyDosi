@@ -2,7 +2,6 @@
 # sudo python -m pip install scipy
 
 import os
-from scipy.optimize import curve_fit
 import scipy 
 print(scipy.__version__)
 from ZPyDosi.Common.utils_general import lmap, get_aff_size, get_c, tex
@@ -298,24 +297,14 @@ axloc[0,1].set_xticklabels([])
 do_ref = False
 
 if do_ref:                                                            # plot the geni2000 results
-    if False:
-        #eff = EfficiencyCalibration("calib_out_2019_02_25_p13_100h")
-        eff = EfficiencyCalibration("calib_L1_p13_2019_03_01_100h")
-        sol_ref_nrj, sol_ref, sol_ref_sig = eff.nrj, eff.eff, eff.eff_sig
-        sol_ref     = projet_vec_interpol(tab_x, np.log(sol_ref_nrj), sol_ref)
-        sol_ref_sig = projet_vec_interpol(tab_x, np.log(sol_ref_nrj), sol_ref_sig)
-        
-        aff_curve(axloc[0,2], np.exp(tab_x),  sol_ref*100,            sol_ref_sig,"black",1,0.2)
-        aff_curve(axloc[0,1], np.exp(tab_x), (sol_ref/sol-1)*100, sol_ref_sig/sol*100,"black",1,0.2)
-        
-    else:
-        eff = EfficiencyCalibrationG2K("toto")
-        #sol_ref = eff.get_eff(np.exp(l_x_fine))
-        #sol_ref_sig = sol_ref*0
-        axloc[0,0].errorbar(eff.raw_data_e,(eff.raw_data_v/my_fct(eff.raw_data_e, *best_p)-1)*100, yerr=eff.raw_data_v, fmt='o', c="red", zorder=100, alpha=0.6)
-        axloc[0,1].errorbar(eff.raw_data_e,eff.raw_data_v*100, yerr=eff.raw_data_v*0, fmt='o', c="red", zorder=100, alpha=0.6)
-        #axref[0,0].errorbar(np.log(eff.raw_data_e),eff.raw_data_v, yerr=eff.raw_data_v*0, fmt='o', c="red", zorder=100, alpha=0.6)
-        #aff_curve(axref[0,0], tab_x,         sol_ref, sol_ref_sig,"black",1,0.2)
+
+    eff = EfficiencyCalibrationG2K("toto")
+    #sol_ref = eff.get_eff(np.exp(l_x_fine))
+    #sol_ref_sig = sol_ref*0
+    axloc[0,0].errorbar(eff.raw_data_e,(eff.raw_data_v/my_fct(eff.raw_data_e, *best_p)-1)*100, yerr=eff.raw_data_v, fmt='o', c="red", zorder=100, alpha=0.6)
+    axloc[0,1].errorbar(eff.raw_data_e,eff.raw_data_v*100, yerr=eff.raw_data_v*0, fmt='o', c="red", zorder=100, alpha=0.6)
+    #axref[0,0].errorbar(np.log(eff.raw_data_e),eff.raw_data_v, yerr=eff.raw_data_v*0, fmt='o', c="red", zorder=100, alpha=0.6)
+    #aff_curve(axref[0,0], tab_x,         sol_ref, sol_ref_sig,"black",1,0.2)
     #aff_curve(axloc[0,2], np.exp(tab_x), sol_ref*100, sol_ref_sig*100,"black",1,0.2)
     #aff_curve(axloc[0,1], np.exp(tab_x), (sol_ref/sol-1)*100, sol_ref_sig/sol*100,"black",1,0.2)
 

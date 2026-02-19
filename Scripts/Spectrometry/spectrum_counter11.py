@@ -8,10 +8,9 @@ from scipy.optimize import curve_fit
 from ZPyDosi.Common.utils_general import lmap, get_aff_size, tex, str2time, dup, dupx, activity2float, set_nice_ax
 from ZPyDosi.Common.CsvSeeker import CsvSeeker
 from ZPyDosi.Common.GetParam import get_param_vari
-from ZPyDosi.Prints.PrintnSave import aff_s_v, aff, aff_s_v_vs
+from ZPyDosi.Prints.PrintnSave import aff_s_v, aff_s_v_vs
 from ZPyDosi.Plots.SubPlots import my_sub6, aff_curve
 import numpy as np
-from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
 print()

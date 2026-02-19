@@ -430,10 +430,6 @@ if not low_mem:
         #l_srel_ave_dosi += list(l_srel_ave[nb_nrj*idosi: nb_nrj*(idosi+1)])
     del(d_pos_2_cov)
     
-    if False:
-        for i in range(len(ll_cor)):
-            for j in range(len(ll_cor)):
-                ll_cor[i,j] = 0 if i!=j else 1
     '''
     for k in range(len(data.l_key_irdff_iaea)): # trunk irdff data to flux energy boundaries
         #print(ll_fe[k][0])
@@ -792,9 +788,6 @@ aff_mat4(l_x, l_x, check_cor, axmatsup, "horizontal", "", "Dosimeter number", "D
 axmat2.set_ylim(list(reversed(axmat2.get_ylim())))
 axmatsup.set_ylim(list(reversed(axmatsup.get_ylim())))
 if not low_mem:
-    if False:
-        for i in range(len(ll_fv)):
-            l_ax[0,0].plot(dup_piquet(l_ce),dup(integ(l_ce, l_xv_proj_c*ll_fv_proj_c[i])),"r")
     
     
     

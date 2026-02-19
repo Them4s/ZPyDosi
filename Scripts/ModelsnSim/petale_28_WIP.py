@@ -586,7 +586,6 @@ ax.set_xlabel("x")
 fig.tight_layout()
 
 from skspatial.objects import Plane, Points # type: ignore 
-from skspatial.plotting import plot_3d  # type: ignore
 
 l_point=[]
 for i in range(len(vals_yz)):

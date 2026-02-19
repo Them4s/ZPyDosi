@@ -5,7 +5,6 @@ from ZPyDosi.Common.GetParam import get_param_vari
 from ZPyDosi.Plots.SubPlots import my_sub6
 from ZPyDosi.Prints.PrintnSave import aff_list
 import numpy as np
-from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
 path_tka = get_param_vari("tka" , str, None).split("//")

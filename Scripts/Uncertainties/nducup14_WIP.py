@@ -169,10 +169,6 @@ else:
 '''
 
 
-if False:
-    for i in range(len(ll_cor)):
-        for j in range(len(ll_cor)):
-            ll_cor[i,j] = 0 if i!=j else 1
 
 for k in range(len(data.l_key_irdff_iaea)):
     if l_fe[0] >ll_ce[k][0]:
@@ -561,9 +557,6 @@ for i in range(1,len(cor)):
     if i%5==0: l_tick +=[i]
 axmat2.set_ylim(list(reversed(axmat2.get_ylim())))
 axmat2.set_yticks(l_tick)
-if False:
-    for i in range(len(ll_fv)):
-        l_ax[0,0].plot(dup_piquet(l_ce),dup(integ(l_ce, l_xv_proj_c*ll_fv_proj_c[i])),"r")
 
 
 
