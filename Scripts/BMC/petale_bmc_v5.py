@@ -11,7 +11,6 @@ from multiprocessing import Pool
 import matplotlib.pyplot as plt
 import numpy as np
 import serpentTools
-import re
 
 # from utils_p11_WIP import *
 

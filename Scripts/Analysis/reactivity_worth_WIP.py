@@ -1,11 +1,13 @@
 # py ~/Link_to_analysis/python/irrad/reactivity_worth_WIP.py csv_data=$csv_data csv_dosi=$csv_dosi
-from utils_p11_WIP import *
+from ZPyDosi.Common.utils_general import lmap
+from ZPyDosi.Common.GetParam import get_param_vari
+import numpy as np
 import datetime
 from scipy.optimize import curve_fit
-import math
+import matplotlib.pyplot as plt
+import datetime
 from sympy.solvers import solve
 from sympy import Symbol
-import functools
 from numpy.random import default_rng
 import pandas as pd
 from statsmodels.formula.api import ols #For ordinary least square 

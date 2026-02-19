@@ -1,8 +1,19 @@
 
-from utils_p3 import *
-from data_spectre import *
+from ZPyDosi.Common.utils_general import lmap,time2str
+from ZPyDosi.Common.ExcelSheet import ExcelSheet
+from ZPyDosi.DosiFunctions.Dictionaries import d_spectro
+from ZPyDosi.Prints.PrintnSave import aff, aff_t
+from ZPyDosi.XSnFlux.Projections import projet_vec_intervals_from_continus
+from ZPyDosi.XSnFlux.GetIRDFF import get_irdff_iaea
+import numpy as np
+import os
+from ZPyDosi.DosiFunctions.Functions import get_iso2mass
+from ..Analysis.data_spectre import dico_spectrum
+path_xsdata    = os.path.expandvars("Path to your XS")
+path_iaea_data = os.path.expandvars("Path to your IRDFF-II")
 
 power_per_src_n = 1.32574000e-11	# J/n
+mode_irdff_only =True
 
 #ath_xsdata = "/var/local/lrs_cluster/xsdata/jeff33/sss_jeff33.xsdata"				# get the mass from the xsdata
 

@@ -1,8 +1,9 @@
-from utils_p11_WIP import *
-import datetime
+from ZPyDosi.Common.utils_general import get_aff_size, tex
+from ZPyDosi.Stats.Stats import cor_sig_to_cov, sig2covdiag
+from ZPyDosi.Plots.MatrixPlots import make_cmap, nice_nb
+import numpy as np
 from scipy.optimize import curve_fit
-import scipy
-import math
+import matplotlib.pyplot as plt
 import statsmodels as sm
 import matplotlib.animation as ani
 def flin(X,a,b):

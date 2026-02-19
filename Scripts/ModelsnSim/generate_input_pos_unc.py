@@ -1,10 +1,11 @@
 # py ~/Link_to_analysis/python/Misc/generate_input_pos_unc.py original=input num=16 run_name=run omp_num=4 csv_data=~/Link_to_analysis/irrad/petale/petale_analysis_8.xlsx  csv_dosi=~/Link_to_analysis/irrad/petale/data_dosi.xlsx case=expFe_al pert_position=True larger_dosi=True
 
-from utils_p9 import *
+from ZPyDosi.Common.GetParam import get_param_vari
 import subprocess
 from pathlib import Path
 import shutil
 from os.path import expanduser
+import os
 home = expanduser("~")
 
 original_name  = get_param_vari("original", str)

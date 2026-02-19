@@ -1,10 +1,22 @@
 
 
 
-from utils_p3 import *
+from ZPyDosi.Common.utils_general import lmap, aff_param, dup, dupx, get_aff_size
+from ZPyDosi.Common.CsvSeeker import get_csv, get_csv_list, get_csv_dosi_data
+from ZPyDosi.DosiFunctions.Dictionaries import d_spectro
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Prints.PrintnSave import aff_s_v, aff_list, aff
+from ZPyDosi.Plots.SubPlots import my_sub6, aff_curve
+from ZPyDosi.EfficiencyCalibration.EfficiencyCalibration import EfficiencyCalibration
+from ZPyDosi.Serpent2_utils.sss2_utils import get_sss_out, get_sss_res
+from ZPyDosi.Stats.Stats import imoyvar_list, icovar_jkk
+import numpy as np
+from numpy.random import rand
+from random	import gauss
+import os
 import datetime
 from scipy.optimize import curve_fit
-
+import matplotlib.pyplot as plt
 
 fig = plt.figure(1, figsize=(16/1.2,5/1.4))
 fig.patch.set_facecolor('white')
@@ -376,7 +388,7 @@ class Measure:
 
 
 
-mode_vr = True
+mode_vr = False
 if not mode_vr:
 	print (aff_list("l_calcul (raw)", np.array(lmap(lambda name : get_sss_out(calc+"_det0.m", "DETdos_"+name+"_791970_102_rr ")[-2] , l_name_sss))))
 
@@ -386,8 +398,8 @@ if not mode_vr:
 	l_c  = den_at_dosi * np.array(lmap(lambda name : get_sss_out(calc+"_det0.m", "DETdos_"+name+"_791970_102_rr ")[-2] , l_name_sss))
 	l_cs = np.array(lmap(lambda name : get_sss_out(calc+"_det0.m", "DETdos_"+name+"_791970_102_rr ")[-1] , l_name_sss))
 	l_cs *= l_c
-else:
-	l_c =
+else: # TODO Fix this 
+	l_c = 1
 
 
 if False: # MCNP (Oscari) value
@@ -546,7 +558,7 @@ for i in range(len(l_c)):
 
 
 
-cov, cor = icovar(l_sampled_etal.T, talk=False)
+cov, cor = icovar_jkk(l_sampled_etal.T,do_cor=True)
 for i_l, l in enumerate(list(cor)):
 	print (aff_list("correlation_matrix:" if i_l==0 else "",l))
 print (aff_list("np.diag(correlation_matrix)**0.5",np.diag(cov)**0.5))

@@ -1,12 +1,12 @@
 # nohup python3.9 /home/thomasligonnet/Link_to_analysis/python/Misc/run_multi_sim.py num=32 num_mult=2 time=24. &
 
 # to be lauch from the main folder
-from utils_p9 import *
-from pathlib import Path
-import time
-import signal
-import psutil
 
+from ZPyDosi.Common.GetParam import get_param_vari
+import time
+import psutil
+import subprocess
+import os
 num  = get_param_vari("num", int) #total sim number
 start_num  = get_param_vari("start_num", int,1)
 num_mult  = get_param_vari("num_mult", int) #num of simultaneous sim

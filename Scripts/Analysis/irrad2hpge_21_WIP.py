@@ -6,15 +6,21 @@ Reads the experimental and simulation results, and the preprocessed uncertaintie
 Compute the C/E and their covariance.
 '''
 
-from ZPyDosi.Common.GetParam import *
-from ZPyDosi.DataIrrad.DataIrrad import *
-from ZPyDosi.Plots.SubPlots import *
-from ZPyDosi.Plots.MatrixPlots import *
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Common.utils_general import aff_param, dupx, dup, get_c, get_aff_size, lmap, tex
+from ZPyDosi.Stats.Stats import cov_mult, cov_l_mult, cor_sig_to_cov, cov_to_sig_cor, sig2covdiag, cov_inv
+from ZPyDosi.Prints.PrintnSave import aff_s_v, aff_list, aff_decription_s_v_cov, aff_decription_s_v_cov_as_C_over_E, export_csv
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
+from ZPyDosi.DosiFunctions.Dictionaries import d_lib
+from ZPyDosi.Plots.SubPlots import my_sub6, aff_curve
+from ZPyDosi.Plots.MatrixPlots import aff_mat4
+import matplotlib.pyplot as plt
 import datetime
 from scipy.optimize import curve_fit
 import scipy
 import math
-
+import os
+import numpy as np
 #fig = plt.figure(1, figsize=(16/1.2,5/1.4))
 # fig = plt.figure(1, figsize=(16*2*1.6,9*1.6))#with activity
 # fig = plt.figure(1, figsize=(16*2*1.3,9*1.3))

@@ -1,7 +1,5 @@
-from utils_p11_WIP import *
 import pandas as pd
 import numpy as np
-
 path="/home/thomasligonnet/Documents/IRDFF-II_TAB/cor/Mn55ng_cor.csv"
 
 

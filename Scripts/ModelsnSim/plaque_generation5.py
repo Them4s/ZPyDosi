@@ -2,7 +2,13 @@
 # cd "$petale_analysis"/plaque_3D
 # python3.9 ../python/sss_input/plaque_generation5.py
 
-from utils_p9 import *
+from ZPyDosi.Common.utils_general import lmap, get_aff_size, tex
+from ZPyDosi.Common.ExcelSheet import ExcelSheet
+from ZPyDosi.Plots.MatrixPlots import make_cmap, nice_nb, interval_joli
+from ZPyDosi.Prints.PrintnSave import aff, aff_t
+from ZPyDosi.Plots.SubPlots import my_sub6
+import numpy as np
+import matplotlib.pyplot as plt
 from scipy import interpolate
 l_mini, l_maxi, l_ave = [], [], []
 Volumes=[]

@@ -2,9 +2,14 @@
 #py ../../python/hpge/counts_to_activity.py csv_data=$csv_data csv_dosi=$csv_dosi lcase=$case
 
 
-from utils_p11_WIP import *
+from ZPyDosi.Common.utils_general import lmap
+from ZPyDosi.Common.ExcelSheet import ExcelSheet
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
+from ZPyDosi.DosiFunctions.Dictionaries import d_spectro
+from ZPyDosi.Common.GetParam import get_param_vari
+import numpy as np
 import datetime
-from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 # import ipyparallel as ipp
 # rc = ipp.Client()
 # view = rc.load_balanced_view()

@@ -1,10 +1,10 @@
 # py ~/Link_to_analysis/python/Misc/simple_power_plot.py path=...
-from utils_p11_WIP import *
-import datetime
+from ZPyDosi.Common.GetParam import get_param_vari
+
+import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats import linregress
-import math
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 
 path_spec  = get_param_vari("path", str)
 def f_exp(X,a,b):
@@ -111,14 +111,14 @@ plt.figure()
 plt.plot(val2[1500:1750]/2614,val[60:310]/(val2[1500:1750]/2614),linestyle="",marker=".")
 plt.xlabel("Power [W]")
 plt.ylabel("Count per Watt [W$^{-1}$")
-plt.figure()
-plt.plot(val2[1750:1940]/2614,val3[310:500]/(val2[1750:1940]/2614),linestyle="",marker=".")
-plt.xlabel("Power [W]")
-plt.ylabel("Count per Watt [W$^{-1}$")
-# plt.yscale("log")
-# plt.xscale("log")
-plt.grid()
-plt.show()
+# plt.figure()
+# plt.plot(val2[1750:1940]/2614,val3[310:500]/(val2[1750:1940]/2614),linestyle="",marker=".")
+# plt.xlabel("Power [W]")
+# plt.ylabel("Count per Watt [W$^{-1}$")
+# # plt.yscale("log")
+# # plt.xscale("log")
+# plt.grid()
+# plt.show()
 coef,cov = curve_fit(f_lin,range(890,980),np.log(val[890:980]))
 print(coef)
 plt.plot(range(890,980),f_exp(range(890,980),*coef))

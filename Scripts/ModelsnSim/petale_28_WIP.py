@@ -2,12 +2,18 @@
 Produce automatically the petale geometry with the dosimeters
 '''
 
-from ZPyDosi.Common.GetParam import *
-from ZPyDosi.DataIrrad.DataIrrad import *
+from ZPyDosi.Common.utils_general import lmap
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
+from ZPyDosi.DosiFunctions.Dictionaries import d_matdosi_2_data
 from scipy.optimize import curve_fit
 from os.path import expanduser
+import numpy as np
+from random import gauss
+from numpy.random import rand
+import matplotlib.pyplot as plt
 home = expanduser("~")
-from mpl_toolkits.mplot3d import Axes3D
+
 
 
 print("#"*50)

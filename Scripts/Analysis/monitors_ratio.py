@@ -2,11 +2,11 @@
 # cd $petale_analysis/irrad/petale
 # py $petale_analysis/python/irrad/monitors_ratio.py
 
-import os, sys
+import os
 import numpy as np
-import matplotlib as mpl
 import matplotlib.pyplot as plt
-from utils_p8 import *
+from ZPyDosi.Common.utils_general import lmap
+from ZPyDosi.Common.GetParam import get_param_vari
 import datetime
 
 plt.rcParams.update({'font.size': 22})

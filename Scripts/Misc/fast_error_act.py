@@ -1,8 +1,10 @@
-from utils_p11_WIP import *
+from ZPyDosi.Common.utils_general import lmap, tex, get_c
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
+from ZPyDosi.Prints.PrintnSave import aff_s_v
+import numpy as np
 import datetime
-from scipy.optimize import curve_fit
-import scipy
-import math
+import matplotlib.pyplot as plt
 
 path_csv_data  = get_param_vari("csv_data", str)
 path_csv_dosi  = get_param_vari("csv_dosi", str)

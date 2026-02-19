@@ -4,12 +4,20 @@
 Compute and save the uncertainties due to core cross-sections using multiple data from a set of perturbed simulations
 '''
 
-from ZPyDosi.Common.GetParam import *
-from ZPyDosi.DataIrrad.DataIrrad import *
-from ZPyDosi.Plots.SubPlots import *
-from ZPyDosi.Plots.MatrixPlots import *
-from ZPyDosi.XSnFlux.GetIRDFF import *
-from ZPyDosi.XSnFlux.Projections import *
+
+import os
+from ZPyDosi.Common.utils_general import lmap, get_aff_size, get_c, tex, dup, dup_piquet,set_nice_ax
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
+from ZPyDosi.Prints.PrintnSave import aff_list, aff_mat
+from ZPyDosi.Plots.SubPlots import my_sub6, my_sub6_finalise, get_lim
+from ZPyDosi.Plots.MatrixPlots import aff_mat4
+from ZPyDosi.Stats.Stats import icovar_jkk, imoyvar, cov_to_sig_cor
+from ZPyDosi.XSnFlux.Aggregate import aggregate_spectrum
+from ZPyDosi.XSnFlux.GetIRDFF import get_irdff_iaea
+from ZPyDosi.XSnFlux.Projections import projet_vec_intervals_from_continus
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 

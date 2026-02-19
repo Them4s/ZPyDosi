@@ -1,7 +1,13 @@
-
-from utils_p3 import *
+from ZPyDosi.Common.utils_general import get_aff_size, tex,time2strdetail
+from ZPyDosi.Prints.PrintnSave import aff
+from ZPyDosi.Plots.SubPlots import my_sub6
+import numpy as np
+import datetime
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-
+import time 
+import xlrd
 
 
 fig = plt.figure(figsize=(10,12))

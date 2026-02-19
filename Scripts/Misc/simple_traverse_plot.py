@@ -1,9 +1,6 @@
 # py ~/Link_to_analysis/python/Misc/simple_traverse_plot.py path=...
-from utils_p11_WIP import *
-import datetime
-from scipy.optimize import curve_fit
-import math
-import matplotlib.pyplot as plt 
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 dico_color = {"Al":(0.6,0.6,0.6), "Fe":(0.2,0.2,0.2), "In":(0.8,0.85,1), "Ni":(0.8,0.6,0.4), "Au":(0.8,0.8,0.5)}

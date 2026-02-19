@@ -1,7 +1,5 @@
 
-from utils_p5 import *
-from cnf import *
-import subprocess
+from .cnf import read_cnf_file
 
 for p in [  'hpge_data/raw/data/Fu/Calibration~PETALE/Ba_300920_24h_2016_1344_top.CNF',
             'hpge_data/raw/data/Fu/Calibration~PETALE/2020_10_06_10_02_44_FU_T_Cs134-2020.CNF',

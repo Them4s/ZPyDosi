@@ -1,15 +1,18 @@
-import os, sys
-from ZPyDosi.Common.GetParam import *
-from ZPyDosi.Common.CsvSeeker import *
-from ZPyDosi.Prints.PrintnSave import *
-from ZPyDosi.Plots.SubPlots import *
-from scipy.optimize import curve_fit
-from scipy.special import gamma, factorial
 from random import gauss
-from cnf import *
+from ..Analysis.cnf import read_cnf_file
 import datetime as dtime
 import math
 
+import os
+from scipy.optimize import curve_fit
+from ZPyDosi.Common.utils_general import lmap, get_aff_size, tex, str2time, dup, dupx, activity2float, set_nice_ax
+from ZPyDosi.Common.CsvSeeker import CsvSeeker
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Prints.PrintnSave import aff_s_v, aff, aff_s_v_vs
+from ZPyDosi.Plots.SubPlots import my_sub6, aff_curve
+import numpy as np
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 
 print()
 

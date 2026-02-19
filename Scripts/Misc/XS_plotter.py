@@ -1,14 +1,13 @@
 # py /home/thomasligonnet/ownCloud/Experimental\ activities\ LRS@EPFL/Projects/PETALE/analysis/python/Misc/reaction_rate_projector.py input=tmp
 print("In devloppement, manual editing still necessary")
 # Project reaction rate and relative uncertainty from sim spectra
-
+from ZPyDosi.Common.utils_general import lmap
+from ZPyDosi.Plots.MatrixPlots import make_cmap
+from ZPyDosi.DosiFunctions.Functions import get_at_density
+from ZPyDosi.XSnFlux.GetIRDFF import get_irdff_iaea
 import numpy as np
-import matplotlib as mpl
+import os
 import matplotlib.pyplot as plt
-from utils_p11_WIP import *
-
-from multiprocessing import Pool
-from itertools import product
 plt.rcParams.update({'font.size': 18})
 print ("#"*50)
 

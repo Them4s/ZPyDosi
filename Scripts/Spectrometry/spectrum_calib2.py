@@ -1,16 +1,21 @@
 # sudo apt-get remove python-scipy
 # sudo python -m pip install scipy
 
-import os, sys
+import os
 from scipy.optimize import curve_fit
-import numpy as np
 import scipy 
 print(scipy.__version__)
-
-from utils_p5 import *
+from ZPyDosi.Common.utils_general import lmap, get_aff_size, get_c, tex
+from ZPyDosi.Common.CsvSeeker import CsvSeeker
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Prints.PrintnSave import aff_s_v, aff, mk_dir
+from ZPyDosi.Plots.SubPlots import my_sub6, aff_curve
+from ZPyDosi.Plots.MatrixPlots import aff_mat4
+from ZPyDosi.EfficiencyCalibration.EfficiencyCalibration import EfficiencyCalibration, EfficiencyCalibrationG2K
+from ZPyDosi.Stats.Stats import imoyvar_list, icovar_jkk, cov_mult
+import numpy as np
 from scipy.optimize import curve_fit
-from random import gauss
-
+import matplotlib.pyplot as plt
 print()
 
 print("#"*50)

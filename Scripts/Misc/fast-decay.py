@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import datetime as dt
 from scipy.optimize import curve_fit
 
 half_life=54.29*60

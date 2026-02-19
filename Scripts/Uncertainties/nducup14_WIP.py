@@ -7,12 +7,18 @@
 Compute and save the uncertainties due to dosimetry nuclear data.
 '''
 
-from ZPyDosi.Common.GetParam import *
-from ZPyDosi.DataIrrad.DataIrrad import *
-from ZPyDosi.Plots.SubPlots import *
-from ZPyDosi.Plots.MatrixPlots import *
-from ZPyDosi.XSnFlux.GetIRDFF import *
-from ZPyDosi.XSnFlux.Projections import *
+import os
+from ZPyDosi.Common.utils_general import lmap, get_aff_size, get_c, dup, dup_piquet,set_nice_ax
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
+from ZPyDosi.Prints.PrintnSave import aff_list, aff_mat
+from ZPyDosi.Plots.SubPlots import my_sub6, my_sub6_finalise, get_lim, aff_curve
+from ZPyDosi.Plots.MatrixPlots import aff_mat4, make_cmap
+from ZPyDosi.Stats.Stats import cov_to_sig_cor, cor_sig_to_cov
+from ZPyDosi.XSnFlux.GetIRDFF import get_irdff_iaea
+from ZPyDosi.XSnFlux.Projections import projet_vec_intervals_from_continus, projet_vec_intervals_from_integrated
+import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
 plt.rcParams.update({'font.size': 18})
 print ("#"*50)

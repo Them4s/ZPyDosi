@@ -1,9 +1,5 @@
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-from utils_p11_WIP import *
-import os
-from pathlib import Path
+
+from ZPyDosi.Common.GetParam import get_param_vari
 
 path = get_param_vari("path", str,"")
 do_print=True

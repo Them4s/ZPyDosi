@@ -1,10 +1,10 @@
-from ZPyDosi.Common.utils_general import *
-from ZPyDosi.Common.GetParam import *
-from ZPyDosi.Common.CsvSeeker import *
-
+from ZPyDosi.Common.utils_general import lmap
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Common.CsvSeeker import CsvSeeker
+import os
+import shutil
 import serpentTools # type: ignore
 from serpentTools.settings import rc # type: ignore
-
 #rc['serpentVersion'] = '2.1.21'
 
 print ("#"*50)

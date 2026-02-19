@@ -28,10 +28,10 @@ mpl.rc('text.latex',preamble=r"\usepackage{amsmath} \usepackage{graphicx} \usepa
 
 import subprocess
 
-
+### To remove ###
 path_xsdata    = os.path.expandvars("$petale_analysis/data/sss_jeff33.xsdata")
 path_iaea_data = os.path.expandvars("$petale_analysis/data/iaea_data/")
-
+#################
 def lmap(f,l):
     """
     Apply a function to each element of an iterable and return a list.

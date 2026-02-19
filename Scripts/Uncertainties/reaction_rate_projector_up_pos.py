@@ -2,13 +2,16 @@
 print("In devloppement, manual editing still necessary")
 # Project reaction rate and relative uncertainty from sim spectra
 
+from ZPyDosi.Common.utils_general import lmap
+from ZPyDosi.DosiFunctions.Functions import get_at_density
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Plots.MatrixPlots import make_cmap
+from ZPyDosi.Serpent2_utils.sss2_utils import get_sss_res
+from ZPyDosi.XSnFlux.GetIRDFF import get_irdff_iaea
+from ZPyDosi.XSnFlux.Projections import projet_vec_intervals_from_continus, projet_vec_intervals_from_integrated
 import numpy as np
-import matplotlib as mpl
 import matplotlib.pyplot as plt
-from utils_p9 import *
 
-from multiprocessing import Pool
-from itertools import product
 
 np.seterr(divide='ignore', invalid='ignore')
 

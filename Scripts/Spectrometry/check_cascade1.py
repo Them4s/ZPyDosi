@@ -1,7 +1,8 @@
 
-import os, sys
-from utils_p3 import *
+import os
+from ZPyDosi.EfficiencyCalibration.EfficiencyCalibration import EfficiencyCalibration
 
+talk=False
 keV_max = 8
 eff_min = 0.1 # %
 

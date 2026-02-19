@@ -5,13 +5,14 @@ input of CROCUS for PETALE
 
 '''
 
-
-import sys
+from ZPyDosi.Common.utils_general import lmap
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Prints.PrintnSave import aff
+from ZPyDosi.DataInsta.DataInsta import DataInsta
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
+from ZPyDosi.DosiFunctions.Dictionaries import d_matdosi_2_data
+from ZPyDosi.DosiFunctions.Functions import get_massic_fraction
 import numpy as np
-from  ZPyDosi.Common.GetParam import *
-from  ZPyDosi.DataIrrad.DataIrrad import *
-from  ZPyDosi.DataInsta.DataInsta import *
-from math import *
 from scipy.optimize import curve_fit
 
 

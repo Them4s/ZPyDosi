@@ -1,9 +1,11 @@
 
 
-from utils_p9 import *
-import datetime
-from scipy.optimize import curve_fit
-
+from ZPyDosi.Common.utils_general import aff_param, get_aff_size, tex
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Plots.SubPlots import my_sub6
+import numpy as np
+import matplotlib.pyplot as plt
 #fig = plt.figure(1, figsize=(16/1.2,5/1.4))
 #fig = plt.figure(1, figsize=(16*2*1.1,9*1.1))
 #fig.patch.set_facecolor('white')

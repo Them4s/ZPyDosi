@@ -1,16 +1,30 @@
 
 #python ../../../../python/irrad/expected_act.py calib=../../../../hpge/test_tp_fermi/calib_out_2019_02_25_p13_100h
 
-from utils_p3 import *
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Common.utils_general import lmap, get_aff_size, tex, str2time, time2str
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
+from ZPyDosi.Plots.SubPlots import my_sub6, my_sub6_finalise
+from ZPyDosi.DosiFunctions.Dictionaries import d_spectro, d_matdosi_2_data, d_mt2name, d_mt2tex
+from ZPyDosi.DosiFunctions.Functions import get_massic_fraction, get_iso2mass, weight_2_selfshielding_Au_15mm
+from ZPyDosi.XSnFlux.Projections import projet_vec_intervals_from_continus
+from ZPyDosi.XSnFlux.GetIRDFF import get_irdff_iaea 
+from ZPyDosi.Prints.PrintnSave import aff 
+from ..Radioprotection.DoseRateCalc import gen_dose_rate_fct
+import numpy as np
+import matplotlib.pyplot as plt
+
 from data_spectre import *
 import datetime, calendar
-from scipy.optimize import curve_fit
 import datetime
-
+import os
 
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 now = datetime.datetime.now()
+
+
+path_iaea_data = os.path.expandvars("Your path here") # to be modified in the future
 
 
 

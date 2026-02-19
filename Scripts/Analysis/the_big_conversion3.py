@@ -29,10 +29,9 @@
 # mv hpge_data/raw/data/Fu/Cr\ Fe/13_53_51_Fe_P_20_grd.CNF     hpge_data/raw/data/Fu/Cr\ Fe/13_53_51_Fe_P_20_pgrd.CNF
 
 # find $petale_analysis/../../../-\ Exchange\ -/CEA/PETALE/programme/Spectra -name "*Fe_P_11*"
-
-from utils_p7 import *
-from cnf import *
-import subprocess
+from ZPyDosi.Common.ExcelSheet import ExcelSheet
+from .cnf import read_cnf_file
+import os
 
 path_log        = "hpge_data/raw/Log_5.2_recup.xlsx"
 path_analysis   = "petale_analysis_8.xlsx"
