@@ -1,6 +1,7 @@
 import os, sys
 import matplotlib as mpl
 
+
 mode_serv = False
 for param in sys.argv[1:]:
     if param[:len("serv")]=="serv" and param[len("serv")] == "=":
