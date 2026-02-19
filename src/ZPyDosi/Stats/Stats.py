@@ -276,11 +276,6 @@ def cov_l_mult(l_mean_cov):
 
 
 
-if False:
-    v,m = np.array([1,2]), np.array([[0.1, 0.05],[0.05,0.1]])
-    aff_decription_s_v_cov("a",(v,m))
-    aff_decription_s_v_cov("b",cov_inv((v,m)))
-    exit()
 
 
 def icovar_jkk(l_l_v, l_w=None, do_cor=False, do_jackknife=False, fast_jackknife=True, blabla=False, nb_jkk=None, fast=True):
