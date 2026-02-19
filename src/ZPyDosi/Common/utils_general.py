@@ -1,7 +1,5 @@
-import os, sys, os.path, shutil
+import os, sys
 import matplotlib as mpl
-from os.path import expanduser
-import hashlib
 
 mode_serv = False
 for param in sys.argv[1:]:
@@ -18,27 +16,16 @@ for param in sys.argv[1:]:
 #     appnope.nope()    # stop the apple power nap
 # except ImportError:
 #     pass
-from math import pi
 import matplotlib.pyplot as plt
-import matplotlib.colors as colors
-import matplotlib.patches as mpatches
-from matplotlib.collections import PatchCollection
 import numpy as np
-from numpy.random import rand
-from matplotlib.pyplot  import pcolor, show, colorbar, xticks, yticks, pcolormesh, imshow
-from random import gauss
-from scipy.interpolate import interp2d
-import time
 from decimal import Decimal
 
-from scipy.optimize import curve_fit
 mpl.rc('text', usetex=True)
 #plt.rc('text', usetex=True)
 mpl.rc('text.latex',preamble=r"\usepackage{amsmath} \usepackage{graphicx} \usepackage{nicefrac} \usepackage{xcolor}")
 
 
 import subprocess
-import datetime
 
 
 path_xsdata    = os.path.expandvars("$petale_analysis/data/sss_jeff33.xsdata")
