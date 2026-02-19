@@ -3,7 +3,7 @@ from ..Common.CsvSeeker import CsvSeeker
 from ..Common.ExcelSheet import ExcelSheet
 from ..Stats.Stats import cor_sig_to_cov
 from ..EfficiencyCalibration.EfficiencyCalibration import EfficiencyCalibration
-from ..Serpent2_utils.sss2_utils import get_sss_res, get_sss_det
+from ..Serpent2_utils.sss2_utils import get_sss_res, get_sss_det, get_sss_out
 from ..Prints.PrintnSave import aff, load_dict_from_file, aff_list, aff_decription_s_v_cov
 from ..DosiFunctions.Dictionaries import d_spectro, d_mt2name
 from ..DosiFunctions.Functions import get_at_density, mass_rad_mat_2_ep
