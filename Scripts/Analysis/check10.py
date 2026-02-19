@@ -51,7 +51,7 @@ if not os.path.exists("check_out"):
 #print (aff_s_v("th_deadtime", th_deadtime))
 tprint = TabPrinter("name mat time_g2k delta_time count_tka sig_tka count_file sig_file count_diff_[%] sig_diff_[%] deadtime_csv deadtime_tka deadtime_diff_[pt] pos_calc_vs_reel_[cm]".split(), sep_size=2)
 global linearity_warning
-linearity_warning=[];
+linearity_warning=[]
 
 
 for i in range(data.nb_dosi):

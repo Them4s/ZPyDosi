@@ -1,17 +1,238 @@
 # py ~/Link_to_analysis/python/irrad/reactivity_worth_WIP.py csv_data=$csv_data csv_dosi=$csv_dosi
 from ZPyDosi.Common.utils_general import lmap
 from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
 import numpy as np
 import datetime
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
-import datetime
 from sympy.solvers import solve
 from sympy import Symbol
 from numpy.random import default_rng
 import pandas as pd
 from statsmodels.formula.api import ols #For ordinary least square 
-from signal_analysis_2_WIP import * # type: ignore
+
+### DataCrit from the pile oscillation part, should be an import in the future
+
+# default kinetic param CROCUS
+beta_J33=np.array([2.24952E-04,1.09109E-03,6.58035E-04,1.44130E-03,2.45583E-03,8.03684E-04,6.69582E-04,2.52243E-04])
+# beta_J33_rel=np.array([0.01]*8)
+beta_J33_rel=np.array([0.00761,0.00348,0.00451,0.00304,0.00233,0.00407 ,0.00445 ,0.00724])
+beta_J33_sig=beta_J33*beta_J33_rel
+lambda_J33=np.array([1.24667E-02,  2.82917E-02,4.25244E-02,1.33042E-01 , 2.92467E-01 , 6.66488E-01 , 1.63478E+00 , 3.55460E+00 ])
+Lambda_J33=4.76746E-05
+CFUL_clock_factor=1.000 #correction with respect to SAFFRON
+
+def to_datetime(hour):
+    if isinstance(hour,datetime.datetime):
+        return hour
+    if isinstance(hour,datetime.time):
+        fake_day=datetime.datetime(2024,1,1)
+        return datetime.datetime.combine(fake_day,hour)
+    else:
+        return datetime.datetime.strptime(hour,    '%H:%M:%S')
+
+d_offset_CFUL={ # linearity measurements
+    "C1":-0.137,
+    "C2":-0.116,
+    "C3":-0.1565,
+    "C4":-0.2965}
+
+def load_CFUL(path,offest=True):
+    off=0
+    if offest:
+        for key in d_offset_CFUL.keys():
+            if key in path: 
+                off = d_offset_CFUL[key]
+        if off ==0:
+            print("ERROR in load_CFUL: CFUL id not found")
+            exit()
+        else:
+            print("Offset correction applied")
+    signal=(np.loadtxt(path,skiprows=5,dtype=np.float64)-off)
+    return signal
+
+class DataCrit:
+    def __init__(self,signal_f,dwell_t=1,Mes_start="00:00:00",P_start="00:00:00",P_end="00:00:00", nums_to_exclude=[], mstart=-1,
+                 beta=beta_J33,
+                 lambda_=lambda_J33,
+                 Lambda=Lambda_J33,
+                 beta_sig=beta_J33_sig,
+                 det_Type="Monitor"):
+        self.measurment_start=to_datetime(Mes_start)
+        self.Crit_start=to_datetime(P_start)
+        self.Crit_end=to_datetime(P_end)
+        self.Crit_duration=(self.Crit_end-self.Crit_start).total_seconds()
+        self.signal_file=signal_f
+        self.Lambda=Lambda
+        self.lambda_=np.array(lambda_)
+        self.beta=np.array(beta)
+        self.beta_sig=np.array(beta_sig)
+        self.Beta=sum(self.beta)
+        self.Beta_sig=np.sqrt(sum(self.beta_sig**2))
+        self.period=-1
+        self.omega=-1
+        self.omega_sig=-1
+        self.reactivity=-1
+        self.reactivity_sig=-1
+        self.total_duration=(self.Crit_start-self.measurment_start).total_seconds()
+        self.Mstart=mstart
+        self.det_Type=det_Type
+        if det_Type=="SAFFRON":
+            self.signal=np.array(lmap(lambda line: [float(s) for s in line.split()],open(self.signal_file,"r").readlines()))
+            #local signal as sum of local Mimi 
+            #global signal as sum of SAFFRON except locals
+            self.signal_global=self.signal[0]
+            for i in range(1,len(self.signal)): 
+                if i not in nums_to_exclude: 
+                    self.signal_global+=self.signal[i]
+        elif det_Type=="CFUL": #loading CFUl results in positive
+            tmp=load_CFUL(self.signal_file)
+            self.signal_global= np.abs(tmp[:,1])
+            self.dwell_time=np.mean(np.diff(tmp[:,0]))/CFUL_clock_factor
+            # self.signal_global=np.array(lmap(lambda s: abs(float(s.replace(","," ").split()[1])) ,open(self.signal_file,"r").readlines()[5:]))
+            # self.dwell_time=np.mean(np.diff(lmap(lambda s: float(s.replace(","," ").split()[0]) ,open(self.signal_file,"r").readlines()[5:])))
+            self.signal_local=[]
+            print("CFUL dwell_time = {} s".format(self.dwell_time))
+        elif det_Type=="Monitor":
+            if "//" in self.signal_file:
+                f=[]
+                for path in self.signal_file.split("//"):
+                    f+=lmap(lambda s: float(s) ,open(path,"r").readlines()[2:-1])
+            else:
+                f=lmap(lambda s: float(s) ,open(self.signal_file,"r").readlines()[2:-1])
+            self.signal_global=np.array(f)
+            self.dwell_time=dwell_t
+            self.signal_local=[]
+
+        else:
+            print("ERROR DataCrit: Unknown detector type entered!")
+            print(exit())
+
+    def __str__(self):
+        return "DataCrit"
+
+    def CalcPeriod(self, signal=[-1],First_order_fit=False): #linear Fit of the stable period (=1st order Taylor)
+        
+        def flin(X,a,b):
+            X=np.array(X)
+            return X*a+b
+        
+        if signal[0]==-1:
+            signal=self.signal_global
+        
+        if self.Mstart!=-1:
+            # print("period in manual mode")
+            fstart=(self.Crit_start-self.measurment_start).total_seconds()+self.Mstart
+        elif self.Crit_duration > 600:
+            fstart=(self.Crit_start-self.measurment_start).total_seconds()+300
+            self.Mstart=300
+        elif self.Crit_duration > 200:
+            fstart=(self.Crit_start-self.measurment_start).total_seconds()+100
+            self.Mstart=100
+        else:
+            print("ERROR DataCrit: signal duration too short for auto-fit please enter start point manually!")
+        fend=(self.Crit_end-self.measurment_start).total_seconds()
+        tofit=signal[int(fstart/self.dwell_time):int(fend/self.dwell_time)]
+        if not First_order_fit:
+            coef,cov=curve_fit(flin,np.arange(len(tofit))*self.dwell_time,np.log(tofit))
+            self.period=1/coef[0]
+            self.omega=coef[0]
+            self.omega_sig=cov[0,0]**0.5
+        else:
+            coef,cov=curve_fit(flin,np.arange(len(tofit))*self.dwell_time,(tofit))
+            self.period=coef[1]/coef[0]
+            self.omega=coef[0]/coef[1]
+            self.omega_sig=cov[0,0]**0.5
+        return self.period
+    
+    def CalcRho(self, signal=[-1], unc_poisson=False,unc_beta=False):
+        if signal[0]==-1:
+            signal=self.signal_global
+        if not unc_poisson and not unc_beta:
+            if self.period==-1:
+                self.CalcPeriod(signal)
+            self.reactivity=self.Lambda*self.omega+sum(self.beta*self.omega/(self.lambda_+self.omega))
+        else:
+            Nsample=2**10
+            l_reactivity=[]
+            if self.det_Type in ["SAFFRON","Monitor"]: #counters
+                for i in range(Nsample):
+                    if unc_poisson:
+                        l_signal=np.random.poisson(signal,size=(1,len(signal)))
+                    else:
+                        l_signal=np.random.normal(signal,[0]*len(signal),size=(1,len(signal)))
+                    if unc_beta:
+                        l_beta=np.random.normal(self.beta,self.beta_sig,size=(1,len(self.beta)))
+                    else:
+                        l_beta=np.random.normal(self.beta,[0]*len(self.beta),size=(1,len(self.beta)))
+                    omeg=1/self.CalcPeriod(l_signal[0])
+                    l_reactivity+=[self.Lambda*omeg+sum(l_beta[0]*omeg/(self.lambda_+omeg))]
+            elif self.det_Type in ["CFUL"]: #currents
+                omeg_ref=1/self.CalcPeriod(signal)
+                for i in range(Nsample):
+                    if unc_poisson:
+                        rand_omeg=np.random.normal(self.omega,self.omega_sig)
+                    else:
+                        rand_omeg=self.omega
+                    if unc_beta:
+                        l_beta=np.random.normal(self.beta,self.beta_sig)
+                    else:
+                        l_beta=self.beta
+                    l_reactivity+=[self.Lambda*rand_omeg+sum(l_beta*rand_omeg/(self.lambda_+rand_omeg))]
+            else:
+                print("Error in DataPeriod.CalcRho: det_Type unkown")
+                exit()
+            self.reactivity=np.mean(l_reactivity)
+            self.reactivity_sig=np.std(l_reactivity)
+    
+    def Delta_rho(self, unc_poisson=False,unc_beta=False,plot=False):
+        if not unc_poisson and not unc_beta:
+            if self.reactivity==-1:
+                self.CalcRho()
+            self.delta_rho=self.reactivity*1e5
+            return self.delta_rho
+        else:
+            self.CalcRho(unc_poisson=unc_poisson,unc_beta=unc_beta)
+            self.delta_rho=self.reactivity*1e5
+            self.delta_rho_sig=self.reactivity_sig*1e5
+            return self.delta_rho,self.delta_rho_sig
+
+    def Plot_fit(self):
+        if self.reactivity==-1:
+            self.CalcRho()
+        fstart=(self.Crit_start-self.measurment_start).total_seconds()+self.Mstart
+        fend=(self.Crit_end-self.measurment_start).total_seconds()
+        delta_T=np.arange(int((fend-fstart)/self.dwell_time))*self.dwell_time
+        plt.figure()
+        plt.plot(np.arange(len(self.signal_global))*self.dwell_time,self.signal_global)
+        plt.plot(np.arange(len(self.signal_global))[int(fstart/self.dwell_time):int(fstart/self.dwell_time)+len(delta_T)]*self.dwell_time,self.signal_global[int(fstart/self.dwell_time)]*np.exp(self.omega*delta_T))
+        print("Plot_fit stable period={}".format(1/self.omega))
+        plt.xlabel("Time [s]")
+        plt.ylabel("Count [-]")
+        plt.yscale("log")
+        plt.show()
+
+    def Feynman_VoM(self,signal=[-1]):
+        l_VoM=[]
+        l_dt=[]
+        if signal[0]==-1:
+            signal=self.signal_global
+        dt=self.dwell_time
+        max_dt=len(signal)*dt//32
+        l_dtm=np.unique(np.divmod(np.logspace(dt,max_dt,5000),dt)[0])
+        for m in l_dtm:
+            l_val=[sum(signal[i*m:(i+1)*m]) for i in range(len(signal)//m)]
+            l_VoM+=[np.var(l_val)/np.mean(l_val)]
+            l_dt+=[dt*m]
+        plt.figure()
+        plt.plot(l_dt,l_VoM)
+        plt.ylabel("Var to mean ratio")
+        plt.xlabel("dwell_timw [s]")
+        plt.xscale("log")
+        plt.show()
+
+
 
 path_csv_data  = get_param_vari("csv_data", str)
 path_csv_dosi  = get_param_vari("csv_dosi", str)

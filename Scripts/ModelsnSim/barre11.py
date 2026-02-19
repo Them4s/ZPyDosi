@@ -7,7 +7,6 @@ input of CROCUS for PETALE
 
 from ZPyDosi.Common.utils_general import lmap
 from ZPyDosi.Common.GetParam import get_param_vari
-from ZPyDosi.Prints.PrintnSave import aff
 from ZPyDosi.DataInsta.DataInsta import DataInsta
 from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
 from ZPyDosi.DosiFunctions.Dictionaries import d_matdosi_2_data

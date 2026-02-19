@@ -10,7 +10,7 @@ from ZPyDosi.Common.GetParam import get_param_vari
 from ZPyDosi.Prints.PrintnSave import aff_s_v, aff, mk_dir
 from ZPyDosi.Plots.SubPlots import my_sub6, aff_curve
 from ZPyDosi.Plots.MatrixPlots import aff_mat4
-from ZPyDosi.EfficiencyCalibration.EfficiencyCalibration import EfficiencyCalibration, EfficiencyCalibrationG2K
+from ZPyDosi.EfficiencyCalibration.EfficiencyCalibration import EfficiencyCalibrationG2K
 from ZPyDosi.Stats.Stats import imoyvar_list, icovar_jkk, cov_mult
 import numpy as np
 from scipy.optimize import curve_fit

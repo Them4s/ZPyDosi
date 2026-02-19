@@ -13,9 +13,9 @@ from ZPyDosi.Prints.PrintnSave import aff
 from ..Radioprotection.DoseRateCalc import gen_dose_rate_fct
 import numpy as np
 import matplotlib.pyplot as plt
+from .data_spectre import dico_spectrum, dico_petale_rr
 
-from data_spectre import *
-import datetime, calendar
+import calendar
 import datetime
 import os
 

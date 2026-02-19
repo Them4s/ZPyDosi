@@ -2,7 +2,6 @@
 # python petale_bmc_v5.py Nxs=128 calc=4 omp=24
 
 import os
-import datetime as dt
 import subprocess as sb
 import shutil
 import time as tm
@@ -62,7 +61,7 @@ if not No_MAYA:
     socket_name=socket.gethostname()
     # paf_xs = f"/msfrdata1/data/xsdata/sss/jeff33_crocus_bmc_{socket.gethostname()}/ace"
     # paf_bp = f"/msfrdata1/data/xsdata/sss/jeff33_crocus_bmc_{socket.gethostname()}"+"/"+bd
-    paf_bp = f"/msfrdata1/data/xsdata/sss/"+bd
+    paf_bp = "/msfrdata1/data/xsdata/sss/"+bd
 else:
     paf_bp="/media/thomasligonnet/sup_disk_1/jeff33_pert"
     socket_name="s1"
@@ -255,7 +254,6 @@ def cov2scale(l_nrj,cov,nrj_cov):
             big_cov[l_idy,l_idx]=cov[i-1,j-1]
     return big_cov
 #!/usr/bin/env python3
-import numpy as np
 
 def order_indices(A, B):
     """
@@ -1383,35 +1381,6 @@ for i_loop in range(1 if not Looping else 123456789):
             l_wgt_cor_iso=[]
             no_bigmat=False
             if False:
-                name_ace = "{:02}-{}-{:03}-ga-0300.ace".format(zz,elt,aaa)
-                ACE_prior=ACE(paf_bp+"/out_sample_xs/"+name_ace)
-                ACE_ori=ACE("XS_out/ori_ace"+name_ace)
-                path_numpy_prior="XS_out/archive_numpy_prior/{:02}-{}-{:03}-ga-0300_auto-4_mt2_4_102_eig_cor_i40.npz".format(zz,elt,aaa)
-                Covar=np.load(path_numpy_prior,allow_pickle=True)['dict_data'].tolist()
-                l_mts=['2','4','102']
-                d_cov_inv={
-                    '2'  :np.linalg.inv(cov2scale(ACE_ori['2']['l_nrj']  ,Covar[('2','2')],Covar["l_nrj"])),
-                    '4'  :np.linalg.inv(cov2scale(ACE_ori['4']['l_nrj']  ,Covar[('4','4')],Covar["l_nrj"])),
-                    '102':np.linalg.inv(cov2scale(ACE_ori['102']['l_nrj'],Covar[('102','102')],Covar["l_nrj"]))
-                }
-                l_tmp_wgt_cor=[]
-                for n in range(1,len(wgt_CS)+1):
-                    path_sample=paf_bp+"/out_sample_xs/"      +name_ace.replace(".ace", "_r"+str(n)+".ace")
-                    ACE_samp=ACE(path_sample)
-                    diff_o={
-                        '2'  : ACE_samp['2']['xs']  -ACE_ori['2']['xs']  ,
-                        '4'  : ACE_samp['4']['xs']  -ACE_ori['4']['xs']  ,
-                        '102': ACE_samp['102']['xs']-ACE_ori['102']['xs']
-                    }
-                    diff_n={
-                        '2'  : ACE_samp['2']['xs']  -ACE_prior['2']['xs']  ,
-                        '4'  : ACE_samp['4']['xs']  -ACE_prior['4']['xs']  ,
-                        '102': ACE_samp['102']['xs']-ACE_prior['102']['xs']
-                    }
-                    l_wgt_cor_tmp+=[np.prod([np.exp(-1/2 * (diff_o[mt].T.dot(d_cov_inv[mt].dot(diff_o[mt]))
-                                                        - diff_n[mt].T.dot(d_cov_inv[mt].dot(diff_n[mt]))))
-                                                        for mt in l_mts])]
-            elif False:
                 for zz,elt,aaa in l_zz_elt_aaa :
                     Big_vec_ori, Big_mat_ori=get_Big(zz,elt,aaa,"ori",mat=True)
                     Big_vec_new, Big_mat_new=get_Big(zz,elt,aaa,"new",mat=True)

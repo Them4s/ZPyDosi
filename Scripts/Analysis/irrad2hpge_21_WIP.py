@@ -11,7 +11,7 @@ from ZPyDosi.Common.utils_general import aff_param, dupx, dup, get_c, get_aff_si
 from ZPyDosi.Stats.Stats import cov_mult, cov_l_mult, cor_sig_to_cov, cov_to_sig_cor, sig2covdiag, cov_inv
 from ZPyDosi.Prints.PrintnSave import aff_s_v, aff_list, aff_decription_s_v_cov, aff_decription_s_v_cov_as_C_over_E, export_csv
 from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
-from ZPyDosi.DosiFunctions.Dictionaries import d_lib
+from ZPyDosi.DosiFunctions.Dictionaries import d_lib, d_mt2tex 
 from ZPyDosi.Plots.SubPlots import my_sub6, aff_curve
 from ZPyDosi.Plots.MatrixPlots import aff_mat4
 import matplotlib.pyplot as plt
@@ -21,6 +21,7 @@ import scipy
 import math
 import os
 import numpy as np
+import time
 #fig = plt.figure(1, figsize=(16/1.2,5/1.4))
 # fig = plt.figure(1, figsize=(16*2*1.6,9*1.6))#with activity
 # fig = plt.figure(1, figsize=(16*2*1.3,9*1.3))

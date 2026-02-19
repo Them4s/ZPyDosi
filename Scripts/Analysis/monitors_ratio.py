@@ -72,16 +72,16 @@ for (root,dirs,files) in os.walk("power_history/", topdown=True):
     print(dirs)
     print(tka)
     if num_file == 2 or num_file == 2.5 : #exclude the third of moni 1
-        if (not "v2" in tka[1]) and (not "v1" in tka[0]) : # correction for an exception
+        if ( "v2" not in tka[1]) and ( "v1" not in tka[0]) : # correction for an exception
             tka[1],tka[0]=tka[0],tka[1]
         print(tka)
-        if (not "v2" in tka[3]) and (not "v1" in tka[2]) : # correction for an exception
+        if ( "v2" not in tka[3]) and ( "v1" not in tka[2]) : # correction for an exception
             tka[2],tka[3]=tka[3],tka[2]
         f1_1 = list(open(os.path.join(root,tka[0]),"r").readlines()[2:])
         f1_2 = list(open(os.path.join(root,tka[2]),"r").readlines()[2:])
         f2_1 = list(open(os.path.join(root,tka[1]),"r").readlines()[2:])
         f2_2 = list(open(os.path.join(root,tka[3]),"r").readlines()[2:])
-        if (not "v2" in tka[1]) or (not "v2" in tka[3]) : #Check
+        if ( "v2" not in tka[1]) or ( "v2" not in tka[3]) : #Check
             print("error with file and monitors")
             print(tka[1],tka[3])
             exit()

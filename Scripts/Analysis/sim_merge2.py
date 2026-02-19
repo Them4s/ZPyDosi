@@ -4,7 +4,6 @@ from ZPyDosi.Common.CsvSeeker import CsvSeeker
 import os
 import shutil
 import serpentTools # type: ignore
-from serpentTools.settings import rc # type: ignore
 #rc['serpentVersion'] = '2.1.21'
 
 print ("#"*50)
@@ -68,7 +67,7 @@ for case_csv in lcase_csv:
           sub_vec_s_fin=[]
           # sub_w=[]
           # sub_sum_w=[]
-          if vec_s[0][i] is not "":
+          if vec_s[0][i] != "":
             for j in range(len(vec_s[0][i])):
                 if (float(vec_s[1][i][j])==0. and float(vec[1][i][j])!=0.0):
                     print("error")

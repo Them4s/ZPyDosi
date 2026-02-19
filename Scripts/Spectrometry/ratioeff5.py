@@ -1,4 +1,4 @@
-from ZPyDosi.Common.utils_general import lmap, get_aff_size,tex
+from ZPyDosi.Common.utils_general import lmap, get_aff_size, tex, simple
 from ZPyDosi.Common.TabPrinter import TabPrinter
 from ZPyDosi.Common.GetParam import get_param_vari
 from ZPyDosi.DataIrrad.DataIrrad import DataIrrad

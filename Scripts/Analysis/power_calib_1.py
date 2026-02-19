@@ -5,7 +5,7 @@ from ZPyDosi.Common.utils_general import lmap, aff_param, dup, dupx, get_aff_siz
 from ZPyDosi.Common.CsvSeeker import get_csv, get_csv_list, get_csv_dosi_data
 from ZPyDosi.DosiFunctions.Dictionaries import d_spectro
 from ZPyDosi.Common.GetParam import get_param_vari
-from ZPyDosi.Prints.PrintnSave import aff_s_v, aff_list, aff
+from ZPyDosi.Prints.PrintnSave import aff_s_v, aff
 from ZPyDosi.Plots.SubPlots import my_sub6, aff_curve
 from ZPyDosi.EfficiencyCalibration.EfficiencyCalibration import EfficiencyCalibration
 from ZPyDosi.Serpent2_utils.sss2_utils import get_sss_out, get_sss_res
@@ -213,8 +213,6 @@ if True:
 		l_a  = np.array( [1]+[4.81E-07,9.69E-07,1.96E-06,3.81E-06,7.02E-06,1.33E-05,2.37E-05,3.93E-05,6.78E-05,1.13E-04])
 		l_s  = np.zeros(len(l_a))+1
 		l_s[0] = 0.01
-		def my_fct(x, a, b, c):
-			return a*np.exp(b*x) + c
 		def my_fct(x, a, b,c,d):
 			return a*np.exp(-b*x)+c*x+d
 			#return 1-a*np.exp(-b*x)-c*np.exp(-d*x)
@@ -261,7 +259,8 @@ l_abs_gamma_Au = autoabs(l_w)
 print (aff_list("l_abs_gamma_Au",l_abs_gamma_Au))
 
 
-
+l_cp_histo = []
+l_cp_histo_met_2 = []
 
 class Measure:
 	def __init__(self, dwell, t0, path):
@@ -363,8 +362,6 @@ class Measure:
 			at += -lambd*at*self.dwell
 			l_at += [at]
 			l_t  += [l_t[-1]+self.dwell]
-		l_cp_histo = []
-		l_cp_histo_met_2 = []
 		#for date, time_meas, name in l_date_meas:
 		for j in range(len(l_hpge_time)):
 			t_begin = (l_hpge_time[j]-self.t0).total_seconds()
