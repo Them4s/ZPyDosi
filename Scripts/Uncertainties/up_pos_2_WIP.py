@@ -13,6 +13,7 @@ from ZPyDosi.Plots.SubPlots import *
 from ZPyDosi.Plots.MatrixPlots import *
 from ZPyDosi.XSnFlux.GetIRDFF import *
 from ZPyDosi.XSnFlux.Projections import *
+import numpy as np
 # print('RAM memory % used:', psutil.virtual_memory()[2])
 
 def array32(mat):
