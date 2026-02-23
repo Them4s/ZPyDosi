@@ -534,6 +534,8 @@ print
 
 if not os.path.exists("nducup_out"):
     os.mkdir("nducup_out")
+if not os.path.exists("nducup_out/hist"):
+    os.mkdir("nducup_out/hist")
 
 
 path = "nducup_out/out_"+(data.get_key_for_ndup())

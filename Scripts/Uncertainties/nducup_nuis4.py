@@ -30,7 +30,7 @@ gr_order = get_param_vari("gr_order", int,2) # to gain ram by decreasing the spe
 do_rm=get_param_vari("do_rm",bool,"False") #To remove commented detectors
 redo=get_param_vari("redo",bool,"False") 
 
-data = DataIrrad(path_csv_data, path_csv_dosi, lcase_csv, load_ndup_nuis_tosuppress=True, load_sss_results=False, load_sss_spectrum=False,group_order=gr_order, remove_data=do_rm)
+data = DataIrrad(path_csv_data, path_csv_dosi, lcase_csv, load_sss_results=False, load_sss_spectrum=False,group_order=gr_order, remove_data=do_rm)
 print ("#"*50)
 
 path_ex = "ndupnuis_out/out_"+(data.get_key_for_ndup_nuis())
@@ -88,7 +88,10 @@ d_id2pathpos = {v: k for k, v in d_pathpos2id.items()}
 ll_vtot   = []
 ll_srel   = []
 irand=0
+# for path_todo in l_path_todo:
+#     print(path_todo + str(irand+1)+"/input_mat_sss_2_of/perspectra")
 while all([os.path.isfile(path_todo + str(irand+1)+"/input_mat_sss_2_of/perspectra") for path_todo in l_path_todo]):
+    # print("COUCOU")
     irand+=1
     l_vtot = []
     l_srel = []
@@ -677,6 +680,8 @@ print
 
 if not os.path.exists("ndupnuis_out"):
     os.mkdir("ndupnuis_out")
+if not os.path.exists("ndupnuis_out/hist"):
+    os.mkdir("ndupnuis_out/hist")
 
 path = "ndupnuis_out/out_"+(data.get_key_for_ndup_nuis())
 

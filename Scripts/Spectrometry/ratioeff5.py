@@ -7,12 +7,13 @@ from ZPyDosi.Prints.PrintnSave import save_dict_to_file
 from ZPyDosi.Stats.Stats import imoyvar_list
 import numpy as np
 import matplotlib.pyplot as plt
-
+import os
 
 
 path_csv_data  = get_param_vari("csv_data", str)
 path_csv_dosi  = get_param_vari("csv_dosi", str)
 lcase_csv  = get_param_vari("lcase", str).split("/")
+do_plot  = get_param_vari("plot", bool, "True")
 
 print ("#"*50)
 data_irrad = DataIrrad(    path_csv_data,
@@ -162,8 +163,19 @@ for key in d_res.keys():
         (iso2, mt2, case2) = key2
         d_ratio["_".join([iso, mt, case,iso2, mt2, case2])]=cov[i,j]
 print(d_ratio)
+os.makedirs("Ratio",exist_ok=True)
 save_dict_to_file(d=d_ratio,filename="Ratio/"+data_irrad.get_key_for_ratio())
 
+# data_irrad = DataIrrad(    path_csv_data,
+#             path_csv_dosi,
+#             lcase_csv,
+#             #use_sqrt_for_meas_sig=True,
+#             #load_hpge_eff=True,
+#             #load_sss_results=True,
+#             #load_ndup=True,
+#             remove_data=False,
+#             load_ratio=True
+#             )
 
 # for key in d_res.keys():
 #     (iso, mt) = key
@@ -187,69 +199,68 @@ save_dict_to_file(d=d_ratio,filename="Ratio/"+data_irrad.get_key_for_ratio())
 
 
 
-exit() # a enlever pour faire un joli plot :)
-
-fig = plt.figure(figsize=(11,5))
-fig.patch.set_facecolor('white')
-nb_plt = len(d_res.keys())
-tab_ax = my_sub6(fig,1,1,0,list_ry=[1]*nb_plt, list_rx=[1], auto_y=False,auto_x=False)
-l_ax = list(reversed(tab_ax[0,:]))
-
-
-for ikey, key in enumerate(d_res.keys()):
-    l_eff, l_eff_sig, l_name = map(lambda l: np.array(l), d_res[key])
-    #nb_dosi = 3
-    #l_eff, l_eff_sig, l_name = l_eff[:nb_dosi], l_eff_sig[:nb_dosi], l_name[:nb_dosi]
-    moy,sig = imoyvar_list(l_eff)
-    sig_ori = sig
-    if len(l_eff)>2:
-        sig /= (len(l_eff)-1)**0.5
-    
-    l_test = np.arange(moy*0.9, moy*1.1, moy/100000.)
-    sampled_guess = l_test
-    cov = np.diag(l_eff_sig**2)
-    covl_inv = np.linalg.inv(cov)
-    l_chi2 = lmap(lambda g: (l_eff-g).T.dot(covl_inv.dot(l_eff-g)), sampled_guess)
-    l_w = np.exp(-np.array(l_chi2)/2)
-    
-    moy2,sig2 = imoyvar_list(sampled_guess, l_w)
-    def approx(v):
-        return round(v, 5)
-        #return int(v*10000)/10000.
-    print (str(key))
-    print ("    on the measurments disp val,sig,sig_res[%] = "+str((approx(moy),approx(sig_ori), approx(sig_ori/moy*100))))
-    print ("    on the measurments disp val,sig,sig_res[%] = "+str((approx(moy),approx(sig), approx(sig/moy*100))))
-    print ("    and using uncertainties val,sig,sig_res[%] = "+str((approx(moy2),approx(sig2),approx(sig2/moy2*100))))
-    print ("    residuals: "+"\n               ".join(map(lambda v:str(v), (l_eff-moy2)/(sig2**2+l_eff_sig**2)**0.5)))
-    
-    for d in range(len(l_eff)):
-        l_ax[ikey].errorbar([d], [l_eff[d]], [l_eff_sig[d]], c=(0,0,0),linewidth=2)
-        on = moy2<l_eff[d]
-        l_ax[ikey].text(d,l_eff[d]+(1 if on else -1)*l_eff_sig[d],r"$"+str(simple(l_eff_sig[d]/l_eff[d]*100,2))+r"\%$",va="bottom" if on else "top",ha="left",size=get_aff_size("s_tick")*0.8)
-    
-    l_ax[ikey].set_xlim([-1.1, len(l_eff)-0.5])
-    aff_curve(l_ax[ikey], l_ax[ikey].get_xlim(), [moy2, moy2], [sig2,sig2], (0,0,1), 1,0.3, dashes=[5,2])
-    l_ax[ikey].plot(l_ax[ikey].get_xlim(), [moy2*1.01, moy2*1.01], c=(0,0,1), dashes=[2,5])
-    l_ax[ikey].plot(l_ax[ikey].get_xlim(), [moy2*0.99, moy2*0.99], c=(0,0,1), dashes=[2,5])
-    l_ax[ikey].text(-1,moy2,     r"$\mu$",va="bottom",ha="left",size=get_aff_size("s_tick"), color=(0,0,1))
-    l_ax[ikey].text(-1,moy2*1.01,r"$\mu+1\%$",va="bottom",ha="left",size=get_aff_size("s_tick"), color=(0,0,1))
-    l_ax[ikey].text(-1,moy2*0.99,r"$\mu-1\%$",va="bottom",ha="left",size=get_aff_size("s_tick"), color=(0,0,1))
-    
-    #aff_curve(ax, lx,ly,sly,c,a1,a2
-    
-    if 0.9<moy2<1.1:
-        l_ax[ikey].plot(l_ax[ikey].get_xlim(), [1, 1], c=(0,0,0), dashes=[5,2])
-    
-    l_ax[ikey].set_xticks(range(len(l_eff)))
-    l_ax[ikey].set_xticklabels(map(lambda n:tex(n), l_name), size=get_aff_size("s_tick"))
-    # , rotation=(0 if len(l_name)<4 else 45))
-    
-    l_ax[ikey].set_ylabel(tex(r"Eff. ratio"),    size=get_aff_size("s_xylabel"))
-    l_ax[ikey].set_xlabel(tex(r"Dosimeter"),    size=get_aff_size("s_xylabel"))
+if do_plot: # a enlever pour faire un joli plot :)
+    fig = plt.figure(figsize=(11,5))
+    fig.patch.set_facecolor('white')
+    nb_plt = len(d_res.keys())
+    tab_ax = my_sub6(fig,1,1,0,list_ry=[1]*nb_plt, list_rx=[1], auto_y=False,auto_x=False)
+    l_ax = list(reversed(tab_ax[0,:]))
 
 
-fig.savefig("ratioeff_all.png", bbox_inches=('tight'), dpi=200)
-plt.show()
+    for ikey, key in enumerate(d_res.keys()):
+        l_eff, l_eff_sig, l_name = map(lambda l: np.array(l), d_res[key])
+        #nb_dosi = 3
+        #l_eff, l_eff_sig, l_name = l_eff[:nb_dosi], l_eff_sig[:nb_dosi], l_name[:nb_dosi]
+        moy,sig = imoyvar_list(l_eff)
+        sig_ori = sig
+        if len(l_eff)>2:
+            sig /= (len(l_eff)-1)**0.5
+        
+        l_test = np.arange(moy*0.9, moy*1.1, moy/100000.)
+        sampled_guess = l_test
+        cov = np.diag(l_eff_sig**2)
+        covl_inv = np.linalg.inv(cov)
+        l_chi2 = lmap(lambda g: (l_eff-g).T.dot(covl_inv.dot(l_eff-g)), sampled_guess)
+        l_w = np.exp(-np.array(l_chi2)/2)
+        
+        moy2,sig2 = imoyvar_list(sampled_guess, l_w)
+        def approx(v):
+            return round(v, 5)
+            #return int(v*10000)/10000.
+        print (str(key))
+        print ("    on the measurments disp val,sig,sig_res[%] = "+str((approx(moy),approx(sig_ori), approx(sig_ori/moy*100))))
+        print ("    on the measurments disp val,sig,sig_res[%] = "+str((approx(moy),approx(sig), approx(sig/moy*100))))
+        print ("    and using uncertainties val,sig,sig_res[%] = "+str((approx(moy2),approx(sig2),approx(sig2/moy2*100))))
+        print ("    residuals: "+"\n               ".join(map(lambda v:str(v), (l_eff-moy2)/(sig2**2+l_eff_sig**2)**0.5)))
+        
+        for d in range(len(l_eff)):
+            l_ax[ikey].errorbar([d], [l_eff[d]], [l_eff_sig[d]], c=(0,0,0),linewidth=2)
+            on = moy2<l_eff[d]
+            l_ax[ikey].text(d,l_eff[d]+(1 if on else -1)*l_eff_sig[d],r"$"+str(simple(l_eff_sig[d]/l_eff[d]*100,2))+r"\%$",va="bottom" if on else "top",ha="left",size=get_aff_size("s_tick")*0.8)
+        
+        l_ax[ikey].set_xlim([-1.1, len(l_eff)-0.5])
+        aff_curve(l_ax[ikey], l_ax[ikey].get_xlim(), [moy2, moy2], [sig2,sig2], (0,0,1), 1,0.3, dashes=[5,2])
+        l_ax[ikey].plot(l_ax[ikey].get_xlim(), [moy2*1.01, moy2*1.01], c=(0,0,1), dashes=[2,5])
+        l_ax[ikey].plot(l_ax[ikey].get_xlim(), [moy2*0.99, moy2*0.99], c=(0,0,1), dashes=[2,5])
+        l_ax[ikey].text(-1,moy2,     r"$\mu$",va="bottom",ha="left",size=get_aff_size("s_tick"), color=(0,0,1))
+        l_ax[ikey].text(-1,moy2*1.01,r"$\mu+1\%$",va="bottom",ha="left",size=get_aff_size("s_tick"), color=(0,0,1))
+        l_ax[ikey].text(-1,moy2*0.99,r"$\mu-1\%$",va="bottom",ha="left",size=get_aff_size("s_tick"), color=(0,0,1))
+        
+        #aff_curve(ax, lx,ly,sly,c,a1,a2
+        
+        if 0.9<moy2<1.1:
+            l_ax[ikey].plot(l_ax[ikey].get_xlim(), [1, 1], c=(0,0,0), dashes=[5,2])
+        
+        l_ax[ikey].set_xticks(range(len(l_eff)))
+        l_ax[ikey].set_xticklabels(map(lambda n:tex(n), l_name), size=get_aff_size("s_tick"))
+        # , rotation=(0 if len(l_name)<4 else 45))
+        
+        l_ax[ikey].set_ylabel(tex(r"Eff. ratio"),    size=get_aff_size("s_xylabel"))
+        l_ax[ikey].set_xlabel(tex(r"Dosimeter"),    size=get_aff_size("s_xylabel"))
+
+
+    fig.savefig("ratioeff_all.png", bbox_inches=('tight'), dpi=200)
+    plt.show()
 
 
 

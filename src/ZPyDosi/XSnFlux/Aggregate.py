@@ -1,5 +1,5 @@
 import numpy as np
-def aggregate_spectrum(arr:np.ndarray, G):
+def aggregate_spectrum(arr:np.ndarray, G, sig=False):
     """
     Aggregates a 2D array by summing over bins of size 2^G along the columns.
 
@@ -24,7 +24,11 @@ def aggregate_spectrum(arr:np.ndarray, G):
     new_M = M // bin_size
 
     # Reshape and sum over the bins
-    reshaped_arr = arr.reshape(N, new_M, bin_size)
-    aggregated_arr = reshaped_arr.sum(axis=2)
+    if sig:
+        reshaped_arr = np.square(arr).reshape(N, new_M, bin_size)
+        aggregated_arr = np.sqrt(reshaped_arr.sum(axis=2))
+    else:
+        reshaped_arr = arr.reshape(N, new_M, bin_size)
+        aggregated_arr = reshaped_arr.sum(axis=2)
 
     return aggregated_arr

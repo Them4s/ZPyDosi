@@ -252,55 +252,54 @@ class DataIrrad:
             
             self.l_mat        = lmap(lambda name: name.split("-")[0], self.l_name)
             if load_ratio:
-                self.d_ratio=load_dict_from_file(filename="Ratio/8d88ffabf2b0a63016e3c408c2cc58c8")       
-                # self.d_ratio=load_dict_from_file(filename="Ratio/"+self.get_key_for_ratio())       
+                # self.d_ratio=load_dict_from_file(filename="Ratio/8d88ffabf2b0a63016e3c408c2cc58c8")  #PETALE all ratios
+                self.d_ratio=load_dict_from_file(filename="Ratio/"+self.get_key_for_ratio())       
                 ratio_key= self.d_ratio.keys()
                 for (name_dosi, name,pos, iso, mt) in zip(l_name_tmp, l_hpge_id_tmp,l_hpge_pos_tmp, l_iso_tmp, l_mt_tmp):    # get the calibration
-                    def get_data(name, pos, namehpge,idposhpge,key):
-                        for ihpgecalib in range(len(tmp_data_lnamehpge)):
-                            idhpge, poshpge = tmp_data_lnamehpge[ihpgecalib], tmp_data_lposhpge[ihpgecalib]
-                            #print(name, pos, v,s,key, idhpge, poshpge, idhpge==name and poshpge==pos)
-                            if idhpge==name and poshpge==pos:
-                                self.l_calib_path      += [tmp_data_lpathhpge[ihpgecalib]]
-                                tmploc="_".join([iso,mt,str(namehpge)])
-                                print(tmploc)
-                                if tmploc in ratio_key and idposhpge!="p13":
-                                    self.l_calib_ratio_v   += [self.d_ratio["_".join([iso,mt,namehpge])]]
-                                    self.l_calib_ratio_s   += [self.d_ratio["_".join([iso,mt,namehpge,iso,mt,namehpge])]**0.5]
-                                else:
-                                    self.l_calib_ratio_v   += [1]
-                                    self.l_calib_ratio_s   += [0]
+                    def get_data(name, pos, key):
+                        self.l_calib_path      += [tmp_data_lpathhpge[0]] # kinda legacy my be improved
+                        # tmploc="_".join([iso,mt,str(namehpge)])
+                        # print(tmploc)
+                        tmploc="_".join([iso,mt,str(name)])
+                        if tmploc in ratio_key and (name!=tmp_data_lposhpge[0]): #"p13" is PETALE legacy
+                            self.l_calib_ratio_v   += [self.d_ratio["_".join([iso,mt,name])]]
+                            self.l_calib_ratio_s   += [self.d_ratio["_".join([iso,mt,name,iso,mt,name])]**0.5]
+                        elif pos==tmp_data_lposhpge[0] and name==tmp_data_lnamehpge[0]:
+                            self.l_calib_ratio_v   += [1]
+                            self.l_calib_ratio_s   += [0]
+                        else:
+                            return False
 
-                                if key is not None: key += "_"+name+"_"+pos+"_"+str(d_spectro[(iso, mt)]["keV"])
-                                self.l_calib_ratio_key += [key]
-                                return True
-                        return False
+                        if key is  None: key = name+"_"+pos+"_"+str(d_spectro[(iso, mt)]["keV"])
+                        self.l_calib_ratio_key += [key]
+                        return True
                 #print("#"*40)
                 #print("coucou",name_dosi)
-                    if not get_data(name, pos, 1.,0.,None):
-                        l_key_ratio_eff = dosi_csv.get_in_list("name", "name", "name", name_dosi, "ratio_eff", deep=True).replace("/"," ").split()
-                        key_ratio_eff = l_key_ratio_eff[0]
-                        ok = False
-                        #print(name_dosi,l_key_ratio_eff)
-                        #print("loop",key_ratio_eff)
-                        for ikey, name_key_available in enumerate(dosi_csv.get_list("ratio_eff", "ratio_eff", "name")):
-                            if name_key_available == key_ratio_eff:
-                                nrj       = dosi_csv.get_list("ratio_eff", "ratio_eff", "energy [keV]")[ikey]
-                                pos_other = dosi_csv.get_list("ratio_eff", "ratio_eff", "pos_other"   )[ikey]
-                                pos_ref   = dosi_csv.get_list("ratio_eff", "ratio_eff", "pos_ref"     )[ikey]
-                                ratio_val = dosi_csv.get_list("ratio_eff", "ratio_eff", "ratio_val"   )[ikey]
-                                ratio_sig = dosi_csv.get_list("ratio_eff", "ratio_eff", "ratio_sig"   )[ikey]
-                                name_hpge_ref, pos_hpge_ref = pos_ref.split("_")
-                                hpge_id,hpge_id_pos=pos_other.split("_")
-                                #print((iso, mt))
-                                #print(nrj, pos_other, pos_ref,d_spectro[(iso, mt)]["keV"],float(nrj), pos_other.split("_") == [name,pos], abs(d_spectro[(iso, mt)]["keV"]-float(nrj))<2)
-                                if pos_other.split("_") == [name,pos] and abs(d_spectro[(iso, mt)]["keV"]-float(nrj))<2:
-                                    #print("->",key_ratio_eff, name_key_available, nrj, pos_other, pos_ref, name, pos, pos_other.split("_") == [name,pos] )
-                                    if get_data(name_hpge_ref, pos_hpge_ref, hpge_id, hpge_id_pos, key_ratio_eff+"_"+pos_other):
-                                        ok = True
-                                        break
-                        if not ok:
-                            self._err("no hpge HPGe calibration or efficiency ratio found for <"+name_dosi+"> in HPGe <"+name+"> at position <"+pos+"> for iso <"+str(iso)+"> and mt <"+str(mt)+">")
+                    tmploc="_".join([iso,mt,str(name)])
+                    print(tmploc, name, pos)
+                    if not get_data(name, pos,None):
+                        self._err("no hpge HPGe calibration or efficiency ratio found for <"+name_dosi+"> in HPGe <"+name+"> at position <"+pos+"> for iso <"+str(iso)+"> and mt <"+str(mt)+">")
+                        # l_key_ratio_eff = dosi_csv.get_in_list("name", "name", "name", name_dosi, "auto_abs_et_geom", deep=True).replace("/"," ").split()
+                        # key_ratio_eff = l_key_ratio_eff[0]
+                        # ok = False
+                        # #print(name_dosi,l_key_ratio_eff)
+                        # #print("loop",key_ratio_eff)
+                        # for ikey, name_key_available in enumerate(dosi_csv.get_list("ratio_eff", "ratio_eff", "name")):
+                        #     if name_key_available == key_ratio_eff:
+                        #         nrj       = dosi_csv.get_list("ratio_eff", "ratio_eff", "energy [keV]")[ikey]
+                        #         pos_other = dosi_csv.get_list("ratio_eff", "ratio_eff", "pos_other"   )[ikey]
+                        #         pos_ref   = dosi_csv.get_list("ratio_eff", "ratio_eff", "pos_ref"     )[ikey]
+                        #         name_hpge_ref, pos_hpge_ref = pos_ref.split("_")
+                        #         hpge_id,hpge_id_pos=pos_other.split("_")
+                        #         #print((iso, mt))
+                        #         #print(nrj, pos_other, pos_ref,d_spectro[(iso, mt)]["keV"],float(nrj), pos_other.split("_") == [name,pos], abs(d_spectro[(iso, mt)]["keV"]-float(nrj))<2)
+                        #         if pos_other.split("_") == [name,pos] and abs(d_spectro[(iso, mt)]["keV"]-float(nrj))<2:
+                        #             #print("->",key_ratio_eff, name_key_available, nrj, pos_other, pos_ref, name, pos, pos_other.split("_") == [name,pos] )
+                        #             if get_data(name_hpge_ref, pos_hpge_ref, hpge_id, hpge_id_pos, key_ratio_eff+"_"+pos_other):
+                        #                 ok = True
+                        #                 break
+                        # if not ok:
+                        #     self._err("no hpge HPGe calibration or efficiency ratio found for <"+name_dosi+"> in HPGe <"+name+"> at position <"+pos+"> for iso <"+str(iso)+"> and mt <"+str(mt)+">")
             
             
             if load_moni:
@@ -823,7 +822,7 @@ class DataIrrad:
         txt += " ".join(self.l_key_irdff_iaea)
         return hashlib.md5(bytes(txt, 'utf-8')).hexdigest()
     
-    def get_key_for_ratio(self):
+    def get_key_for_ratio(self, l_name=None,l_mat=None):
         """
         Generate a unique hash key for efficiency ratios table file.
 
@@ -836,8 +835,8 @@ class DataIrrad:
         str
             MD5 hexadecimal hash string representing the corresponding table file path.
         """
-        txt  = " ".join(self.l_name)
-        txt += " ".join(self.l_mat)
+        txt  = " ".join(self.l_name) if l_name is None else " ".join(l_name)
+        txt += " ".join(self.l_mat) if l_mat is None else " ".join(l_mat)
         txt += "_efficacité"
         return hashlib.md5(bytes(txt, 'utf-8')).hexdigest()
 
