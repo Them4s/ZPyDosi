@@ -14,6 +14,7 @@ from scipy.optimize import curve_fit
 import hashlib
 import os 
 import sys
+
 class DataIrrad:
     '''
     Container for the iradiation data from a csv/xlsx file prior
@@ -163,6 +164,8 @@ class DataIrrad:
         self.l_dead_time_param = { #Key: Dead_t_load
                                 "v1":{"tau":data_csv.get_list("monitors","monitors","tau [s]",data_type=float)[0], "tau_s" :data_csv.get_list("monitors","monitors","tau sig [s]",data_type=float)[0]},
                                 "v2":{"tau":data_csv.get_list("monitors","monitors","tau [s]",data_type=float)[1], "tau_s" :data_csv.get_list("monitors","monitors","tau sig [s]",data_type=float)[1]}}
+        self.path_xsdata=data_csv.get_list("XS_path","XS_path","sim_XSDATA",data_type=str)[0]
+        self.path_iaea_data=data_csv.get_list("XS_path","XS_path","IRDFF_folder",data_type=str)[0]
         print("loading:")
         for case_csv in lcase_csv:
             print(case_csv)
@@ -347,7 +350,7 @@ class DataIrrad:
             return s
         self.l_aaa        = lmap(lambda i: fct_remove_0(self.l_iso[i][:-1].replace(self.l_zz[i],"",1)), range(self.nb_dosi))
         self.l_mat_with_iso = [r"^{"+s1+r"}"+s2 for (s1,s2) in zip(self.l_aaa,self.l_mat)]
-        self.l_at_den    = lmap(lambda i: get_at_density(self.l_mat[i],self.l_iso[i][:-1]), range(self.nb_dosi))
+        self.l_at_den    = lmap(lambda i: get_at_density(self.l_mat[i],self.l_iso[i][:-1],self.path_xsdata), range(self.nb_dosi))
         self.l_key_irdff_iaea= lmap(lambda i: self.l_mat[i]+self.l_aaa[i]+d_mt2name[self.l_mt[i]], range(self.nb_dosi))
         
         self.l_masse    = np.array(lmap(lambda name: float(dosi_csv.get_in_list("name", "name", "name", name, "weight",        deep=True)), self.l_name))
@@ -359,7 +362,7 @@ class DataIrrad:
         
         self.l_volume   = (np.pi*self.l_radius**2)*self.l_thickness
         
-        self.l_at_den     = np.array(lmap(lambda i: get_at_density(self.l_mat[i],self.l_iso[i][:-1]),    range(self.nb_dosi)))
+        self.l_at_den     = np.array(lmap(lambda i: get_at_density(self.l_mat[i],self.l_iso[i][:-1],self.path_xsdata),    range(self.nb_dosi)))
         self.l_half_time  = np.array(lmap(lambda i: d_spectro[(self.l_iso[i], self.l_mt[i])]["halftime"],    range(self.nb_dosi)))
         self.l_gamma_nrj  = np.array(lmap(lambda i: d_spectro[(self.l_iso[i], self.l_mt[i])]["keV"],    range(self.nb_dosi)))
         self.l_gamma_inten= np.array(lmap(lambda i: d_spectro[(self.l_iso[i], self.l_mt[i])]["inten"],    range(self.nb_dosi)))

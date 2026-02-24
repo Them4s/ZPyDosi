@@ -230,7 +230,7 @@ for irand in range(nb_rand):
         path = path_todo + str(irand+1)+"/input"+"_mat_sss_2_of/perspectra"
         # print(path)r
         # exit()
-        bash_cmd="python3.10 /home/thomasligonnet/Link_to_analysis/python/Misc/reaction_rate_projector_up_pos.py input="+path_todo + str(irand+1)+"/input save_key=up_pos_out/num{}".format(irand+1)+(data.get_key_for_up_pos()) + " save_mat="+"_".join(lcase_csv[0].split("_")[1:] ) + " add_all={}".format(add_all)
+        bash_cmd="python3.10 /home/thomasligonnet/Link_to_analysis/python/Misc/reaction_rate_projector_up_pos.py input="+path_todo + str(irand+1)+"/input save_key=up_pos_out/num{}".format(irand+1)+(data.get_key_for_up_pos()) + " save_mat="+"_".join(lcase_csv[0].split("_")[1:] ) + " add_all={}".format(add_all) + " path_xsdata={}".format(data.path_xsdata)
         processes  += [subprocess.Popen(bash_cmd.replace("&","").split(), stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf8', preexec_fn=os.setsid)]
         # process = subprocess.Popen(bash_cmd.replace("&","").split(), stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf8', preexec_fn=os.setsid)
         # process.wait()
@@ -705,26 +705,7 @@ if not low_mem:
     # 2.65236816888e-09 1.42474098881e-09 7.33710367979e-08 1.18010649669e-06
     # 7.07999915439e-11 1.03003612194e-11 1.22131125564e-09 1.27037705998e-08
     # 0.0266931236677 0.00722963773787 0.0166456862128 0.0107649357371
-    '''
     
-    print "cov2"
-    #print " ".join(map(lambda v:str(v),l_rr / get_at_density("Au", "79197")))
-    print aff_list("l_rr", l_rr)
-    print aff_mat("l_rrs", l_rrs)
-    #print " ".join(map(lambda v:str(v),l_rr))
-    #print " ".join(map(lambda v:str(v),l_rrs))
-    #print " ".join(map(lambda v:str(v),l_rrs/l_rr))
-    print
-    exit()
-    
-    sens = l_dlet*ll_fv_proj_c
-    for i in range(len(sens)):
-        sens[i] *= l_at_den[i]
-    cov_rr  = (sens).dot(ll_cov.dot(sens.T))
-    print "rr cov_rr**0.5"
-    print "\n".join(map(lambda l: " ".join(map(lambda v:str(v),l)), list(cov_rr**0.5)))
-    print
-    '''
     #cor = cov_rr*1.
     #stddev = np.sqrt(np.diag(cov_rr))
     #stddev = np.sqrt(np.diag(cov_rr))

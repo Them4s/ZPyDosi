@@ -9,8 +9,9 @@ from ZPyDosi.Plots.MatrixPlots import make_cmap
 from ZPyDosi.DosiFunctions.Functions import get_at_density
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
-
+path_xsdata    = os.path.expandvars("Path to your XSDATA file")
 plt.rcParams.update({'font.size': 18})
 np.seterr(divide='ignore', invalid='ignore')
 

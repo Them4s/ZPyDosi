@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 18})
 print ("#"*50)
 
+
+path_xsdata    = os.path.expandvars("Path to your XSDATA file")
 np.seterr(divide='ignore', invalid='ignore')
 
 # inputs_name=["J3","T2019","T2021","J4","b8","b71","JENDL4","Uppsala"]

@@ -20,6 +20,7 @@ np.seterr(divide='ignore', invalid='ignore')
 inputs_name = get_param_vari("input",     str).split("//")
 save_key = get_param_vari("save_key",     str,None)
 save_mat = get_param_vari("save_mat",     str,None)
+path_xsdata = get_param_vari("path_xsdata",    str)
 add_all  = get_param_vari("add_all", bool, "False")
 
 # matplotlib.use('Agg')
@@ -87,9 +88,9 @@ cov_tot=[]
 cov_tot_s=[]
 rr_=[]
 rr_s_=[]
-l_at_den=np.array(list(map(lambda mat,iso: get_at_density(mat,iso),l_mat1,l_ZZAAA)))
+l_at_den=np.array(list(map(lambda mat,iso: get_at_density(mat,iso,path_xsdata),l_mat1,l_ZZAAA)))
 
-real_at_dens=get_at_density(mat_rr,ZZAAA_rr)
+real_at_dens=get_at_density(mat_rr,ZZAAA_rr,path_xsdata)
 
 for i in range(len(inputs_name)) :
     spectra_=[]
@@ -165,7 +166,7 @@ for i in range(len(inputs_name)) :
                     ll_fv[k][i] = np.array(list(ll_fv[k][i])+[0])
                     ll_fs[k][i] = np.array(list(ll_fs[k][i])+[0])
             #print(len(ll_fv[0][0]))
-            at_dens=get_at_density(mat1,ZZAAA)
+            at_dens=get_at_density(mat1,ZZAAA,path_xsdata)
             cov_dist=[]
             cov_dist_s=[]
             tmp_proj_xs = projet_vec_intervals_from_continus(E3, l_xs_e, l_xs_v)

@@ -1,0 +1,115 @@
+#begin MT102:LB5:Symmetric Matrix/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: CO-59(N,G)CO-60
+fun: MT102:LB5:Symmetric Matrix 
+con: 3
+dash: 1
+dot: o
+lx: 7
+//
+ 2.0E7 15.7904
+ 2.4E7 16.1591
+ 2.8E7 16.1404
+ 3.4E7 16.2136
+ 4.2E7 15.3529
+ 5.0E7 14.4902
+ 6.0E7 14.4902
+//
+#end MT102:LB5:Symmetric Matrix/u
+#begin IRDFF-1.05: CO-59(N,G)CO-60/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: CO-59(N,G)CO-60/c
+#begin MT102:LB1:Fractional/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: CO-59(N,G)CO-60
+fun: MT102:LB1:Fractional 
+con: 3
+dash: 1
+dot: o
+lx: 3
+//
+ 0.0253 0.538517
+ 1000000.0 3.16228
+ 2.0E7 3.16228
+//
+#end MT102:LB1:Fractional/u
+#begin IRDFF-1.05: CO-59(N,G)CO-60/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: CO-59(N,G)CO-60/c
+#begin MT102:LB1:Fractional/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: CO-59(N,G)CO-60
+fun: MT102:LB1:Fractional 
+con: 3
+dash: 1
+dot: o
+lx: 13
+//
+ 8000.0 3.74166
+ 20000.0 5.83095
+ 50000.0 7.07107
+ 100000.0 3.4641
+ 150000.0 2.64575
+ 300000.0 4.58258
+ 500000.0 4.24264
+ 600000.0 6.16441
+ 800000.0 7.81025
+ 1000000.0 8.06226
+ 6000000.0 10.
+ 1.8E7 20.
+ 2.0E7 20.
+//
+#end MT102:LB1:Fractional/u
+#begin IRDFF-1.05: CO-59(N,G)CO-60/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: CO-59(N,G)CO-60/c
+#begin MT102xMT102/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: CO-59(N,G)CO-60
+fun: MT102xMT102 
+con: 3
+thick: 2
+dot: o
+lx: 20
+//
+ 0.0253 0.768115
+ 8000.0 3.78021
+ 20000.0 5.85577
+ 50000.0 7.09154
+ 100000.0 3.50571
+ 150000.0 2.7
+ 300000.0 4.61411
+ 500000.0 4.27668
+ 600000.0 6.18789
+ 800000.0 7.82879
+ 1000000.0 8.66025
+ 6000000.0 10.4881
+ 1.8E7 20.2485
+ 2.0E7 15.7904
+ 2.4E7 16.1591
+ 2.8E7 16.1404
+ 3.4E7 16.2136
+ 4.2E7 15.3529
+ 5.0E7 14.4902
+ 6.0E7 14.4902
+//
+#end MT102xMT102/u
+#begin IRDFF-1.05: CO-59(N,G)CO-60/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: CO-59(N,G)CO-60/c

@@ -1,0 +1,119 @@
+#begin MT103:LB5:Symmetric Matrix/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: FE-56(N,P)MN-56
+fun: MT103:LB5:Symmetric Matrix 
+con: 3
+dash: 1
+dot: o
+lx: 7
+//
+ 2.0E7 18.0948
+ 2.4E7 17.2051
+ 2.8E7 16.2363
+ 3.4E7 15.3333
+ 4.2E7 14.4163
+ 5.0E7 14.0088
+ 6.0E7 14.0088
+//
+#end MT103:LB5:Symmetric Matrix/u
+#begin IRDFF-1.05: FE-56(N,P)MN-56/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: FE-56(N,P)MN-56/c
+#begin MT103:LB5:Symmetric Matrix/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: FE-56(N,P)MN-56
+fun: MT103:LB5:Symmetric Matrix 
+con: 3
+dash: 1
+dot: o
+lx: 26
+//
+ 2900000.0 8.35485
+ 5000000.0 4.96788
+ 6000000.0 4.57155
+ 7000000.0 4.82159
+ 8000000.0 3.63193
+ 9000000.0 3.09318
+ 1.0E7 2.87168
+ 1.1E7 2.77532
+ 1.15E7 2.51481
+ 1.2E7 2.15889
+ 1.25E7 1.79499
+ 1.3E7 1.47436
+ 1.35E7 1.2155
+ 1.4E7 1.06696
+ 1.45E7 1.08348
+ 1.5E7 1.21538
+ 1.55E7 1.36342
+ 1.6E7 1.48625
+ 1.65E7 1.60117
+ 1.7E7 1.73713
+ 1.75E7 1.89385
+ 1.8E7 2.05046
+ 1.85E7 2.24732
+ 1.9E7 2.73596
+ 1.95E7 4.00756
+ 2.0E7 4.00756
+//
+#end MT103:LB5:Symmetric Matrix/u
+#begin IRDFF-1.05: FE-56(N,P)MN-56/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: FE-56(N,P)MN-56/c
+#begin MT103xMT103/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: FE-56(N,P)MN-56
+fun: MT103xMT103 
+con: 3
+thick: 2
+dot: o
+lx: 32
+//
+ 2900000.0 8.35485
+ 5000000.0 4.96788
+ 6000000.0 4.57155
+ 7000000.0 4.82159
+ 8000000.0 3.63193
+ 9000000.0 3.09318
+ 1.0E7 2.87168
+ 1.1E7 2.77532
+ 1.15E7 2.51481
+ 1.2E7 2.15889
+ 1.25E7 1.79499
+ 1.3E7 1.47436
+ 1.35E7 1.2155
+ 1.4E7 1.06696
+ 1.45E7 1.08348
+ 1.5E7 1.21538
+ 1.55E7 1.36342
+ 1.6E7 1.48625
+ 1.65E7 1.60117
+ 1.7E7 1.73713
+ 1.75E7 1.89385
+ 1.8E7 2.05046
+ 1.85E7 2.24732
+ 1.9E7 2.73596
+ 1.95E7 4.00756
+ 2.0E7 18.0948
+ 2.4E7 17.2051
+ 2.8E7 16.2363
+ 3.4E7 15.3333
+ 4.2E7 14.4163
+ 5.0E7 14.0088
+ 6.0E7 14.0088
+//
+#end MT103xMT103/u
+#begin IRDFF-1.05: FE-56(N,P)MN-56/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: FE-56(N,P)MN-56/c

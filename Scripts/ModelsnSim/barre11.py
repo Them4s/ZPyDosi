@@ -173,7 +173,7 @@ def fct_C(h1, h2, l_remhn_dosi):
 		print ("      "+str(d_matdosi_2_data[m_dosi]["compo"]))
 		for iso,l_mt in d_matdosi_2_data[m_dosi]["iso"]:
 			mat_iso = "mat_reac_"+m_dosi+"_"+str(iso)
-			frac_masse_iso = get_massic_fraction(str(iso)[:-1], d_matdosi_2_data[m_dosi]["compo"])
+			frac_masse_iso = get_massic_fraction(str(iso)[:-1], d_matdosi_2_data[m_dosi]["compo"], data_irrad.path_xsdata)
 			if not var_red:
 				add_in_l(l_defmat,aff("mat "+mat_iso, l=25)+" -"+aff(frac_masse_iso*d_matdosi_2_data[m_dosi]["den"],l=20)+" rgb "+d_matdosi_2_data[m_dosi]["rgb"]+" "+str(iso)[:-1]+".34y 1")
 				
@@ -232,7 +232,7 @@ def fct_CR(nro, name, l_remhn_dosi):
 		print ("      "+str(d_matdosi_2_data[m_dosi]["compo"]))
 		for iso,l_mt in d_matdosi_2_data[m_dosi]["iso"]:
 			mat_iso = "mat_reac_"+m_dosi+"_"+str(iso)
-			frac_masse_iso = get_massic_fraction(str(iso)[:-1], d_matdosi_2_data[m_dosi]["compo"])
+			frac_masse_iso = get_massic_fraction(str(iso)[:-1], d_matdosi_2_data[m_dosi]["compo"],data_irrad.path_xsdata)
 			if not var_red:
 				add_in_l(l_defmat,aff("mat "+mat_iso, l=25)+" -"+aff(frac_masse_iso*d_matdosi_2_data[m_dosi]["den"],l=20)+" rgb "+d_matdosi_2_data[m_dosi]["rgb"]+" "+str(iso)[:-1]+".34y 1")
 			for mt in l_mt:

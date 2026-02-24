@@ -1,5 +1,5 @@
 from ..Prints.PrintnSave import aff
-from ..Common.utils_general import lmap, path_xsdata
+from ..Common.utils_general import lmap
 from .Dictionaries import d_matdosi_2_data
 import numpy as np
 from math import pi
@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 d_iso2mass = None
 mode_irdff_only = False
 
-def _init_d_iso2mass():
+def _init_d_iso2mass(path_xsdata):
     """
     Initialize the isotope-to-mass lookup dictionary.
 
@@ -28,7 +28,7 @@ def _init_d_iso2mass():
     warn = False
     for iso_complete, mass in map(lambda l: (l.split()[0], float(l.split()[5])),open(path_xsdata).readlines()):            # get the mass from the xsdata
         iso, temp_key = iso_complete[:-4], iso_complete[-4:]
-        if not mode_irdff_only or ".34y" == temp_key:
+        if not mode_irdff_only or ".34y" == temp_key:  # avoid IRDFF
             if iso in d_iso2mass and abs(mass/d_iso2mass[iso]-1)>1e-4:
                 print ("warning - "+aff(iso)+aff(d_iso2mass[iso], l=11, rev=True)+"!= "+aff(mass, l=11, rev=True)+"rel diff: "+aff(d_iso2mass[iso]/mass,l=14))
                 warn = True
@@ -36,11 +36,11 @@ def _init_d_iso2mass():
     if warn:
         exit()
 
-def get_iso2mass(iso):
-    if d_iso2mass is None: _init_d_iso2mass()
+def get_iso2mass(iso,path_xsdata):
+    if d_iso2mass is None: _init_d_iso2mass(path_xsdata)
     return d_iso2mass[iso]
 
-def get_massic_fraction(iso, compo,suffix="g0.0300c"):
+def get_massic_fraction(iso, compo,path_xsdata,suffix="g0.0300c"):
     """
     Compute the mass fraction of a given isotope in a composition.
 
@@ -61,14 +61,14 @@ def get_massic_fraction(iso, compo,suffix="g0.0300c"):
     float
         Mass fraction of the specified isotope within the composition.
     """
-    if d_iso2mass is None: _init_d_iso2mass()
+    if d_iso2mass is None: _init_d_iso2mass(path_xsdata)
     l_iso_e = compo.split()[::2]
     l_iso_f = lmap(lambda v:float(v), compo.split()[1::2])
     pos = l_iso_e.index(iso+suffix)
     return l_iso_f[pos]*d_iso2mass[l_iso_e[pos][:5]] / sum(lmap(lambda i: l_iso_f[i] * d_iso2mass[l_iso_e[i][:5]],range(len(l_iso_e))))
 
 
-def get_at_density(mat, iso):
+def get_at_density(mat, iso, path_xsdata):
     """
     Compute the atomic density of an isotope in a material.
 
@@ -88,15 +88,11 @@ def get_at_density(mat, iso):
     float
         Atomic density of the isotope in units of atoms per barn·centimeter.
     """
-    at_per_g = 6.022140857e23 / get_iso2mass(iso)                    # at/g
-    mass_frac = get_massic_fraction(iso, d_matdosi_2_data[mat]["compo"])
+    at_per_g = 6.022140857e23 / get_iso2mass(iso, path_xsdata)                    # at/g
+    mass_frac = get_massic_fraction(iso, d_matdosi_2_data[mat]["compo"], path_xsdata)
     density = d_matdosi_2_data[mat]["den"]
     return at_per_g * mass_frac * density*1e-24                    # at/(barn.cm)
 
-if False:
-    print (get_iso2mass("79197"))
-    print (get_massic_fraction("79197", "79197g0.0300c 1"))
-    print (get_at_density("Au", "79197"))
 
 def mass_rad_mat_2_ep(masse, rad, mat):
     """

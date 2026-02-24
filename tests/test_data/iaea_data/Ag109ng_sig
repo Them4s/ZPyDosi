@@ -1,0 +1,75 @@
+#begin IRDFF-1.05: AG-109(N,G)Ag-110N/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: AG-109(N,G) MF40.MT102
+fun: IRDFF-1.05: AG-109(N,G)Ag-110N 
+con: 3
+dash: 1
+dot: o
+lx: 10
+//
+ 1.0 5.
+ 80.0 10.
+ 150.0 15.
+ 300.0 15.
+ 400.0 15.
+ 500.0 30.
+ 650.0 10.
+ 25000.0 5.
+ 2000000.0 30.
+ 2.0E7 30.
+//
+#end IRDFF-1.05: AG-109(N,G)Ag-110N/u
+#begin matrix2/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end matrix2/c
+#begin IRDFF-1.05: AG-109(N,G)Ag-110N/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: AG-109(N,G) MF40.MT102
+fun: IRDFF-1.05: AG-109(N,G)Ag-110N 
+con: 3
+dash: 1
+dot: o
+lx: 1
+//
+ 2.0E7 5.
+//
+#end IRDFF-1.05: AG-109(N,G)Ag-110N/u
+#begin matrix2/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end matrix2/c
+#begin MT102xMT102/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: AG-109(N,G) MF40.MT102
+fun: MT102xMT102 
+con: 3
+thick: 2
+dot: o
+lx: 10
+//
+ 1.0 7.07107
+ 80.0 11.1803
+ 150.0 15.8114
+ 300.0 15.8114
+ 400.0 15.8114
+ 500.0 30.4138
+ 650.0 11.1803
+ 25000.0 7.07107
+ 2000000.0 30.4138
+ 2.0E7 30.4138
+//
+#end MT102xMT102/u
+#begin matrix2/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end matrix2/c

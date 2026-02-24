@@ -24,7 +24,6 @@ from matplotlib.patches import Rectangle
 now = datetime.datetime.now()
 
 
-path_iaea_data = os.path.expandvars("Your path here") # to be modified in the future
 
 
 
@@ -302,8 +301,8 @@ def fct(idosi, name, mat, iso, mt, weight, volume, pos_barre, pos, power_irrad, 
 	thickness	= mass_rad_mat_2_ep(weight, radius, mat)
 	volume          = (np.pi*radius**2)*thickness'''
 	
-	at_per_g = 6.022140857e23 / get_iso2mass(iso[:-1])					# at/g
-	mass_frac = get_massic_fraction(iso[:-1], d_matdosi_2_data[mat]['compo'])
+	at_per_g = 6.022140857e23 / get_iso2mass(iso[:-1],data_irrad.path_xsdata)					# at/g
+	mass_frac = get_massic_fraction(iso[:-1], d_matdosi_2_data[mat]['compo'],data_irrad.path_xsdata)
 	at_density = at_per_g * mass_frac * d_matdosi_2_data[mat]["den"]*1e-24			# at/(barn.cm)
 	
 	ZZZ = iso[-4:-1]
@@ -343,7 +342,7 @@ def fct(idosi, name, mat, iso, mt, weight, volume, pos_barre, pos, power_irrad, 
 	mat mat_dosi_8_4_Al iso 130270  mt 107    rr_v 7.002774e-12   rr_s% 8.57      surf s_petale_dos_8_4_Al z 47.0    rad 1.475     x1 -17.627499999999998    th 0.04999999999999716    z_correction 1.0003619626320788 vol 0.34174637584829526    den 2.6989 mass 0.9223392937769641
 	'''
 	
-	path_irdff_case = path_iaea_data+"/"+mat+ZZZ+d_mt2name[mt]
+	path_irdff_case = data_irrad.path_iaea_data+"/"+mat+ZZZ+d_mt2name[mt]
 	if path_irdff_case not in d_xs_irdff_already_process:
 		(l_cor_e, cor), (l_xs_e,l_xs_v,l_xs_s) = get_irdff_iaea(path_irdff_case)
 		tmp_proj_xs = projet_vec_intervals_from_continus(l_fe, l_xs_e, l_xs_v)

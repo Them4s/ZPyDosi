@@ -9,8 +9,9 @@ import numpy as np
 import os
 from ZPyDosi.DosiFunctions.Functions import get_iso2mass
 from ..Analysis.data_spectre import dico_spectrum
-path_xsdata    = os.path.expandvars("Path to your XS")
-path_iaea_data = os.path.expandvars("Path to your IRDFF-II")
+
+path_xsdata    = os.path.expandvars("Path to your XSDATA file")
+path_iaea_data = os.path.expandvars("Path to your IRDFF-II Folder")
 
 power_per_src_n = 1.32574000e-11	# J/n
 mode_irdff_only =True
@@ -36,7 +37,7 @@ for iso_complete, mass in map(lambda l: (l.split()[0], float(l.split()[5])),open
 
 def get_rr(pos_plaque, iso, masse, d_rea, iso_sss,mat_sss, power_irrad, t_irrad): # massic_den
 	
-	at_per_g = 6.022140857e23 / get_iso2mass(iso_sss)					# at/g
+	at_per_g = 6.022140857e23 / get_iso2mass(iso_sss,path_xsdata)					# at/g
 	l_iso_e = mat_sss.split()[::2]
 	l_iso_f = lmap(lambda v:float(v), mat_sss.split()[1::2])
 	pos = l_iso_e.index(iso_sss+".03c") 

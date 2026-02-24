@@ -1,0 +1,139 @@
+#begin MT102:LB5:Symmetric Matrix/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: FE-58(N,G)FE-59
+fun: MT102:LB5:Symmetric Matrix 
+con: 3
+dash: 1
+dot: o
+lx: 8
+//
+ 1.9E7 15.1949
+ 2.2E7 15.0951
+ 2.6E7 15.1837
+ 3.0E7 15.5123
+ 3.8E7 15.3875
+ 4.6E7 15.0346
+ 5.6E7 13.6733
+ 6.0E7 13.6733
+//
+#end MT102:LB5:Symmetric Matrix/u
+#begin IRDFF-1.05: FE-58(N,G)FE-59/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: FE-58(N,G)FE-59/c
+#begin MT102:LB1:Fractional/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: FE-58(N,G)FE-59
+fun: MT102:LB1:Fractional 
+con: 3
+dash: 1
+dot: o
+lx: 1
+//
+ 2.0E7 0.0632455
+//
+#end MT102:LB1:Fractional/u
+#begin IRDFF-1.05: FE-58(N,G)FE-59/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: FE-58(N,G)FE-59/c
+#begin MT102:LB1:Fractional/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: FE-58(N,G)FE-59
+fun: MT102:LB1:Fractional 
+con: 3
+dash: 1
+dot: o
+lx: 3
+//
+ 1000.0 5.
+ 2000000.0 10.
+ 2.0E7 10.
+//
+#end MT102:LB1:Fractional/u
+#begin IRDFF-1.05: FE-58(N,G)FE-59/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: FE-58(N,G)FE-59/c
+#begin MT102:LB1:Fractional/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: FE-58(N,G)FE-59
+fun: MT102:LB1:Fractional 
+con: 3
+dash: 1
+dot: o
+lx: 14
+//
+ 0.0253 3.97995
+ 100.0 4.97494
+ 2000.0 19.8997
+ 50000.0 24.8747
+ 150000.0 19.8997
+ 400000.0 19.8997
+ 900000.0 24.8747
+ 2000000.0 29.8496
+ 4000000.0 29.8496
+ 6000000.0 29.8496
+ 8000000.0 29.8496
+ 1.0E7 29.8496
+ 1.45E7 29.8496
+ 2.0E7 29.8496
+//
+#end MT102:LB1:Fractional/u
+#begin IRDFF-1.05: FE-58(N,G)FE-59/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: FE-58(N,G)FE-59/c
+#begin MT102xMT102/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: FE-58(N,G)FE-59
+fun: MT102xMT102 
+con: 3
+thick: 2
+dot: o
+lx: 23
+//
+ 0.0253 5.64305
+ 100.0 6.38389
+ 1000.0 7.05365
+ 2000.0 20.5184
+ 50000.0 25.3723
+ 150000.0 20.5184
+ 400000.0 20.5184
+ 900000.0 25.3723
+ 2000000.0 31.4802
+ 4000000.0 31.4802
+ 6000000.0 31.4802
+ 8000000.0 31.4802
+ 1.0E7 31.4802
+ 1.45E7 31.4802
+ 1.9E7 34.9555
+ 2.0E7 15.1949
+ 2.2E7 15.0951
+ 2.6E7 15.1837
+ 3.0E7 15.5123
+ 3.8E7 15.3875
+ 4.6E7 15.0346
+ 5.6E7 13.6733
+ 6.0E7 13.6733
+//
+#end MT102xMT102/u
+#begin IRDFF-1.05: FE-58(N,G)FE-59/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: FE-58(N,G)FE-59/c

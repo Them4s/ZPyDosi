@@ -1,0 +1,121 @@
+#begin MT107:LB5:Symmetric Matrix/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: V-51(N,A)SC-48
+fun: MT107:LB5:Symmetric Matrix 
+con: 3
+dash: 1
+dot: o
+lx: 7
+//
+ 2.0E7 40.5871
+ 2.4E7 42.5219
+ 2.8E7 42.8614
+ 3.4E7 43.1024
+ 4.2E7 42.6772
+ 5.0E7 42.7714
+ 6.0E7 42.7714
+//
+#end MT107:LB5:Symmetric Matrix/u
+#begin IRDFF-1.05: V-51(N,A)SC-48/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: V-51(N,A)SC-48/c
+#begin MT107:LB5:Symmetric Matrix/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: V-51(N,A)SC-48
+fun: MT107:LB5:Symmetric Matrix 
+con: 3
+dash: 1
+dot: o
+lx: 27
+//
+ 2000000.0 8.00584
+ 8000000.0 5.94444
+ 8400000.0 5.14252
+ 8700000.0 4.8002
+ 9000000.0 4.73125
+ 9500000.0 4.96084
+ 1.0E7 5.12483
+ 1.05E7 5.08759
+ 1.1E7 4.74793
+ 1.15E7 4.06835
+ 1.2E7 3.15903
+ 1.25E7 2.27478
+ 1.3E7 1.71336
+ 1.35E7 1.53188
+ 1.4E7 1.47476
+ 1.45E7 1.45619
+ 1.5E7 1.64555
+ 1.55E7 2.06119
+ 1.6E7 2.48951
+ 1.65E7 2.75907
+ 1.7E7 2.84758
+ 1.75E7 2.85296
+ 1.8E7 2.87048
+ 1.85E7 2.87576
+ 1.9E7 2.85269
+ 1.95E7 3.22721
+ 2.0E7 3.22721
+//
+#end MT107:LB5:Symmetric Matrix/u
+#begin IRDFF-1.05: V-51(N,A)SC-48/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: V-51(N,A)SC-48/c
+#begin MT107xMT107/u
+tit: Relative Uncertainty
+tit2: IRDFF-1.05: V-51(N,A)SC-48
+fun: MT107xMT107 
+con: 3
+thick: 2
+dot: o
+lx: 33
+//
+ 2000000.0 8.00584
+ 8000000.0 5.94444
+ 8400000.0 5.14252
+ 8700000.0 4.8002
+ 9000000.0 4.73125
+ 9500000.0 4.96084
+ 1.0E7 5.12483
+ 1.05E7 5.08759
+ 1.1E7 4.74793
+ 1.15E7 4.06835
+ 1.2E7 3.15903
+ 1.25E7 2.27478
+ 1.3E7 1.71336
+ 1.35E7 1.53188
+ 1.4E7 1.47476
+ 1.45E7 1.45619
+ 1.5E7 1.64555
+ 1.55E7 2.06119
+ 1.6E7 2.48951
+ 1.65E7 2.75907
+ 1.7E7 2.84758
+ 1.75E7 2.85296
+ 1.8E7 2.87048
+ 1.85E7 2.87576
+ 1.9E7 2.85269
+ 1.95E7 3.22721
+ 2.0E7 40.5871
+ 2.4E7 42.5219
+ 2.8E7 42.8614
+ 3.4E7 43.1024
+ 4.2E7 42.6772
+ 5.0E7 42.7714
+ 6.0E7 42.7714
+//
+#end MT107xMT107/u
+#begin IRDFF-1.05: V-51(N,A)SC-48/c
+x-units: MeV
+y: Uncertainty
+y-unit: 1, (%)
+iy-unit: 1        
+//
+#end IRDFF-1.05: V-51(N,A)SC-48/c
