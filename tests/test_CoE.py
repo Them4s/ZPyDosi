@@ -4,6 +4,9 @@ import sys
 import shutil
 from pathlib import Path
 
+import matplotlib as mpl
+mpl.rcParams["text.usetex"] = shutil.which("latex") is not None
+
 ROOT = Path(__file__).resolve().parents[1]
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
