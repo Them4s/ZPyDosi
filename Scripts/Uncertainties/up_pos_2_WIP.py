@@ -21,6 +21,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import subprocess
 import time
+import shutil
+import matplotlib as mpl
+mpl.rcParams["text.usetex"] = shutil.which("latex") is not None
 # print('RAM memory % used:', psutil.virtual_memory()[2])
 
 def array32(mat):

@@ -21,6 +21,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 plt.rcParams.update({'font.size': 18})
+import shutil
+import matplotlib as mpl
+mpl.rcParams["text.usetex"] = shutil.which("latex") is not None
 print ("#"*50)
 #key      = get_param_vari("key", str, None)
 #path_sss = get_param_vari("path_sss", str, None)

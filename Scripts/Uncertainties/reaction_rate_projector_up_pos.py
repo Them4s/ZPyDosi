@@ -11,6 +11,9 @@ from ZPyDosi.XSnFlux.GetIRDFF import get_irdff_iaea
 from ZPyDosi.XSnFlux.Projections import projet_vec_intervals_from_continus, projet_vec_intervals_from_integrated
 import numpy as np
 import matplotlib.pyplot as plt
+import shutil
+import matplotlib as mpl
+mpl.rcParams["text.usetex"] = shutil.which("latex") is not None
 
 
 np.seterr(divide='ignore', invalid='ignore')

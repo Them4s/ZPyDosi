@@ -22,6 +22,10 @@ import math
 import os
 import numpy as np
 import time
+
+import shutil
+import matplotlib as mpl
+mpl.rcParams["text.usetex"] = shutil.which("latex") is not None
 #fig = plt.figure(1, figsize=(16/1.2,5/1.4))
 # fig = plt.figure(1, figsize=(16*2*1.6,9*1.6))#with activity
 # fig = plt.figure(1, figsize=(16*2*1.3,9*1.3))
