@@ -394,10 +394,10 @@ def icovar_jkk(l_l_v, l_w=None, do_cor=False, do_jackknife=False, fast_jackknife
             return tmp_cor
         l_jkk = list(range(len(l_l_v)))
         while len(l_jkk) > nb_jkk: l_jkk.pop(int(rand()*len(l_jkk)))
-        jackknife_cov_var = np.fromiter((moy_without(i)-loc_cov)**2.0 for i in l_jkk, dtype=np.float64).sum() * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
+        jackknife_cov_var = np.fromiter(((moy_without(i)-loc_cov)**2.0 for i in l_jkk), dtype=np.float64).sum() * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
         #jackknife_cov_var = np.sum((dmoy_without(i))**2.0 for i in l_jkk) * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
         if do_cor:
-            jackknife_cor_var = np.fromiter((moy_without_cor(i)-loc_cor)**2.0 for i in l_jkk, dtype=np.float64).sum() * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
+            jackknife_cor_var = np.fromiter(((moy_without_cor(i)-loc_cor)**2.0 for i in l_jkk), dtype=np.float64).sum() * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
     t3 = time.time()
     #print t3-t2
     if not do_cor and not do_jackknife:
@@ -541,10 +541,10 @@ def icovar_jkk_w_nan(l_l_v, l_w=None, do_cor=False, do_jackknife=False, fast_jac
             return tmp_cor
         l_jkk = list(range(len(l_l_v)))
         while len(l_jkk) > nb_jkk: l_jkk.pop(int(rand()*len(l_jkk)))
-        jackknife_cov_var = np.fromiter((moy_without(i)-loc_cov)**2.0 for i in l_jkk, dtype=np.float64).sum() * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
+        jackknife_cov_var = np.fromiter(((moy_without(i)-loc_cov)**2.0 for i in l_jkk), dtype=np.float64).sum() * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
         #jackknife_cov_var = np.sum((dmoy_without(i))**2.0 for i in l_jkk) * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
         if do_cor:
-            jackknife_cor_var = np.fromiter((moy_without_cor(i)-loc_cor)**2.0 for i in l_jkk, dtype=np.float64).sum() * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
+            jackknife_cor_var = np.fromiter(((moy_without_cor(i)-loc_cor)**2.0 for i in l_jkk), dtype=np.float64).sum() * (len(l_l_v)/len(l_jkk)) * (len(l_l_v)-1.)/(len(l_l_v))
     t3 = time.time()
     #print t3-t2
     if not do_cor and not do_jackknife:
