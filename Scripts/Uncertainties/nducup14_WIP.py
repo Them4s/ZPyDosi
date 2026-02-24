@@ -89,7 +89,7 @@ ll_fv, ll_fs = [],[]
 
 
 for idosi in range(data.nb_dosi):
-    idata_irdff = get_irdff_iaea(os.path.expandvars("$petale_analysis/data/iaea_data/"+data.l_key_irdff_iaea[idosi]), e_min = None)
+    idata_irdff = get_irdff_iaea(os.path.expandvars(data.path_iaea_data+"/"+data.l_key_irdff_iaea[idosi]), e_min = None)
     
     ll_ce   += [idata_irdff[0][0]]
     lll_cor += [idata_irdff[0][1]]

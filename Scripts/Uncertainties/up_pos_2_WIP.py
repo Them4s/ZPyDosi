@@ -230,7 +230,7 @@ for irand in range(nb_rand):
         path = path_todo + str(irand+1)+"/input"+"_mat_sss_2_of/perspectra"
         # print(path)r
         # exit()
-        bash_cmd="python3.10 /home/thomasligonnet/Link_to_analysis/python/Misc/reaction_rate_projector_up_pos.py input="+path_todo + str(irand+1)+"/input save_key=up_pos_out/num{}".format(irand+1)+(data.get_key_for_up_pos()) + " save_mat="+"_".join(lcase_csv[0].split("_")[1:] ) + " add_all={}".format(add_all) + " path_xsdata={}".format(data.path_xsdata)
+        bash_cmd="python3.10 /home/thomasligonnet/Link_to_analysis/python/Misc/reaction_rate_projector_up_pos.py input="+path_todo + str(irand+1)+"/input save_key=up_pos_out/num{}".format(irand+1)+(data.get_key_for_up_pos()) + " save_mat="+"_".join(lcase_csv[0].split("_")[1:] ) + " add_all={}".format(add_all) + " path_xsdata={}".format(data.path_xsdata) + " path_irdff_folder={}".format(data.path_iaea_data)
         processes  += [subprocess.Popen(bash_cmd.replace("&","").split(), stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf8', preexec_fn=os.setsid)]
         # process = subprocess.Popen(bash_cmd.replace("&","").split(), stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf8', preexec_fn=os.setsid)
         # process.wait()
@@ -402,7 +402,7 @@ if not low_mem:
     
     for idosi in range(data.nb_dosi):
         print(data.l_key_irdff_iaea[idosi])
-        idata_irdff = get_irdff_iaea(os.path.expandvars("$petale_analysis/data/iaea_data/"+data.l_key_irdff_iaea[idosi]), e_min = None)
+        idata_irdff = get_irdff_iaea(os.path.expandvars(data.path_iaea_data+"/"+data.l_key_irdff_iaea[idosi]), e_min = None)
         # get_irdff_iaea -> (l_cor_e, cor), (l_xs_e,l_xs_v,l_xs_s)
         #ll_ce   += [list(l_nrj_piquet)]                            # ori : [idata_irdff[0][0]] irdff cov nrj (bin)     new : phi cov nrj (bin)
         #lll_fc_bin += [list(d_pos_2_cov[data.l_up_pos_name[idosi]])]   # ori : [idata_irdff[0][1]] irdff cov val (bin)     new : phi cov val (bin)

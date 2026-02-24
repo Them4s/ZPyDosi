@@ -13,6 +13,7 @@ print ("#"*50)
 
 
 path_xsdata    = os.path.expandvars("Path to your XSDATA file")
+path_irdff_folder    = os.path.expandvars("Path to your IRDFF folder")
 np.seterr(divide='ignore', invalid='ignore')
 
 # inputs_name=["J3","T2019","T2021","J4","b8","b71","JENDL4","Uppsala"]
@@ -94,7 +95,7 @@ l_key_irdff_iaea=["In115ng","Au197ng","In115inel","Ni58np","Fe54np","Fe56np","Al
 l_label=["$^{115}$In(n,$\gamma$)","$^{197}$Au(n,$\gamma$)","$^{115}$In(n,n')","$^{58}$Ni(n,p)","$^{54}$Fe(n,p)","$^{56}$Fe(n,p)",r"$^{27}$Al(n,$\alpha$)"]
 plt.figure(figsize=(16,9))
 for i in range(len(l_key_irdff_iaea)):
-    idata_irdff = get_irdff_iaea(os.path.expandvars("/home/thomasligonnet/Link_to_analysis/data/iaea_data/"+l_key_irdff_iaea[i]), e_min = None)
+    idata_irdff = get_irdff_iaea(os.path.expandvars(path_irdff_folder+"/"+l_key_irdff_iaea[i]), e_min = None)
     
 
     plt.plot(idata_irdff[1][0],idata_irdff[1][1],label=l_label[i])

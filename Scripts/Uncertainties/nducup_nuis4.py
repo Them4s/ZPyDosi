@@ -259,7 +259,7 @@ lll_cov_sig = np.zeros(((len(l_fe_bin)-1) * nb_dosi, (len(l_fe_bin)-1) * nb_dosi
 print("coucou2")
 
 for idosi in range(data.nb_dosi):
-    idata_irdff = get_irdff_iaea(os.path.expandvars("$petale_analysis/data/iaea_data/"+data.l_key_irdff_iaea[idosi]), e_min = None)
+    idata_irdff = get_irdff_iaea(os.path.expandvars(data.path_iaea_data+"/"+data.l_key_irdff_iaea[idosi]), e_min = None)
     # get_irdff_iaea -> (l_cor_e, cor), (l_xs_e,l_xs_v,l_xs_s)
     #ll_ce   += [list(l_nrj_piquet)]                            # ori : [idata_irdff[0][0]] irdff cov nrj (bin)     new : phi cov nrj (bin)
     #lll_fc_bin += [list(d_pos_2_cov[l_pos_dosi[idosi]])]   # ori : [idata_irdff[0][1]] irdff cov val (bin)     new : phi cov val (bin)

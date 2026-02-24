@@ -21,6 +21,7 @@ inputs_name = get_param_vari("input",     str).split("//")
 save_key = get_param_vari("save_key",     str,None)
 save_mat = get_param_vari("save_mat",     str,None)
 path_xsdata = get_param_vari("path_xsdata",    str)
+path_irdff_folder = get_param_vari("path_irdff_folder",    str)
 add_all  = get_param_vari("add_all", bool, "False")
 
 # matplotlib.use('Agg')
@@ -139,7 +140,7 @@ for i in range(len(inputs_name)) :
             print(mat1)
             rr_for_cov=[]
             rr_for_cov_s=[]
-            path_irdff_case = "/home/thomasligonnet/ownCloud/Experimental activities LRS@EPFL/Projects/PETALE/analysis/data/iaea_data/"+mat1+AAA+R1
+            path_irdff_case = path_irdff_folder+"/"+mat1+AAA+R1
             (l_cor_e, cor), (l_xs_e,l_xs_v,l_xs_s) = get_irdff_iaea(path_irdff_case)
 
             E1,E2 = 1e-10, 20.
