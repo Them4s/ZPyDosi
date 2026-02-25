@@ -1,9 +1,14 @@
-import os, sys
+import os
+# from ..Analysis.cnf import read_cnf_file
+
+from ZPyDosi.Common.utils_general import lmap, get_aff_size, tex,  dup, dupx
+from ZPyDosi.Common.CsvSeeker import CsvSeeker
+from ZPyDosi.Common.GetParam import get_param_vari
+from ZPyDosi.Prints.PrintnSave import aff_s_v, aff_list, aff
+from ZPyDosi.Plots.SubPlots import my_sub6, aff_curve
+import numpy as np
+import matplotlib.pyplot as plt
 #from map1loc import *
-from utils_p5 import *
-from scipy.optimize import curve_fit
-from random import gauss
-import datetime as dtime
 
 
 path_csv = get_param_vari("csv" , str, None)
