@@ -201,10 +201,10 @@ for i in range(data.nb_dosi):
                 #print()
                 #print (bash_cmd.replace("serv=1",""))
                 err()
-            # elif do_print:
-            #     #print()
-            #     #print (bash_cmd.replace("serv=1",""))
-            #     err()
+            elif do_print:
+                #print()
+                #print (bash_cmd.replace("serv=1",""))
+                err()
             else:
                 print()
         else:

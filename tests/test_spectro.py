@@ -35,5 +35,13 @@ def test_my_script(tmp_path):
     run_script(
         tmp_path,
         str(ROOT / "Scripts" / "Analysis" / "check10.py"),
-        arg_csv, ard_dosi, arg_case
+        arg_csv, ard_dosi, arg_case, "print=True"
+    )
+    
+    
+    run_script(
+        tmp_path,
+        str(ROOT / "Scripts" / "Spectrometry" / "spectrum_counter11.py"),
+        "csv={}/check_out/input_exemple_2020_10_15_07_55_19_Fu_p13_In-Pni-10-i.xlsx".format(tmp_path),
+        "case=2020_10_15_07_55_19_Fu_p13_In-Pni-10-i", "plot=False", "serv=1"
     )
