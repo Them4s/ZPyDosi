@@ -1,0 +1,23 @@
+http://www.nucleide.org/Laraweb/Results/In-115m.txt
+Nuclide ; In-115m 
+Element ; Indium
+Z ; 49
+Daughter(s) ; (I.T.) ; In-115 ; 95 ; (B-) ; Sn-115 ; 5
+QIT ; 336.24 ; Q- ; 836
+Half-life (h) ; 4.486 ; 0.004
+Half-life (s) ; 16.150E3 ; 0.014E3
+Decay constant (1/s) ; 42.920E-6 ; 0.038E-6
+Specific activity (Bq/g) ; 224.76E15 ; 0.20E15
+Reference ; NDS 86 & 104 - 2008
+Coincidence threshold ; 10%
+Emissions (7 lines) sorted by decreasing intensity
+--------------------------------------------------------------------------------------------------------------------------------
+Energy (keV) ; Ener. unc. (keV) ; Intensity (%) ; Int. unc. (%) ; Type ; Origin ; Lvl. start ; Lvl. end ; Possible coinc./Sum of
+336.24 ; 0.03 ; 45.9 ; 0.1 ; g ; In-115 ; 1 ; 0 ; 
+24.21 ;  ; 17.91 ; 0.27 ; XKa1 ; In-115 ;  ;  ; 
+24.0023 ;  ; 9.55 ; 0.15 ; XKa2 ; In-115 ;  ;  ; 
+27.3364 ;  ; 5.03 ; 0.09 ; XK'b1 ; In-115 ;  ;  ; 
+3.531 ;  ; 3.09 ; 0.08 ; XL ; In-115 ;  ;  ; 
+27.9094 ;  ; 0.95 ; 0.04 ; XK'b2 ; In-115 ;  ;  ; 
+497.37 ; 0.30 ; 0.05 ; 0.01 ; g ; Sn-115 ; 1 ; 0 ; 
+================================================================================================================================

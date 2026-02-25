@@ -3,6 +3,7 @@ retrieve the number of counts for all HPGe measurement of an experiments and pri
 '''
 import os
 import shutil
+import sys
 from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
 from ZPyDosi.Common.GetParam import get_param_vari
 from ZPyDosi.Common.ExcelSheet import ExcelSheet
@@ -11,7 +12,7 @@ from ZPyDosi.Common.utils_general import str2time
 from ZPyDosi.Common.TabPrinter import TabPrinter
 from ZPyDosi.Prints.PrintnSave import aff
 import subprocess
-
+from pathlib import Path
 print ("#"*50)
 #key      = get_param_vari("key", str, None)
 #path_sss = get_param_vari("path_sss", str, None)
@@ -21,7 +22,6 @@ path_csv_data  = get_param_vari("csv_data",  str)
 path_csv_dosi  = get_param_vari("csv_dosi",  str)
 lcase_csv      = get_param_vari("lcase",     str).split("/")
 do_print       = get_param_vari("print",     bool, "false")
-path_hpge      = get_param_vari("path_hpge", str,  "hpge_data")
 plot           = get_param_vari("plot",      bool, "false")
 th_deadtime   =  get_param_vari("th_deadtime",float, "1e-4")
 Cumulative_plot= get_param_vari("cumulative_plot", bool, "True")
@@ -29,10 +29,10 @@ do_dead_time_corr    = get_param_vari("dead_time_corr", bool, "True")
 lin_warning    = get_param_vari("lin_warning", bool, "True")
 bkg_sub= get_param_vari("bkg_sub", bool, "False")
 
-hpge_peak_data = get_param_vari("hpge_peak_data", str, "/home/laureau/data/hpge/test_tp_fermi/data_other")
-
 #python_exe = "python3.8"
-python_exe = "python3.10"
+# python_exe = "python3.10"
+
+
 
 print ("#"*50, "check of:")
 print ("#"+" "*49, "- time in csv vs tka")
@@ -41,8 +41,9 @@ print ("#"+" "*49, "- csv uncertainties")
 print ("#"+" "*49, "- dead_time csv vs tka")
 
 
-data = DataIrrad(path_csv_data, path_csv_dosi, lcase_csv, remove_data=False)
-
+data = DataIrrad(path_csv_data, path_csv_dosi, lcase_csv, remove_data=False,load_ratio=False)
+path_hpge      = data.path_spectra_folder
+print(path_hpge)
 
 if not os.path.exists("check_out"):
     os.mkdir("check_out")
@@ -80,10 +81,13 @@ for i in range(data.nb_dosi):
     #name_file_tka = path_hpge+"/"+"_".join([data.l_ymd[i], data.l_hms[i], data.l_hpge_id[i], data.l_hpge_pos[i], data.l_time_in_hpge_raw[i], data.l_name[i]])
     name_file_tka = "_".join([data.l_ymd[i], data.l_hms[i], data.l_hpge_id[i], data.l_hpge_pos[i], data.l_name[i]])
     d_file_2_path = {}
-    for path, subdirs, files in os.walk("hpge_data"):
+    # print("COUCOU")
+    print(path_hpge)
+    for path, subdirs, files in os.walk(path_hpge+"/"):
+        # print("COUCOU")
         for file in files:
             d_file_2_path[file] = path+"/"+file
-            #print(file, path+"/"+file)
+            # print(file, path+"/"+file)
     
     #print(d_file_2_path)
     #exit()
@@ -130,11 +134,11 @@ for i in range(data.nb_dosi):
             tprint.add("deadtime_diff_[pt]",data.l_deadtime[i]-dead_time_tka)
         #else:    tprint.add("deadtime_diff_[pt]","")
                                             # check count
-                                            
+        path_example=data.path_checkout_xlsx                               
         try:
-            counter_input = ExcelSheet("check_out/input_exemple.xlsx")    # generation of the spectrum_counter4 xslx input
+            counter_input = ExcelSheet(path_example)    # generation of the spectrum_counter4 xslx input
         except:
-            print("ERROR - I need an example for the script spectrum_counter4.py - check_out/input_exemple.xlsx")
+            print("ERROR - I need an example for the script spectrum_counter11.py - e.g. testdata/check_files/input_exemple.xlsx")
             exit()
         j = 0
         while counter_input.get(j,0) != "############################################################### MEASUREMENT":
@@ -151,16 +155,22 @@ for i in range(data.nb_dosi):
             background=" Triche=True"
         elif (bkg_sub or ("26054" in data.l_iso[i])):
             background=" bkg_sub=True bkg_peak=False Triche=False"
-        home=os.path.expanduser("~")
-        bash_cmd = python_exe+" "+home+"/Link_to_analysis/python/hpge/spectrum_counter11.py  csv=check_out/input_exemple.xlsx   case="+name_file_tka+"     serv=1 plot="+str(plot) + bonus + Cumulative + corr_dead_time + background
+        
+
+        script_path = Path(__file__).resolve()
+        script_dir = Path(__file__).resolve().parent.parent
+        cwd = Path.cwd()
+
+        relative_script_dir = Path(os.path.relpath(script_dir, cwd))
+
+        bash_cmd = sys.executable+" "+"/Spectrometry/spectrum_counter11.py  csv=check_out/input_exemple.xlsx   case="+name_file_tka+"     serv=1 plot="+str(plot) + bonus + Cumulative + corr_dead_time + background
         bash_cmd_args = bash_cmd.split()
-        bash_cmd_args[1] = os.path.expandvars(bash_cmd_args[1])
-        nrj_gamma = float(d_spectro[(data.l_iso[i], data.l_mt[i])]["keV"])
-        #print(bash_cmd)
-        #process = subprocess.Popen(bash_cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        process = subprocess.Popen(bash_cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf8')
+        bash_cmd_args[1] = str(relative_script_dir)+"/Spectrometry/spectrum_counter11.py"
+        process = subprocess.Popen(bash_cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf8',cwd=Path.cwd())
         output, error = process.communicate()
+        print(error)
         count = None
+        nrj_gamma = float(d_spectro[(data.l_iso[i], data.l_mt[i])]["keV"])
         for l in output.split("\n"):
             if len(l.split())>2 and l.split()[0] == "energy" and l.split()[2] == "counts":
                 if abs(float(l.split()[1])-nrj_gamma)<0.5:
@@ -191,10 +201,10 @@ for i in range(data.nb_dosi):
                 #print()
                 #print (bash_cmd.replace("serv=1",""))
                 err()
-            elif do_print:
-                #print()
-                #print (bash_cmd.replace("serv=1",""))
-                err()
+            # elif do_print:
+            #     #print()
+            #     #print (bash_cmd.replace("serv=1",""))
+            #     err()
             else:
                 print()
         else:
@@ -211,8 +221,8 @@ for i in range(data.nb_dosi):
 if linearity_warning and lin_warning:
     print("\n"+"#"*30+" Warning " +"#"*30+   "\n")
     print("".join(linearity_warning))
-
 print (tprint.get_text())
+
 
 #d_spectro = {
 #    ("791970" ,"102"): {"halftime":2.6941*d,  "keV":411.8020,"eff":0.04,  "inten":0.9562   }, #197Au(n,g)198Au(b)          (h2 i-)

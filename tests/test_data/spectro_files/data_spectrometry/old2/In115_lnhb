@@ -1,0 +1,16 @@
+# http://www.lnhb.fr/
+# https://www.nucleonica.com/Application/ReducedDecaySchemes/In116_RDS.png
+# http://www.nucleide.org/Laraweb/index.php
+# https://www.nndc.bnl.gov/nudat2/moveCenter.jsp?move=left
+# https://www.nndc.bnl.gov/nudat2/decaysearchdirect.jsp?nuc=116IN&unc=nds
+# 336 inel
+Energy (keV) ; Ener. unc. (keV) ; Intensity (%) ; Int. unc. (%) ; Type ; Origin ; Lvl. start ; Lvl. end
+138.29 2   ;  ;	 3.70 ; 0.09 ;
+336.244    ;  ; 45.83 ; 0.   ;
+416.90     ;  ; 27.2  ; 0.4  ;
+818.68     ;  ; 12.13 ; 0.14 ;
+1097.28    ;  ; 58.5  ; 0.8  ;
+1293.56    ;  ; 84.8  ; 1.2  ;
+1507.59    ;  ; 9.92  ; 0.13 ;
+1752.5 	   ;  ; 2.36  ; 0.03 ; 
+==========================================================================================================

@@ -166,6 +166,8 @@ class DataIrrad:
                                 "v2":{"tau":data_csv.get_list("monitors","monitors","tau [s]",data_type=float)[1], "tau_s" :data_csv.get_list("monitors","monitors","tau sig [s]",data_type=float)[1]}}
         self.path_xsdata=data_csv.get_list("XS_path","XS_path","sim_XSDATA",data_type=str)[0]
         self.path_iaea_data=data_csv.get_list("XS_path","XS_path","IRDFF_folder",data_type=str)[0]
+        self.path_checkout_xlsx=data_csv.get_list("Gamma_spec_path","Gamma_spec_path","path_xls_example",data_type=str)[0]
+        self.path_spectra_folder=data_csv.get_list("Gamma_spec_path","Gamma_spec_path","spectra_folder",data_type=str)[0]
         print("loading:")
         for case_csv in lcase_csv:
             print(case_csv)

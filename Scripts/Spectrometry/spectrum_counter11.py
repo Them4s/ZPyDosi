@@ -1,5 +1,5 @@
 from random import gauss
-from ..Analysis.cnf import read_cnf_file
+# from ..Analysis.cnf import read_cnf_file
 import datetime as dtime
 import math
 
@@ -24,12 +24,13 @@ do_plot    = get_param_vari("plot", bool, "False")
 do_dead_time_corr    = get_param_vari("dead_time_corr", bool, "True")
 
 free_gain = get_param_vari("free_gain_keV", float, "0")
+serv = get_param_vari("serv", int, "0")
 # free_gain = get_param_vari("free_gain_keV", float, "0")
 Cumulative_bool= get_param_vari("cumulative_plot", bool, "True")
 bkg_sub= get_param_vari("bkg_sub", bool, "False") #Now on False for new substractiomn method
 bkg_peak= get_param_vari("bkg_peak", bool, "True") #Now on False for new substractiomn method
 plot_only_bkg=get_param_vari("plot_only_bkg", bool, "False") #boolean to subtract or not the bkg
-Triche=get_param_vari("Triche", bool, "False") #boolean  use of Zm bkg instead of Ho
+Triche=get_param_vari("Triche", bool, "False") # never used: boolean  use of Zm bkg instead of Ho as they are almost identical and in the same place
 print_true_bkg_stat=get_param_vari("print_true_bkg_stat", bool, "False") #boolean  use of Zm bkg instead of Ho
 print("#"*50)
 if bkg_peak and bkg_sub:
@@ -174,11 +175,18 @@ ax2.set_yscale("log")
 def get_spectrum(path):
     lines = open(path).readlines()
     t_eff, t_total = map(lambda v:float(v), lines[:2])
-    if os.path.isfile(path.replace(".TKA",".CNF")):
-        c = read_cnf_file(path.replace(".TKA",".CNF"), 'TRUE')
-        dead_time=(c["Real time"]-c["Live time"])/c["Real time"]
+    if False:
+        '''
+        Necessitate the use of a cnf.py script which I do not want to include in the package
+        cause it is a legacy python adaptation from C code another repo https://github.com/messlinger/cnfconv
+        and I do not want to deal with potential right issue right now so I commented it
+        '''
+        exit()
+    # if os.path.isfile(path.replace(".TKA",".CNF")):
+        # c = read_cnf_file(path.replace(".TKA",".CNF"), 'TRUE')
+        # dead_time=(c["Real time"]-c["Live time"])/c["Real time"]
     else :
-        print("Warning : No CNF file, using TKA")
+        # print("Warning : No CNF file, using TKA")
         dead_time=(t_total-t_eff)/t_total
     dead_time_correction = 1/(1-dead_time)
     print(aff_s_v("dead_time_correction", dead_time_correction), path.replace(".TKA",".CNF"))
@@ -419,7 +427,8 @@ for i_line, line in enumerate(lines_nrj_param):
             # plt.yscale("log")
             plt.figure()
             plt.plot(l_bkgd_v2[1000:])
-            plt.show()
+            if serv!=1:
+                plt.show()
             exit()
         if(tot_bkg/sig_tot_bkg)>3:
             linearity_warning += "WARNING A PEAK MAY BE IN THE BACKGROUND INTEGRATION ZONE \n"
@@ -537,7 +546,8 @@ if src_descr is None:
     if do_plot:
         #fig.savefig("spectrum_count.png", bbox_inches=('tight'), dpi=200)
         fig.savefig("spectrum_count_out/"+case_csv+".png", bbox_inches=('tight'), dpi=200)
-    plt.show()
+    if serv!=1:
+        plt.show()
     exit()
     
 src_descr["peaks_nrj"]     =     d_resu["nrj"]
@@ -618,8 +628,8 @@ print()
 
 
 
-
-plt.show()
+if serv!=1:
+    plt.show()
 
 
 
