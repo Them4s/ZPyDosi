@@ -45,3 +45,8 @@ def test_my_script(tmp_path):
         "csv={}/check_out/input_exemple_2020_10_15_07_55_19_Fu_p13_In-Pni-10-i.xlsx".format(tmp_path),
         "case=2020_10_15_07_55_19_Fu_p13_In-Pni-10-i", "plot=False", "serv=1"
     )
+    run_script(
+        tmp_path,
+        str(ROOT / "Scripts" / "Spectrometry" / "spectrum_nrj2.py"),
+        "tka=test_data/spectro_files/calib_spectra/2020_09_29_12_00_00_Fu_p13_Eu152-2020.TKA"
+    )

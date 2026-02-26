@@ -1,3 +1,8 @@
+'''
+    Automatically compute the Channel to Energy calibration for an Eu-152 spectra.
+    The Peak_X  optional variable allows to skip the first peak for cases subject
+    to high amount of lead Xrays.
+'''
 
 from scipy.optimize import curve_fit
 from ZPyDosi.Common.utils_general import lmap, get_aff_size, tex
@@ -7,8 +12,8 @@ from ZPyDosi.Prints.PrintnSave import aff_list
 import numpy as np
 import matplotlib.pyplot as plt
 
-path_tka = get_param_vari("tka" , str, None).split("//")
-peak_x = get_param_vari("peak_x" , bool, "False")
+path_tka = get_param_vari("tka" , str, None).split("//") # Path to the spectra
+peak_x = get_param_vari("peak_x" , bool, "False") # If your spectra has a Xray peak to ignore at the beginning
 
 fig = plt.figure(0, figsize=(15.,10.))
 fig.patch.set_facecolor('white')
