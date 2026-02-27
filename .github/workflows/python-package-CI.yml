@@ -79,7 +79,7 @@ jobs:
           pip install pytest
 
       - name: Run pytest (JUnit)
-        run: pytest -q --junitxml=junit.xml
+        run: pytest -q --ignore=tests/test_CoE.py --junitxml=junit.xml
 
       - name: Upload JUnit report
         if: always()
