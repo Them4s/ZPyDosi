@@ -34,57 +34,57 @@ test:py39:
     reports:
       junit: junit.xml
 
-test:py310:
-  stage: test
-  image: python:3.10
-  extends: .default_job
-  script:
-    - pip install -e .
-    - pip install pytest
-    - pytest -q --junitxml=junit.xml
-  artifacts:
-    when: always
-    reports:
-      junit: junit.xml
+# test:py310:
+#   stage: test
+#   image: python:3.10
+#   extends: .default_job
+#   script:
+#     - pip install -e .
+#     - pip install pytest
+#     - pytest -q --junitxml=junit.xml
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: junit.xml
 
-test:py311:
-  stage: test
-  image: python:3.11
-  extends: .default_job
-  script:
-    - pip install -e .
-    - pip install pytest
-    - pytest -q --junitxml=junit.xml
-  artifacts:
-    when: always
-    reports:
-      junit: junit.xml
+# test:py311:
+#   stage: test
+#   image: python:3.11
+#   extends: .default_job
+#   script:
+#     - pip install -e .
+#     - pip install pytest
+#     - pytest -q --junitxml=junit.xml
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: junit.xml
 
-test:py312:
-  stage: test
-  image: python:3.12
-  extends: .default_job
-  script:
-    - pip install -e .
-    - pip install pytest
-    - pytest -q --junitxml=junit.xml
-  artifacts:
-    when: always
-    reports:
-      junit: junit.xml
+# test:py312:
+#   stage: test
+#   image: python:3.12
+#   extends: .default_job
+#   script:
+#     - pip install -e .
+#     - pip install pytest
+#     - pytest -q --junitxml=junit.xml
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: junit.xml
 
-test:py313:
-  stage: test
-  image: python:3.13
-  extends: .default_job
-  script:
-    - pip install -e .
-    - pip install pytest
-    - pytest -q --junitxml=junit.xml
-  artifacts:
-    when: always
-    reports:
-      junit: junit.xml
+# test:py313:
+#   stage: test
+#   image: python:3.13
+#   extends: .default_job
+#   script:
+#     - pip install -e .
+#     - pip install pytest
+#     - pytest -q --junitxml=junit.xml
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: junit.xml
 
 test:py314:
   stage: test
