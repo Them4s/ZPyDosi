@@ -4,6 +4,7 @@
 '''
 Reads the experimental and simulation results, and the preprocessed uncertainties,
 Compute the C/E and their covariance.
+test
 '''
 
 from ZPyDosi.Common.GetParam import get_param_vari
