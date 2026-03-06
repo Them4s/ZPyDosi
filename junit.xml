@@ -1,15 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="2" time="19.312" timestamp="2026-03-05T11:28:07.545073" hostname="LAPTOP-7UL3D2QB"><testcase classname="" name="tests.test_CoE" time="0.000"><error message="collection failure">ImportError while importing test module '/mnt/c/Users/thoma/Documents/ZPyDosi/tests/test_CoE.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-/usr/lib/python3.12/importlib/__init__.py:90: in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-tests/test_CoE.py:7: in &lt;module&gt;
-    import matplotlib as mpl
-E   ModuleNotFoundError: No module named 'matplotlib'</error></testcase><testcase classname="" name="tests.test_spectro" time="0.000"><error message="collection failure">ImportError while importing test module '/mnt/c/Users/thoma/Documents/ZPyDosi/tests/test_spectro.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-/usr/lib/python3.12/importlib/__init__.py:90: in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-tests/test_spectro.py:7: in &lt;module&gt;
-    import matplotlib as mpl
-E   ModuleNotFoundError: No module named 'matplotlib'</error></testcase></testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="20.756" timestamp="2026-02-25T16:20:31.556600+01:00" hostname="lrspc73"><testcase classname="tests.test_spectro" name="test_my_script" time="20.625" /></testsuite></testsuites>
