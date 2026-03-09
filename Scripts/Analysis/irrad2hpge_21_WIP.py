@@ -91,7 +91,7 @@ if Exp_only and len(lcase_csv)>4:
     do_remove=True
     which_norm="None"
     aff_param["ampli"] *=1.5
-if Exp_only:
+elif Exp_only:
     print("Exp_only mode: do_remove=False and which_norm=None")
     fig = plt.figure(1, figsize=(16,9))
     do_remove=True
@@ -253,10 +253,9 @@ class Measure:
             fact = int(dwell/dwell_obj)
             print ("expand time serie (dwell)", dwell/dwell_obj, fact)
             new_l_v, new_l_s = np.zeros(len(self.l_v)*fact), np.zeros(len(self.l_v)*fact)
-            for i in range(len(l_v)):
-                for j in range(fact):
-                    new_l_v[i*fact+j] = self.l_v[i]/fact
-                    new_l_s[i*fact+j] = self.l_s[i]/fact
+ 
+            new_l_v=np.repeat(self.l_v, fact) / fact
+            new_l_s=np.repeat(self.l_s, fact) / fact
             dwell = dwell / fact
             self.l_v = new_l_v
             self.l_s = new_l_s
@@ -442,7 +441,7 @@ l_cp_histo = []
 print ("# propagate")
 #t_max = time_ref
 
-
+l_set_case=list(set(data_irrad.l_case_csv))
 for idosi in range(data_irrad.nb_dosi):
     #print(data_irrad.l_monitor_path[idosi])
     ye,mo,da,ho,mi,se,voie,dw = data_irrad.l_monitor_path[idosi].split("//")[0].split("/")[-1].split("_")[:8]
@@ -458,7 +457,7 @@ for idosi in range(data_irrad.nb_dosi):
                 J_per_I,
                 data_irrad.l_irrad_time_stop[idosi], 
                 corrected_tka=DT_corr)
-        c = get_c(list(set(data_irrad.l_case_csv)).index(data_irrad.l_case_csv[idosi]),len(list(set(data_irrad.l_case_csv))))
+        c = get_c(l_set_case.index(data_irrad.l_case_csv[idosi]),len(l_set_case))
         moni.plot(l_ax[0], c, label=tex(data_irrad.l_case_csv[idosi]))  # , label=r"$\mathrm{monitor~}"+str(i_path_moni+1)+"$"
         d_path2moni[data_irrad.l_monitor_path[idosi]] = moni
         for t in [
@@ -488,8 +487,8 @@ cov_de_zero = np.zeros((data_irrad.nb_dosi, data_irrad.nb_dosi))
 l_c,   m_c   = data_irrad.l_c, data_irrad.m_c             # sig2covdiag(data_irrad.l_cs)
 l_e,   m_e   = data_irrad.l_counts_v, sig2covdiag(data_irrad.l_counts_s)
 for i in range(len(m_e)): #correlation between ND-lib
+    name1=data_irrad.l_name[i]
     for j in range(len(m_e)):
-        name1=data_irrad.l_name[i]
         name2=data_irrad.l_name[j]
         if (len(name1.split("-")[1])>3):
             index=0
@@ -498,7 +497,7 @@ for i in range(len(m_e)): #correlation between ND-lib
             if(3+index)!=len(name1.split("-")[1]):
                 sp=name1.split("-")
                 sp[1]=sp[1][:int(3+index)]
-                name1="-".join(sp)
+                # name1="-".join(sp)
                 
         if (len(name2.split("-")[1])>3):
             index=0
@@ -731,9 +730,10 @@ if which_norm in ["Center","Ref","Custom"]: #normalization process
             if data_irrad.l_mt[i]=="102": # all used thermal sensitive dosimeters do an (n,g) reactions
                 # print("slow",data_irrad.l_name[i])
                 suffix_1="3" if ((case_csv=="au") and (norm_n=="rp")) else norm_n
-                CMoE_div_val2[i] = dico_norm[dico_irrad["begin"]["therm"]+"-"+dico_plate[data_irrad.l_compo_plate[i]]+"-"+dico_irrad["end"]["therm"][case_csv]+suffix_1+suffix_2]["val"]
-                CMoE_div_sig2[i] = dico_norm[dico_irrad["begin"]["therm"]+"-"+dico_plate[data_irrad.l_compo_plate[i]]+"-"+dico_irrad["end"]["therm"][case_csv]+suffix_1+suffix_2]["sig"]
-                CMoE_div_ref_index[i] = dico_norm[dico_irrad["begin"]["therm"]+"-"+dico_plate[data_irrad.l_compo_plate[i]]+"-"+dico_irrad["end"]["therm"][case_csv]+suffix_1+suffix_2]["index"]
+                lookup_therm= dico_norm[dico_irrad["begin"]["therm"]+"-"+dico_plate[data_irrad.l_compo_plate[i]]+"-"+dico_irrad["end"]["therm"][case_csv]+suffix_1+suffix_2]
+                CMoE_div_val2[i] =lookup_therm["val"]
+                CMoE_div_sig2[i] = lookup_therm["sig"]
+                CMoE_div_ref_index[i] = lookup_therm["index"]
                 for j in range(i,data_irrad.nb_dosi):
                     if (data_irrad.l_mt[j]=="102") and (data_irrad.l_case_csv[i]==data_irrad.l_case_csv[j]): 
                         CMoE_div_cor2[i][j]=1
@@ -743,9 +743,10 @@ if which_norm in ["Center","Ref","Custom"]: #normalization process
                 elif (norm_n=="rp"): suffix_1="3"
                 else: suffix_1= "10"
                 # print("fast",data_irrad.l_name[i])
-                CMoE_div_val2[i] = dico_norm[dico_irrad["begin"]["fast"]+"-"+dico_plate[data_irrad.l_compo_plate[i]]+"-"+dico_irrad["end"]["fast"][case_csv]+suffix_1+suffix_2]["val"]
-                CMoE_div_sig2[i] = dico_norm[dico_irrad["begin"]["fast"]+"-"+dico_plate[data_irrad.l_compo_plate[i]]+"-"+dico_irrad["end"]["fast"][case_csv]+suffix_1+suffix_2]["sig"]
-                CMoE_div_ref_index[i] = dico_norm[dico_irrad["begin"]["fast"]+"-"+dico_plate[data_irrad.l_compo_plate[i]]+"-"+dico_irrad["end"]["fast"][case_csv]+suffix_1+suffix_2]["index"]
+                lookup_fast=dico_norm[dico_irrad["begin"]["fast"]+"-"+dico_plate[data_irrad.l_compo_plate[i]]+"-"+dico_irrad["end"]["fast"][case_csv]+suffix_1+suffix_2]
+                CMoE_div_val2[i] = lookup_fast["val"]
+                CMoE_div_sig2[i] = lookup_fast["sig"]
+                CMoE_div_ref_index[i] = lookup_fast["index"]
                 for j in range(i,data_irrad.nb_dosi):
                     if (data_irrad.l_mt[j]!="102") and (data_irrad.l_case_csv[i]==data_irrad.l_case_csv[j]): 
                         CMoE_div_cor2[i][j]=1
@@ -811,7 +812,7 @@ if which_norm in ["Center","Ref","Custom"]: #normalization process
         CMoE_cov2=np.cov(CMoE_val_array,ddof=1)
         CMoE_val_sample=np.mean(CMoE_val_array,axis=1)
         print("normalized C/E")
-        print(CMoE_cov2)
+        print(CMoE_val_sample)
         print("normalized data covariance")
         print(CMoE_cov2)
         print("SSE")
