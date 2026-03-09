@@ -26,6 +26,7 @@ def run_script(tmp_path, *args):
 arg_csv="csv_data="+str(ROOT / "tests" / "test_case.xlsx")
 ard_dosi="csv_dosi="+str(ROOT / "tests" / "test_data" / "dosi.xlsx")
 arg_case=str("lcase=expNi_in2")
+gr="gr_order=4" # aggregate spectra by 2^gr_order to decrease ram usage, can affect precision if too small
 # print(arg_csv)
 # exit()
 def test_my_script(tmp_path):
@@ -45,7 +46,7 @@ def test_my_script(tmp_path):
     run_script(
         tmp_path,
         str(ROOT / "Scripts" / "Uncertainties" / "nducup_nuis4.py"),
-        arg_csv, ard_dosi, arg_case
+        arg_csv, ard_dosi, arg_case, gr
     )
     run_script(
         tmp_path,

@@ -262,7 +262,7 @@ class Measure:
             self.l_v = new_l_v
             self.l_s = new_l_s
             self.l_t = np.arange(len(self.l_v))*dwell
-        pos_maxi = l_v.index(max(self.l_v))
+        pos_maxi = np.argmax(self.l_v)
         if self.l_v[pos_maxi+10] == 0: # alors le G2K comptait quand les moni on ete arretes
             self.l_v[pos_maxi-10:pos_maxi+10] = [0] * 20
 

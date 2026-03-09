@@ -54,5 +54,5 @@ def test_my_script(tmp_path):
         tmp_path,
         str(ROOT / "Scripts" / "Spectrometry" / "spectrum_plot4.py"),
         "csv={}/test_data/spectro_files/meas_hpge_calib.xlsx".format(tmp_path),
-        "case=Eu152_Fu",
+        "case=Eu152_Fu", "serv=1"
     )

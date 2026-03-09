@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 path_tka = get_param_vari("tka" , str, None).split("//") # Path to the spectra
 peak_x = get_param_vari("peak_x" , bool, "False") # If your spectra has a Xray peak to ignore at the beginning
-serv = get_param_vari("serv" , bool, "False") # If your spectra has a Xray peak to ignore at the beginning
+serv = get_param_vari("serv" , bool, "False") # deactivate plotting for testing
 
 fig = plt.figure(0, figsize=(15.,10.))
 fig.patch.set_facecolor('white')

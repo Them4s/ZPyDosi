@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 path_csv = get_param_vari("csv" , str, None)
 case_csv = get_param_vari("case", str, None)
 aff_old = get_param_vari("aff_old", bool, "True")
+serv = get_param_vari("serv" , bool, "False") # deactivate plotting for testing
 
 #aff_old = False
 
@@ -366,7 +367,7 @@ for ax in [ax0, ax1, ax2]:
 #ax2.set_yscale("log")
 
 
-plt.show()
+if not serv: plt.show()
 
 open("spectrum_plot_out","w").write(txt_out)
 print()
