@@ -48,5 +48,11 @@ def test_my_script(tmp_path):
     run_script(
         tmp_path,
         str(ROOT / "Scripts" / "Spectrometry" / "spectrum_nrj2.py"),
-        "tka=test_data/spectro_files/calib_spectra/2020_09_29_12_00_00_Fu_p13_Eu152-2020.TKA"
+        "tka=test_data/spectro_files/calib_spectra/2020_09_29_12_00_00_Fu_p13_Eu152-2020.TKA", "serv=1"
+    )
+    run_script(
+        tmp_path,
+        str(ROOT / "Scripts" / "Spectrometry" / "spectrum_plot4.py"),
+        "csv={}/test_data/spectro_files/meas_hpge_calib.xlsx".format(tmp_path),
+        "case=Eu152_Fu",
     )

@@ -31,7 +31,7 @@ bkg_sub= get_param_vari("bkg_sub", bool, "False") #Now on False for new substrac
 bkg_peak= get_param_vari("bkg_peak", bool, "True") #Now on False for new substractiomn method
 plot_only_bkg=get_param_vari("plot_only_bkg", bool, "False") #boolean to subtract or not the bkg
 Triche=get_param_vari("Triche", bool, "False") # never used: boolean  use of Zm bkg instead of Ho as they are almost identical and in the same place
-print_true_bkg_stat=get_param_vari("print_true_bkg_stat", bool, "False") #boolean  use of Zm bkg instead of Ho
+print_true_bkg_stat=get_param_vari("print_true_bkg_stat", bool, "False") #boolean  PETALE: use of Zm bkg instead of Ho
 print("#"*50)
 if bkg_peak and bkg_sub:
     bkg_sub=False

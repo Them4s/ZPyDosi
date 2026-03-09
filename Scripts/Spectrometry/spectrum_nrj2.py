@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 
 path_tka = get_param_vari("tka" , str, None).split("//") # Path to the spectra
 peak_x = get_param_vari("peak_x" , bool, "False") # If your spectra has a Xray peak to ignore at the beginning
+serv = get_param_vari("serv" , bool, "False") # If your spectra has a Xray peak to ignore at the beginning
 
 fig = plt.figure(0, figsize=(15.,10.))
 fig.patch.set_facecolor('white')
@@ -115,7 +116,7 @@ ax2.set_ylabel(tex(r"Error [bin]"), size=get_aff_size("s_xylabel"))
 
 ax1.set_xticklabels([])
 plt.tight_layout()
-plt.show()
+if not serv: plt.show()
 
 
 
