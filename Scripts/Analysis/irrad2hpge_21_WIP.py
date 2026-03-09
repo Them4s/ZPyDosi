@@ -228,15 +228,17 @@ class Measure:
                 print("# il manque",manque,"secondes, utilisation de la valeur moyenne des 10 dernieres secondes :",ave_v, "+-", ave_s/ave_v*100,"[\%]")
                 l_v += [ave_v] * manque
             t_prev = t
-            l_v_prev = lmap(lambda v:float(v), open(path).readlines()[2:])
+            with open(path) as f:
+                l_v_prev = [float(v) for v in f.readlines()[2:]]
+
             l_v += l_v_prev
         #print("len(l_v)", len(l_v))
         #exit()
         if corrected_tka : #Key : corrected monitor, correction for dead time, dwell time and voie are expected to be the same for all tka.
             l_v = np.array(data_irrad.linearity_loss_corrected_tka(l_v,id_voie=voie,dwell_time=dw))
-            l_v=l_v.tolist()
-        while l_v[-1] == 0:
-            l_v.pop(len(l_v)-1)
+        else:
+            l_v=np.array(l_v)
+        l_v=np.trim_zeros(l_v,"b")
         fact = int(dwell_obj/dwell)
         if fact > 1:
             print("reduce time serie (dwell)")
@@ -269,7 +271,7 @@ class Measure:
         self.l_v /= dwell
         self.l_s /= dwell
         self.dwell = dwell
-        self.tot_power=sum(self.l_v*dwell)
+        self.tot_power=sum(self.l_v)*dwell
         print("total_power: {} Wh".format(self.tot_power/3600))
         maxi = max(self.l_v)
         i_fall = len(self.l_v)-1
@@ -518,12 +520,11 @@ for i in range(len(m_e)): #correlation between ND-lib
 # f_s= data_irrad.l_power_per_src_n_s/data_irrad.l_power_per_src_n/data_irrad.l_power_per_src_n * (1-data_irrad.l_deadtime)
 f = 1./data_irrad.l_power_per_src_n 
 f_s= data_irrad.l_power_per_src_n_s/data_irrad.l_power_per_src_n/data_irrad.l_power_per_src_n
-cor_f=np.zeros(cov_de_zero.shape)
+# cor_f=np.zeros(cov_de_zero.shape)
 
 #correlation matrix for the power scaling, if factors are the same then the simulation must also be statistically speeking
-for  i in range(len(data_irrad.l_power_per_src_n )):
-    for  j in range(len(data_irrad.l_power_per_src_n )):
-        if data_irrad.l_power_per_src_n[i]==data_irrad.l_power_per_src_n[j]: cor_f[i][j]=1
+cor_f = (data_irrad.l_power_per_src_n[:, None] == data_irrad.l_power_per_src_n[None, :]).astype(float)
+
 cov_f=cor_sig_to_cov(cor_f,f_s)
 #print(data_irrad.l_counts_v)
 #print(data_irrad.l_counts_s)
