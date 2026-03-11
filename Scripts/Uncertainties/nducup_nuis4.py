@@ -6,7 +6,7 @@ Compute and save the uncertainties due to core cross-sections using multiple dat
 
 
 import os
-from ZPyDosi.Common.utils_general import lmap, get_aff_size, get_c, tex, dup, dup_piquet,set_nice_ax
+from ZPyDosi.Common.utils_general import lmap, get_aff_size, get_c, dup, dup_piquet,set_nice_ax
 from ZPyDosi.Common.GetParam import get_param_vari
 from ZPyDosi.DataIrrad.DataIrrad import DataIrrad
 from ZPyDosi.Prints.PrintnSave import aff_list, aff_mat
