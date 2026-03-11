@@ -40,14 +40,13 @@ path_ex = "ndupnuis_out/out_"+(data.get_key_for_ndup_nuis())
 if (not redo) and os.path.isfile(path_ex):
     print("nducup_nuis data already exist")
     exit()
-nb_rand = 66 # todo : chzercher le nombre de calcul utilisable
-N_samp=2**15
+
 
 nb_dosi = data.nb_dosi
 
 d_pathidnro2pathpos = {}
 d_pathpos2id = {}
-id = 0
+pos_id = 0
 
 if Big_dosi:
     l_pos_dosi=[name.replace("_3","_1").replace("_5","_1") for name in data.l_pos_name]
@@ -55,7 +54,6 @@ else:
     l_pos_dosi=data.l_pos_name
 
 
-#ll_vtot = [[] for i in range(nb_rand)]
 l_path_todo = []
 l_pathpos = []
 for idosi in range(nb_dosi):
@@ -64,26 +62,9 @@ for idosi in range(nb_dosi):
     if path not in l_path_todo:
         l_path_todo += [path]
         for ipos, pos in enumerate(lpos.split("/")):
-            #if (path, pos) not in d_pathpos2id:
-            d_pathidnro2pathpos[(path, ipos, id)] = (path, pos)  #not used
-            d_pathpos2id[(path, pos)] = id  #not used
             l_pathpos += [(path, pos)]
-            id += 1
+            pos_id += 1
 
-d_pathpos2pathidnro = {v: k for k, v in d_pathidnro2pathpos.items()}
-d_id2pathpos = {v: k for k, v in d_pathpos2id.items()}
-
-#print(d_pathidnro2pathpos)
-#print(d_pathpos2pathidnro)
-#print(l_path_todo)
-#print(d_id2pathpos)
-#print(d_pathpos2id)
-#print(l_pathpos)
-#exit()
-
-#d_nro2pos = {0:"all", 1:"C", 2:"CR", 3:"R"}
-#d_pos2nro = {v: k for k, v in d_nro2pos.items()}
-#d_pos_2_ll_v = {"all":[], "C":[], "CR":[], "R":[]}
 
 
 
@@ -103,8 +84,10 @@ while all([os.path.isfile(path_todo + str(irand+1)+"/input_mat_sss_2_of/perspect
         # print(path)
         dim = lmap(lambda s:int(s),open(path).readlines()[0].split())    # get data shape
         nb_pos, nb_per, nb_nrj = dim
-        specdata       = np.array(lmap(lambda s:float(s), " ".join(open(path       ).readlines()[1:]).split())).reshape(dim)[:,0,:]
-        specdata_sig   = np.array(lmap(lambda s:float(s), " ".join(open(path+"_sig").readlines()[1:]).split())).reshape(dim)[:,0,:]
+        with open(path       ) as f:
+            specdata       = np.array(lmap(lambda s:float(s), " ".join(f.readlines()[1:]).split())).reshape(dim)[:,0,:]
+        with open(path+"_sig") as f:
+            specdata_sig   = np.array(lmap(lambda s:float(s), " ".join(f.readlines()[1:]).split())).reshape(dim)[:,0,:]
         if gr_order!=0:
             specdata    =aggregate_spectrum(specdata    ,gr_order)
             specdata_sig=aggregate_spectrum(specdata_sig,gr_order,True)
@@ -140,55 +123,7 @@ cov_tot,cov_tot_sig = icovar_jkk(ll_vtot, l_w=None, do_cor=False, do_jackknife=T
 # exit()
 moy, std = imoyvar(ll_vtot)
 
-print("coucou 1.5")
-if False:
-    f_leg=1.5
-    fig = plt.figure(1, figsize=(7,5))
-    fig.patch.set_facecolor('white')
-    ax = plt.subplot(1,1,1)
-    ax.set_xscale("log")
-    #ax.set_yscale("log")
-    tout = False
-    if not tout:
-        n0, n = 16, 2
-    else:
-        n0, n = 0, 32
-    ll_vtot = ll_vtot[n0:n0+n]
-    ll_srel = ll_srel[n0:n0+n]
-    l_vtot_ave = np.mean(ll_vtot, axis=0)
-    l_srel_ave = np.mean(ll_srel, axis=0)
-    for i in range(len(ll_vtot)):
-        if tout:
-            ri = i/(len(ll_vtot)-1)
-            d = [2+4*ri, 6*ri]
-        else:
-            d = {0:[1,0], 1:[6,4], 2:[2,2]}[i]
-        l_vtot, l_srel = ll_vtot[i], ll_srel[i]
-        #print(len(l_nrj_piquet))
-        #print(len(l_vtot))
-        #exit()
-        for j in range(nb_pos)[1:]:
-            c = get_c(j-1,nb_pos-1)
-            lv = (l_vtot/(l_vtot_ave+1e-15))[j*len(l_v):(j+1)*len(l_v)]
-            ls = l_srel[j*len(l_v):(j+1)*len(l_v)] * lv
-            lv = (lv-1)*100
-            ls *=100
-            ax.plot(dup(l_nrj_piquet)[1:-1], dup(lv), c=c, dashes=d)
-            ax.fill_between( dup(l_nrj_piquet)[1:-1], dup(lv-ls), dup(lv+ls), facecolor=c, alpha=0.2 )
-            if i == 0:
-                ax.plot([],[],c=c, label=tex({1:"Core center", 2:"Control rod", 3:"Reflector", }[j]))
-        ax.plot([],[],c=(0,0,0), dashes=d, label=tex("Sample "+str(i)))
-    if not tout:
-        ax.legend(loc='best', ncol=2, fontsize=get_aff_size("s_leg")*0.7*f_leg)                                 # print the legend
-    ax.set_ylim([-10,10])
-    ax.set_xlim(ax.get_xlim())
-    ax.plot(ax.get_xlim(), [0,0], c=(0,0,0), lw=0.75)
-    ax.set_ylabel(tex("\phi variation [\%]"), size=get_aff_size("s_xylabel")*f_leg)
-    ax.tick_params(axis='both', which='both', labelsize=get_aff_size("s_tick")*f_leg)
-    set_nice_ax(ax,x="MeV")
-    fig.savefig("ndupnuis_out/inter.png", bbox_inches=('tight'), dpi=300)
-    plt.show()
-    exit()
+
 
 
 #for path_todo in l_path_todo:
@@ -234,8 +169,8 @@ def integ(l_e,l_v,quad=False, log10=False):
     l_dlet = dlet(l_e, log10=log10)
     l_integ = l_v*l_dlet
     if quad: l_integ = l_integ**2
-    for i in range(len(l_integ))[1:]:
-        l_integ[i]+= l_integ[i-1]
+    l_integ = np.cumsum(l_integ)
+
     if quad: l_integ = l_integ**0.5
     return l_integ
 
@@ -274,9 +209,7 @@ for idosi in range(data.nb_dosi):
     ll_xv_c0 += [idata_irdff[1][1]] # ori : list(data.ll_fv) dosi phi val (bin)  new : irdff xs  (c0)
     ll_xe_c0 += [idata_irdff[1][0]] # ori : list(data.l_fe)  dosi phi nrj (bin)  new : irdff nrj (c0)
     #print("a", len(ll_xe_c0[-1]), len(ll_xv_c0[-1]), data.l_key_irdff_iaea[idosi])
-    #ll_fs += # ori : list(data.ll_fs) dosi phi sig
-    pos1 = (len(l_fe_bin)-1)* idosi
-    pos2 = (len(l_fe_bin)-1)*(idosi+1)
+
     lll_cov    [nb_nrj*idosi: nb_nrj*(idosi+1), nb_nrj*idosi: nb_nrj*(idosi+1)] = d_pos_2_cov[((data.l_sss_path_nuis[idosi], l_pos_dosi[idosi]), (data.l_sss_path_nuis[idosi], l_pos_dosi[idosi]))]
     lll_cov_sig[nb_nrj*idosi: nb_nrj*(idosi+1), nb_nrj*idosi: nb_nrj*(idosi+1)] = d_pos_2_cov_sig[((data.l_sss_path_nuis[idosi], l_pos_dosi[idosi]), (data.l_sss_path_nuis[idosi], l_pos_dosi[idosi]))]
     for jdosi in range(data.nb_dosi)[idosi+1:]:
@@ -301,25 +234,12 @@ for k in range(len(data.l_key_irdff_iaea)): # trunk irdff data to flux energy bo
         ll_xv_c0[k] = ll_xv_c0[k][:-1]
     print(len(ll_xe_c0[k]), len(ll_xv_c0[k]))'''
 
-#ll_xv_proj_f = lmap(lambda i: projet_vec_intervals_from_continus(l_fe, ll_xe[i], ll_xv[i]), range(len(ll_ce)))     # old for irdff uncertainty propagation
-#ll_xs_proj_f = lmap(lambda i: projet_vec_intervals_from_continus(l_fe, ll_xe[i], ll_xs[i]), range(len(ll_ce)))
 ll_xv_bin = lmap(lambda i: projet_vec_intervals_from_continus(l_fe_bin, ll_xe_c0[i], ll_xv_c0[i]), range(len(ll_xv_c0)))
 
 
-#ll_xv_proj_c = lmap(lambda i: projet_vec_intervals_from_continus(ll_ce[i], ll_xe[i], ll_xv[i]), range(len(ll_ce)))
-#ll_xs_proj_c = lmap(lambda i: projet_vec_intervals_from_continus(ll_ce[i], ll_xe[i], ll_xs[i]), range(len(ll_ce)))
-#ll_xv_proj_c = lmap(lambda i: projet_vec_intervals_from_integrated(ll_ce[i], ll_xe[i], ll_xv[i]), range(len(ll_ce)))
-#ll_xs_proj_c = lmap(lambda i: projet_vec_intervals_from_integrated(ll_ce[i], ll_xe[i], ll_xs[i]), range(len(ll_ce)))
 
-
-#ll_rv_proj_c = lmap(lambda i: projet_vec_intervals_from_integrated(np.log(ll_ce[i]), np.log(l_fe), ll_fv[i]*ll_xv_proj_f[i]*data.l_at_den[i]),range(len(ll_fv)))
-#ll_rs_proj_c = lmap(lambda i: projet_vec_intervals_from_integrated(np.log(ll_ce[i]), np.log(l_fe), ll_fs[i]*ll_xv_proj_f[i]*data.l_at_den[i]),range(len(ll_fv)))
-
-#ll_rv_bin = lmap(lambda i: projet_vec_intervals_from_integrated(np.log(l_fe_bin), np.log(l_fe_bin), ll_fv_bin[i]*ll_xv_bin[i]*data.l_at_den[i]),range(len(ll_xv_bin)))
 ll_rv_bin = lmap(lambda i: ll_fv_bin[i] * ll_xv_bin[i] * data.l_at_den[i], range(len(ll_xv_bin))) # TODO : voir si utile de faire le calcul du RR sur maillage c0 de irdff puis repasser en bin ensuite
 
-#ll_fv_proj_c = lmap(lambda i: ll_rv_proj_c[i]/(ll_xv_proj_c[i]*data.l_at_den[i]+1e-15),range(len(ll_rv_proj_c)))
-#ll_fs_proj_c = lmap(lambda i: ll_rs_proj_c[i]/(ll_xv_proj_c[i]*data.l_at_den[i]+1e-15),range(len(ll_rs_proj_c)))
 
 #exit()
 
@@ -371,10 +291,10 @@ if True:
         #print(np.array(ll_vtot).shape)
         #exit()
         for l_vtot in ll_vtot:
-            #id = d_pos2nro[l_pos_dosi[i]]
-            id = l_pathpos.index((data.l_sss_path_nuis[i], l_pos_dosi[i]))
-            sub_f = l_vtot[nb_nrj*(id): nb_nrj*(id+1)]
-            #print(id, len(sub_f), len(l_vtot), nb_nrj*(id), nb_nrj*(id+1))
+            #pos_id = d_pos2nro[l_pos_dosi[i]]
+            pos_id = l_pathpos.index((data.l_sss_path_nuis[i], l_pos_dosi[i]))
+            sub_f = l_vtot[nb_nrj*(pos_id): nb_nrj*(pos_id+1)]
+            #print(pos_id, len(sub_f), len(l_vtot), nb_nrj*(pos_id), nb_nrj*(pos_id+1))
             #print(len(sub_f), len(suc_x))
             #print(suc_x)
             #exit()
@@ -390,6 +310,9 @@ if True:
         #print(sub_x)
         #print(i, np.std(l_rr)/np.average(l_rr), np.std(l_rr), np.average(l_rr))
     check = ""
+    
+    check_cov, check_cor, check_cov_sig, check_cor_sig = None, None, None, None
+
     if len(ll_rr)>1:
         check_cov, check_cor,check_cov_sig, check_cor_sig = icovar_jkk(np.array(ll_rr).T, l_w=None, do_cor=True, do_jackknife=True, fast_jackknife=False, blabla=False, nb_jkk=None, fast=True)
         print("#", np.diag(check_cov)**0.5 / np.array(lmap(lambda l_rr: np.average(l_rr), ll_rr)))
@@ -561,21 +484,6 @@ for i in range(nb_dosi):                                                # some p
         l_m = np.array([0.0005,0.001,0.002,0.004,0.008,0.016,0.032,0.064,0.128,0.256])
         l_ax[0,0].plot(dup_piquet(l_fe_bin),dup(tmp/l_m[i]),c=c)
         
-    if False:
-        tmpb = integ(l_fe_bin, ll_fv_bin[i]*ll_xv_bin[i] * std_rel)
-        l_ax[0,0].plot(dup_piquet(l_fe_bin),dup(tmpb/tmpb.max()),c=c, alpha=0.3)
-
-
-
-if False:
-    l_integ_1ev = np.array(l_integ_1ev) #/max(l_integ_1ev)
-    l_integ_tot = np.array(l_integ_tot) #/max(l_integ_tot)
-    print (l_integ_1ev)
-    print (l_integ_tot)
-    print ("autop",(l_integ_tot/l_integ_1ev      )/(l_integ_tot/l_integ_1ev).max())
-    print ("autop",(l_integ_tot/l_integ_tot.max())/(l_integ_1ev/l_integ_1ev.max()))
-    print (((l_integ_tot/l_integ_1ev)/(l_integ_tot/l_integ_1ev).max())/((l_integ_tot/l_integ_tot.max())/(l_integ_1ev/l_integ_1ev.max())))
-
 
 #ll_dlet = []
 #for i in range(data.nb_dosi):
@@ -626,9 +534,8 @@ else:
 samp=np.random.normal(cov_rr,cov_rr_sig,size=(N_samp,sh[0],sh[1]))
 print(samp.shape)
 samp_cor=np.zeros(samp.shape)
-for i in range(sh[0]):
-    for j in range(sh[1]):
-        samp_cor[:,i,j]=samp[:,i,j]/(samp[:,i,i]*samp[:,j,j])**0.5
+diag = samp[:, np.arange(sh[0]), np.arange(sh[0])]  # (N_samp, sh[0])
+samp_cor = samp / (diag[:, :, None] * diag[:, None, :])**0.5
 cor_sig=np.std(samp_cor,axis=0)
 
 stddev, cor = cov_to_sig_cor(cov_rr)
@@ -668,22 +575,25 @@ if not os.path.exists("ndupnuis_out/hist"):
 path = "ndupnuis_out/out_"+(data.get_key_for_ndup_nuis())
 
 print ("write res in",path)
-open(path,"w").write(
-    "val      "+" ".join(map(lambda v:str(v),l_rr))+"\n"+
-    "stdv     "+" ".join(map(lambda v:str(v),stddev))+"\n"+
-    "stdv_rel "+" ".join(map(lambda v:str(v),stddev/l_rr))+"\n"+
-    "corr   \n"+"\n".join(map(lambda l: " ".join(map(lambda v:str(v),l)), list(cor)))
-)
+with open(path,"w") as f:
+    f.write(
+        "val      "+" ".join(map(lambda v:str(v),l_rr))+"\n"+
+        "stdv     "+" ".join(map(lambda v:str(v),stddev))+"\n"+
+        "stdv_rel "+" ".join(map(lambda v:str(v),stddev/l_rr))+"\n"+
+        "corr   \n"+"\n".join(map(lambda l: " ".join(map(lambda v:str(v),l)), list(cor)))
+    )
 stddev=np.diag(check_cov)
-open(path+"_TMC","w").write(
-    "val      "+" ".join(map(lambda v:str(v),l_rr))+"\n"+
-    "stdv     "+" ".join(map(lambda v:str(v),stddev))+"\n"+
-    "stdv_rel "+" ".join(map(lambda v:str(v),stddev/l_rr))+"\n"+
-    "corr   \n"+"\n".join(map(lambda l: " ".join(map(lambda v:str(v),l)), list(check_cor)))
-)
-open("ndupnuis_out/out_"+"ll_rr","w").write(
-    "Reaction rates   \n"+"\n".join(map(lambda l: " ".join(map(lambda v:str(v),l)), list(ll_rr)))
-)
+with open(path+"_TMC","w") as f:
+    f.write(
+        "val      "+" ".join(map(lambda v:str(v),l_rr))+"\n"+
+        "stdv     "+" ".join(map(lambda v:str(v),stddev))+"\n"+
+        "stdv_rel "+" ".join(map(lambda v:str(v),stddev/l_rr))+"\n"+
+        "corr   \n"+"\n".join(map(lambda l: " ".join(map(lambda v:str(v),l)), list(check_cor)))
+    )
+with open("ndupnuis_out/out_"+"ll_rr","w") as f:
+    f.write(
+        "Reaction rates   \n"+"\n".join(map(lambda l: " ".join(map(lambda v:str(v),l)), list(ll_rr)))
+    )
 
 print("rappel check:")
 print(check)
