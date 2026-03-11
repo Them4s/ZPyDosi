@@ -198,8 +198,7 @@ def integ(l_e,l_v,quad=False, log10=False):
     l_dlet = dlet(l_e, log10=log10)
     l_integ = l_v*l_dlet
     if quad: l_integ = l_integ**2
-    for i in range(len(l_integ))[1:]:
-        l_integ[i]+= l_integ[i-1]
+    l_integ = np.cumsum(l_integ)
     if quad: l_integ = l_integ**0.5
     return l_integ
 
@@ -268,11 +267,11 @@ else:
          axmat.plot(axmat.get_xlim(),    [junction,junction], c=(0.7,0.7,0.7), dashes=[6,4])
     
 
-key_printed = []
+key_printed = set()
 for i in range(len(data.l_key_irdff_iaea)):                                        # some plots
     c = get_c(i,len(data.l_key_irdff_iaea))
     if data.l_key_irdff_iaea[i] not in key_printed:
-        key_printed += [data.l_key_irdff_iaea[i]]
+        key_printed.add(data.l_key_irdff_iaea[i])
         aff_curve(l_ax[0,-1], ll_xe[i],ll_xv[i],ll_xs[i],c,1.,0.3,linewidth=1)
         l_ax[0,-2].plot(ll_xe[i],ll_xs[i]/(ll_xv[i]+1e-15)*100,c=c)
         l_ax[0,-2].set_ylim([0.1,99])
@@ -281,13 +280,13 @@ for i in range(len(data.l_key_irdff_iaea)):                                     
 l_integ_1ev = []
 l_integ_tot = []
 
+i_2 = list(l_fe).index(next(e for e in l_fe if e > 1e-6))
 for i in range(len(ll_fv)):                                                # some plots
     c = get_c(i,len(ll_fv))
     aff_curve(l_ax[0,-3], dup_piquet(l_fe),dup(ll_fv[i]),dup(ll_fs[i]),c,1.,0.3,linewidth=1)
     aff_curve(l_ax[0,-4], dup_piquet(l_fe),dup(ll_fv[i]*ll_xv_proj_f[i]),dup(ll_fv[i]*ll_xs_proj_f[i]),c,1.,0.3,linewidth=1)
 
     i_1 = 0
-    i_2 = list(l_fe).index(list(filter(lambda e:e>1e-6, l_fe))[0])
     l_integ_1ev += [integ(l_fe, ll_fv[i]*ll_xv_proj_f[i])[i_2]-integ(l_fe, ll_fv[i]*ll_xv_proj_f[i])[i_1]]
     l_integ_tot += [integ(l_fe, ll_fv[i]*ll_xv_proj_f[i])[-1]   ]
     tmp = integ(l_fe, ll_fv[i]*ll_xv_proj_f[i])
@@ -478,7 +477,7 @@ else:
 #l_rr = sum(ll_dlet[i]*ll_xv_proj_c[i]*l_at_den[i]*ll_fv_proj_c[i])
 #l_rrs  = ((coll_sens.T).dot(cat_mat(lll_cov).dot(coll_sens)))**0.5
 # cov_rr  = ((coll_sens).dot(cat_mat(lll_cov).dot(coll_sens.T)))
-l_samp=np.array(l_samp)
+# l_samp=np.array(l_samp)
 cov_rr  = np.cov(l_samp.T)
 
 
@@ -523,12 +522,13 @@ if not os.path.exists("nducup_out/hist"):
 
 path = "nducup_out/out_"+(data.get_key_for_ndup())
 print ("write res in",path)
-open(path,"w").write(
-    "val      "+" ".join(map(lambda v:str(v),l_rr))+"\n"+
-    "stdv     "+" ".join(map(lambda v:str(v),stddev))+"\n"+
-    "stdv_rel "+" ".join(map(lambda v:str(v),stddev/l_rr))+"\n"+
-    "corr   \n"+"\n".join(map(lambda l: " ".join(map(lambda v:str(v),l)), list(cor)))
-)
+with open(path,"w") as f:
+    f.write(
+        "val      "+" ".join(map(lambda v:str(v),l_rr))+"\n"+
+        "stdv     "+" ".join(map(lambda v:str(v),stddev))+"\n"+
+        "stdv_rel "+" ".join(map(lambda v:str(v),stddev/l_rr))+"\n"+
+        "corr   \n"+"\n".join(map(lambda l: " ".join(map(lambda v:str(v),l)), list(cor)))
+    )
 
 l_x = np.arange(len(cor)+1)+0.5
 
@@ -602,7 +602,7 @@ if save_key !="" : fig.savefig("nducup_out/img_"+save_key.replace("/","+")+".png
 fig.savefig("nducup_out/img.png", bbox_inches=('tight'), dpi=200)
 fig.savefig("nducup_out/hist/"+"+".join(lcase_csv)+".png", bbox_inches=('tight'), dpi=200)
 compare=True
-if compare & do_rm:
+if compare and do_rm:
     path="~/Link_to_analysis/data/Xs_for_plot/Table_XS_{}_J33.csv".format(lcase_csv[0][3:5].replace("SS","Fe"))
     df=pd.read_csv(path,skiprows=[1,2],header=0,dtype=np.float64,delimiter=";")
     plt.figure(figsize=(16,9))
@@ -636,7 +636,7 @@ if compare & do_rm:
     ax3.sharex(ax1)
     l_residual=[]
     for i in range(k):
-        v1=dup(integ(l_fe,ll_fv[k+i]*ll_xv_proj_f[k+i]))[4:]
+        # v1=dup(integ(l_fe,ll_fv[k+i]*ll_xv_proj_f[k+i]))[4:]
         v2=dup(integ(l_fe,ll_fv[i]*ll_xv_proj_f[i]))[4:]
         v3=dup(integ(l_fe,ll_fs[k+i]*ll_xv_proj_f[k+i],quad=True))[4:]
         v4=dup(integ(l_fe,ll_fs[i]*ll_xv_proj_f[i],quad=True))[4:]
