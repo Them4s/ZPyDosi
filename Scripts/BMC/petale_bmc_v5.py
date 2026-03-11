@@ -1,6 +1,11 @@
 # python petale_bmc_v5.py Nxs=0 calc=0 omp=0
 # python petale_bmc_v5.py Nxs=128 calc=4 omp=24
 
+
+'''
+This is clearly not ready for general usage !
+'''
+
 import os
 import subprocess as sb
 import shutil
@@ -9,7 +14,8 @@ import sys
 from multiprocessing import Pool
 import matplotlib.pyplot as plt
 import numpy as np
-import serpentTools
+import serpentTools # type: ignore
+import pandas as pd
 
 # from utils_p11_WIP import *
 
@@ -27,13 +33,18 @@ def get_param(nom, defaut="def_forbiden"):
 
 # exit()
 
+RNG= np.random.default_rng()
+
 #load config
 f=open("config","r").readlines()
 lib=f[0].strip().split("=")[-1]
 mat=f[1].strip().split("=")[-1]
 Only_dosi=None if f[2].strip().split("=")[-1]=="None" else f[2].strip().split("=")[-1].replace(" ","").split(",")
 Is_annealed=bool(int(f[3].strip().split("=")[-1]))
+
 if Is_annealed:
+    if "inter" in f[4]: 
+        inter_folder_suffix=f[4].strip().split("=")[-1]
     print("annealed mode On!")
 ###### setings ######
 # Inifinite loop setting
@@ -140,6 +151,7 @@ def easy_id(A,B,Virtual_BMC_replace=False): # returns the position of the elemen
         l_ids+=[i]
     return np.array(l_ids)
 
+# TODO replace by a ZPyDosi import
 def icovar_jkk(l_l_v, l_w=None, do_cor=False, do_jackknife=False, fast_jackknife=True, blabla=False, nb_jkk=None, fast=True):
     t0 = tm.time()
     err = 1e-50
@@ -220,6 +232,8 @@ def icovar_jkk(l_l_v, l_w=None, do_cor=False, do_jackknife=False, fast_jackknife
     print("icovar_jkk - error")
     exit()
 
+
+# TODO replace by a ZPyDosi import
 def imoyvar(l_l_v, l_w = None, do_jackknife=False):
     t = len(l_l_v[0])
     nxs = len(l_l_v)
@@ -447,15 +461,15 @@ def update_ace_file(source_path: str, dest_path: str, modified_dict: dict):
 
     # 7) Format tokens manually, preserving formatting
     def format_token(orig_tok: str, new_val: float) -> str:
-        # Replace NaN values with 0
-        if np.isnan(new_val):
-            new_val = 0.0
         """
         Preserve integer or float formatting:
         - If orig_tok has no '.' and no 'E', treat as integer.
         - Else treat as float: keep number of decimals equal to orig_tok's,
           use uppercase 'E'.
         """
+        # Replace NaN values with 0
+        if np.isnan(new_val):
+            new_val = 0.0
         width = len(orig_tok)
         # Integer case
         if '.' not in orig_tok and 'E' not in orig_tok:
@@ -555,12 +569,14 @@ def projette(l_xs_e, l_xs_v, l_e_piquet, aff=False, integ=True):
 
     return np.array(l_v)
 
-def Do_ace_project(zz,elt,aaa,which="prior"): # A verifier
+def Do_ace_project(zz,elt,aaa,which="prior"): # not used currently
     name_ace = "{:02}-{}-{:03}-ga-0300.ace".format(zz,elt,aaa)
-    if which=="new": name_ace.replace(".ace","_Thomas.ace")
+    if which=="new": 
+        name_ace = name_ace.replace(".ace","{}.ace".format(inter_folder_suffix))
     dico_ace=parse_ace_file("XS_out/ace/"      +name_ace)
     path_numpy_prior="XS_out/archive_numpy_prior/{:02}-{}-{:03}-ga-0300_auto-4_mt2_4_102_eig_cor_i40.npz".format(zz,elt,aaa)
-    if which=="new": path_numpy_prior.replace(".npz","_Thomas.npz")
+    if which=="new": 
+        path_numpy_prior = path_numpy_prior.replace(".npz","{}.npz".format(inter_folder_suffix))
     dico_mat=np.load(path_numpy_prior,allow_pickle=True)['dict_data'].tolist()
     l_MT=[]
     print("Error MT not defined yet in Do_ace_projection")
@@ -570,17 +586,19 @@ def Do_ace_project(zz,elt,aaa,which="prior"): # A verifier
         Big_vec+=[projette(dico_ace[MT]["l_nrj"],dico_ace[MT]["l_xs"],dico_mat["l_nrj"])]
     return np.array(Big_vec)
 
-def get_BigRel(zz,elt,aaa,which="prior"):
+def get_BigRel(zz,elt,aaa,which="prior"): # not used currently
     path = "{:02}-{}-{:03}-XXXXX.npz".format(zz,elt,aaa)
-    if which=="new": path.replace(".npz","_Thomas.npz")
+    if which=="new": 
+        path = path.replace(".npz","{}.npz".format(inter_folder_suffix))
     Big_mat=np.load(path,allow_pickle=True)['dict_data'].tolist()["Big_mat"]
     return np.array(Big_mat)
 
 def get_Big(zz,elt,aaa,l_mt,which="prior",mat=False):
     path = "XS_out/archive_numpy_{}/{:02}-{}-{:03}-ga-0300_{}_big_data.npz".format(which, zz,elt,aaa,"_".join(map(str, l_mt)))
-    Big_vec=np.load(path,allow_pickle=True)['dict_data'].tolist()["big_vec"]
+    tmp_dico=np.load(path,allow_pickle=True)['dict_data'].tolist()
+    Big_vec=tmp_dico["big_vec"]
     if mat:
-        Big_mat=np.load(path,allow_pickle=True)['dict_data'].tolist()["big_mat"]
+        Big_mat=tmp_dico["big_mat"]
         return Big_vec,Big_mat
     return Big_vec
 
@@ -620,26 +638,28 @@ if __name__ == '__main__' and False:
 
 if No_MAYA:
     cp = shutil.copyfile
-else:
-    import maya 
-    cp = maya.utils.cp
-
-def copy_modif_write(paf1, paf2, l_paramreplace=[]):
-    txt = "".join(open(paf1).readlines())
-    for paramreplace in l_paramreplace : txt = txt.replace(*paramreplace)
-    open(paf2, "w").write(txt)
-
-###### Début de lapartie active du code ######
-
-
-
-if No_MAYA:
     class Dummy:
         def __init__(self, path):
             self.d_rea=parse_ace_file(path)
     ACE=Dummy
 else:
+    import maya  # type: ignore
+    cp = maya.utils.cp
     ACE=maya.coconust.AceRawData
+
+def copy_modif_write(paf1, paf2, l_paramreplace=[]):
+    with open(paf1) as f:
+        txt = "".join(f.readlines())
+    for paramreplace in l_paramreplace : txt = txt.replace(*paramreplace)
+    with open(paf2, "w") as f:
+        f.write(txt)
+
+###### Début de lapartie active du code ######
+
+
+
+
+
 
 # infinite looping until manual stop
 
@@ -899,6 +919,45 @@ for i_loop in range(1 if not Looping else 123456789):
 
     #rc['serpentVersion'] = '2.1.21'
 
+    def get_C(suffix=""): #helper function
+        l_name_in_input=[]
+        l_name_in_input_OG=[]
+        Cref=[]
+        Cref_sig=[]
+        l_ref_dosi=[]
+        IsMn=False # To handle the Mn contamination of the Fe56 dosimeters
+        for path_calc in path_calcs:
+            Path_calc=socket_name+"_"+path_calc
+            Cref+=np.loadtxt(add_csv_path+"/input_mat_sss_2_of/rr_vec{}".format(suffix),skiprows=1)[:,0].tolist()
+            Cref_sig+=np.loadtxt(add_csv_path+"/input_mat_sss_2_of/rr_vec{}_sig".format(suffix),skiprows=1)[:,0].tolist()
+            with open(Path_calc+"input") as file:
+                filedata=file.readlines()
+            while "mat_matrix_rr" not in filedata[0]: filedata.pop(0)
+            filedata.pop(0)
+            while "idet" in filedata[0]:
+                name=filedata[0].split()[1].replace("mat_dosi_","")
+                l_name_in_input_OG+=[name]
+                iso=filedata[0].split()[2]
+                if "BMC" in name:
+                    if iso=="260540" or iso=="260560" or iso=="260580" or iso=="250550":
+                        name=easy_replace(name,["BMC-"],["Fe-"])
+                    if iso=="130270":
+                        name=easy_replace(name,["BMC-"],["Al-"])
+                    if iso=="491150":
+                        name=easy_replace(name,["BMC-"],["In-"])
+                        name+="-i"
+                if iso=="260540":
+                    name=easy_replace(name,["Pfe","Pni","Pcr","Pss"],["Pfe54","Pni54","Pcr54","Pss54"])
+                elif iso=="260580":
+                    name=easy_replace(name,["Pfe","Pni","Pcr","Pss"],["Pfe58","Pni58","Pcr58","Pss58"])   
+                if iso=="250550":
+                    name=easy_replace(name,["Fe-"],["Mn-"])   
+                    IsMn=True
+                l_name_in_input+=[name]
+                l_ref_dosi+=[easy_replace(name,l_nums, ["-{}".format(ref_dosi)]*len(l_nums))]
+                filedata.pop(0)
+        return l_name_in_input, l_name_in_input_OG, Cref, Cref_sig, l_ref_dosi, IsMn
+
     if nb_sim!=0 or force_merging:
         sub_path=os.getcwd()+"/{}_num".format(socket_name)
         os.makedirs(sub_path+"0",exist_ok=True)
@@ -1033,44 +1092,7 @@ for i_loop in range(1 if not Looping else 123456789):
         if nb_sample==0:
             shutil.copytree(sub_path+"0",add_csv_path,dirs_exist_ok=True)
             print("Reference calculation done!")
-            l_name_in_input=[]
-            l_name_in_input_OG=[]
-            Cref=[]
-            Cref_sig=[]
-            l_ref_dosi=[]
-            IsMn=False # To handle the Mn contamination of the Fe56 dosimeters
-            for path_calc in path_calcs:
-                Path_calc=socket_name+"_"+path_calc
-                Cref+=np.loadtxt(add_csv_path+"/input_mat_sss_2_of/rr_vec",skiprows=1)[:,0].tolist()
-                Cref_sig+=np.loadtxt(add_csv_path+"/input_mat_sss_2_of/rr_vec_sig",skiprows=1)[:,0].tolist()
-                with open(Path_calc+"input") as file:
-                    filedata=file.readlines()
-                while "mat_matrix_rr" not in filedata[0]: filedata.pop(0)
-                filedata.pop(0)
-                l_Mn2Add=[]
-                while "idet" in filedata[0]:
-                    name=filedata[0].split()[1].replace("mat_dosi_","")
-                    l_name_in_input_OG+=[name]
-                    iso=filedata[0].split()[2]
-                    if "BMC" in name:
-                        if iso=="260540" or iso=="260560" or iso=="260580" or iso=="250550":
-                            name=easy_replace(name,["BMC-"],["Fe-"])
-                        if iso=="130270":
-                            name=easy_replace(name,["BMC-"],["Al-"])
-                        if iso=="491150":
-                            name=easy_replace(name,["BMC-"],["In-"])
-                            name+="-i"
-                    if iso=="260540":
-                        name=easy_replace(name,["Pfe","Pni","Pcr","Pss"],["Pfe54","Pni54","Pcr54","Pss54"])
-                    elif iso=="260580":
-                        name=easy_replace(name,["Pfe","Pni","Pcr","Pss"],["Pfe58","Pni58","Pcr58","Pss58"])   
-                    if iso=="250550":
-                        name=easy_replace(name,["Fe-"],["Mn-"])   
-                        IsMn=True
-                    l_name_in_input+=[name]
-                    l_ref_dosi+=[easy_replace(name,l_nums, ["-{}".format(ref_dosi)]*len(l_nums))]
-                    filedata.pop(0)
-            import pandas as pd
+            l_name_in_input, l_name_in_input_OG, Cref, Cref_sig, l_ref_dosi, IsMn = get_C()
             df=pd.read_csv(path_ref,delimiter=";")
             j=0
             while df["l_name"][j]!="C":j+=1
@@ -1147,43 +1169,7 @@ for i_loop in range(1 if not Looping else 123456789):
             Cref,Cref_sig,Cref_rel,Cref_names,l_thickness=get_res_csv(path=path_ref,key="C",return_Cov=False)
             CoE_ref,CoE_ref_sig,CoE_ref_rel,CoE_ref_cov,CoE_ref_names,_=get_res_csv(path=path_ref,key="C/(E*E2C)-1") # to compute reference chi2
 
-        l_name_in_input=[]
-        l_name_in_input_OG=[]
-        Cdiff=[]
-        Cdiff_sig=[]
-        l_ref_dosi=[]
-        IsMn=False # To handle the Mn contamination of the Fe56 dosimeters
-        for path_calc in path_calcs:
-            Path_calc=socket_name+"_"+path_calc
-            Cdiff+=np.loadtxt(Path_calc+"input_mat_sss_2_of/rr_vecdiff",skiprows=1)[:,:].tolist()
-            Cdiff_sig+=np.loadtxt(Path_calc+"input_mat_sss_2_of/rr_vecdiff_sig",skiprows=1)[:,:].tolist()
-            with open(Path_calc+"input") as file:
-                filedata=file.readlines()
-            while "mat_matrix_rr" not in filedata[0]: filedata.pop(0)
-            filedata.pop(0)
-            l_Mn2Add=[]
-            while "idet" in filedata[0]:
-                name=filedata[0].split()[1].replace("mat_dosi_","")
-                l_name_in_input_OG+=[name]
-                iso=filedata[0].split()[2]
-                if "BMC" in name:
-                    if iso=="260540" or iso=="260560" or iso=="260580" or iso=="250550":
-                        name=easy_replace(name,["BMC-"],["Fe-"])
-                    if iso=="130270":
-                        name=easy_replace(name,["BMC-"],["Al-"])
-                    if iso=="491150":
-                        name=easy_replace(name,["BMC-"],["In-"])
-                        name+="-i"
-                if iso=="260540":
-                    name=easy_replace(name,["Pfe","Pni","Pcr","Pss"],["Pfe54","Pni54","Pcr54","Pss54"])
-                elif iso=="260580":
-                    name=easy_replace(name,["Pfe","Pni","Pcr","Pss"],["Pfe58","Pni58","Pcr58","Pss58"])   
-                if iso=="250550":
-                    name=easy_replace(name,["Fe-"],["Mn-"])   
-                    IsMn=True
-                l_name_in_input+=[name]
-                l_ref_dosi+=[easy_replace(name,l_nums, ["-{}".format(ref_dosi)]*len(l_nums))]
-                filedata.pop(0)
+        l_name_in_input, l_name_in_input_OG, Cdiff, Cdiff_sig, l_ref_dosi, IsMn = get_C(suffix="diff")
 
 
         Cdiff=np.array(Cdiff)
@@ -1432,7 +1418,7 @@ for i_loop in range(1 if not Looping else 123456789):
             print("Trimming XS")
             def arrenum(X):
                 l=[]
-                for i, val in enumerate(wgt_CS, start=1):
+                for i, val in enumerate(X, start=1):
                     l+=[[i,val]]
                 return np.array(l)
 
@@ -1526,28 +1512,16 @@ for i_loop in range(1 if not Looping else 123456789):
     else:
         print("going straight to BMC")
 
-    if No_MAYA:
-        class Dummy:
-            def __init__(self, path):
-                self.d_rea=parse_ace_file(path)
-        ACE=Dummy
-    else:
-        ACE=maya.coconust.AceRawData
+
 
 
     ### BMC XS prod ###
     Chi2_CS_res=np.loadtxt("XS_out/{}".format(f_wgt_name),skiprows=1)
     if not Skip_BMC and (len(Chi2_CS_res.shape)>1):
         l_mt2=[1]+l_mt
-        Chi2_CS_res=np.loadtxt("XS_out/{}".format(f_wgt_name),skiprows=1)
         a_Chi2=Chi2_CS_res[:,1]
         
-        # a_Chi2=-a_Chi2/2-np.log(sum(np.exp(-a_Chi2/2)))
-        # a_wgt=np.exp(a_Chi2)
-        # a_Chi2[np.argmin(a_Chi2)]=1000
-        # a_Chi2[np.argmin(a_Chi2)]=1000
-        # a_Chi2[np.argmin(a_Chi2)]=1000
-        # a_Chi2[np.argmin(a_Chi2)]=1000
+
         print("minimum Chi2 {}".format(min(a_Chi2)))
         a_wgt=np.exp(-a_Chi2/2)/sum(np.exp(-a_Chi2/2))
         # a_wgt=np.exp(-Chi2_CS_res[:,1]/36/2) # Chi reduits
@@ -1593,8 +1567,7 @@ for i_loop in range(1 if not Looping else 123456789):
                 l_xs=np.array(l_xs)
                 d_posterior["{:02}{:03}".format(zz,aaa)][str(mt)]["l_nrj"]=l_nrj
                 tmp=imoyvar(l_xs,l_w=a_wgt,do_jackknife=True)
-                std=tmp[1]
-                std=imoyvar(l_xs,l_w=a_wgt,do_jackknife=False)[1]
+                std=imoyvar(l_xs,l_w=a_wgt,do_jackknife=False)[1] #because results with Jacknife can cause bug with very bad cases
                 std=np.max([std,tmp[2]],axis=0)
                 d_posterior["{:02}{:03}".format(zz,aaa)][str(mt)]["l_xs"]=tmp[0]
                 d_posterior["{:02}{:03}".format(zz,aaa)][str(mt)]["l_xs_sig"]=std
