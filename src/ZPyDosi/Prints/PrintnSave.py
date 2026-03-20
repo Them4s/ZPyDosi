@@ -298,25 +298,7 @@ def get_key_for_GRAPE_RR(input_path_name):
     """
     return hashlib.md5(bytes(input_path_name, 'utf-8')).hexdigest()
 
-def get_key_for_BLOOM_Sim(input_path_name):
-    """
-    Generate a unique hash key for a BLOOM path.
 
-    The function computes an MD5 hash from the given input path name.
-    The resulting key can be used as a compact, deterministic identifier
-    for caching or indexing GRAPE BLOOM related data.
-
-    Parameters
-    ----------
-    input_path_name : str
-        Input path or name used to generate the hash key.
-
-    Returns
-    -------
-    str
-        MD5 hexadecimal hash string derived from the input path name.
-    """
-    return hashlib.md5(bytes("BLOOM"+input_path_name, 'utf-8')).hexdigest()
 
 def get_key_for_SAFFRON_signal(input_path_name,dwell_time):
     """
