@@ -36,7 +36,7 @@ def get_sss_res(path, key):   #key : get_res
         v = float(lines[0].split()[-2])
         return v
 
-def get_sss_det(path, key,mid_E=False):   #key : get_res
+def get_sss_det(path, key, mid_E=False, no_E=False):   #key : get_res
     """
     Extract detector spectral data from an Serpent2 detector file.
 
@@ -54,12 +54,14 @@ def get_sss_det(path, key,mid_E=False):   #key : get_res
     mid_E : bool, optional
         If ``False``, return energy bin edges. If ``True``, return mid-bin
         energy values.
+    no_E : bool, optional
+        If ``True``, leave the energy list empty.
 
     Returns
     -------
     tuple
         Tuple ``(E, v, dv)`` where:
-        - ``E`` is a list of energy values,
+        - ``E`` is a list of energy values (if any),
         - ``v`` is a list of detector values,
         - ``dv`` is a list or array of absolute uncertainties associated
           with ``v``.
@@ -77,20 +79,21 @@ def get_sss_det(path, key,mid_E=False):   #key : get_res
         v.append(float(lines[0].split()[-2]))
         s.append(float(lines[0].split()[-1]))
         lines.pop(0)
-    while (key+"E") not in lines[0]: lines.pop(0)
-    lines.pop(0)
-    if not mid_E:
-        while "]" not in lines[1] :
+    if not no_E:
+        while (key+"E") not in lines[0]: lines.pop(0)
+        lines.pop(0)
+        if not mid_E:
+            while "]" not in lines[1] :
+                E.append(float(lines[0].split()[0]))
+                lines.pop(0)
             E.append(float(lines[0].split()[0]))
-            lines.pop(0)
-        E.append(float(lines[0].split()[0]))
-        E.append(float(lines[0].split()[1]))
-    else:
-        while "]" not in lines[1] :
+            E.append(float(lines[0].split()[1]))
+        else:
+            while "]" not in lines[1] :
+                E.append(float(lines[0].split()[2]))
+                lines.pop(0)
             E.append(float(lines[0].split()[2]))
-            lines.pop(0)
-        E.append(float(lines[0].split()[2]))
-    lines.pop(0)
+        lines.pop(0)
     return E,v,np.multiply(v,s)
 
 
