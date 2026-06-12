@@ -69,31 +69,46 @@ def get_sss_det(path, key, mid_E=False, no_E=False):   #key : get_res
     # if not os.path.isfile(path):
         # path=path[:-6]+"1_res.m"
         # print("Warning in get_sss_res for "+str(key)+", change from tmp to tmp1")
-    lines = open(path).readlines()
-    E=[]
-    v=[]
-    s=[]
-    while key not in lines[0]: lines.pop(0)
-    lines.pop(0)
-    while "]" not in lines[0] :
-        v.append(float(lines[0].split()[-2]))
-        s.append(float(lines[0].split()[-1]))
-        lines.pop(0)
-    if not no_E:
-        while (key+"E") not in lines[0]: lines.pop(0)
-        lines.pop(0)
-        if not mid_E:
-            while "]" not in lines[1] :
-                E.append(float(lines[0].split()[0]))
-                lines.pop(0)
-            E.append(float(lines[0].split()[0]))
-            E.append(float(lines[0].split()[1]))
-        else:
-            while "]" not in lines[1] :
-                E.append(float(lines[0].split()[2]))
-                lines.pop(0)
-            E.append(float(lines[0].split()[2]))
-        lines.pop(0)
+    E = []
+    v = []
+    s = []
+    with open(path, 'r') as file:
+        lines = iter(file)
+        # Skip lines until key is found
+        for line in lines:
+            if key in line:
+                break
+
+        # Parse v and s
+        for line in lines:
+            if "]" in line:
+                break
+            parts = line.split()
+            v.append(float(parts[-2]))
+            s.append(float(parts[-1]))
+
+        if not no_E:
+            # Skip lines until key+E is found
+            for line in lines:
+                if (key + "E") in line:
+                    break
+
+            # Parse E
+            for line in lines:
+                if "]" in line:
+                    parts = line.split()
+                    if not mid_E:
+                        E.append(float(parts[0]))
+                        if len(parts) > 1:
+                            E.append(float(parts[1]))
+                    else:
+                        E.append(float(parts[2]))
+                    break
+                parts = line.split()
+                if not mid_E:
+                    E.append(float(parts[0]))
+                else:
+                    E.append(float(parts[2]))
     return E,v,np.multiply(v,s)
 
 
