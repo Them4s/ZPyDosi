@@ -4,6 +4,9 @@
 '''
 Reads the experimental and simulation results, and the preprocessed uncertainties,
 Compute the C/E and their covariance.
+For Efficiency purposes this version of the script only uses sampling to propagate uncertainties
+where differencies between calssical and smapling method were observed. The reason being that for 
+large amount of dosimeters it may otherwised require cluster sized RAM for no reason.
 '''
 
 from ZPyDosi.Common.GetParam import get_param_vari
