@@ -36,7 +36,7 @@ def get_sss_res(path, key):   #key : get_res
         v = float(lines[0].split()[-2])
         return v
 
-def get_sss_det(path, key, mid_E=False, no_E=False):   #key : get_res
+def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_res
     """
     Extract detector spectral data from an Serpent2 detector file.
 
@@ -56,6 +56,9 @@ def get_sss_det(path, key, mid_E=False, no_E=False):   #key : get_res
         energy values.
     no_E : bool, optional
         If ``True``, leave the energy list empty.
+    spatial : bool, optional
+        If ``True``, load the detector spatial discretization.
+    
 
     Returns
     -------
@@ -109,6 +112,45 @@ def get_sss_det(path, key, mid_E=False, no_E=False):   #key : get_res
                     E.append(float(parts[0]))
                 else:
                     E.append(float(parts[2]))
+        if spatial:
+            # Skip lines until key+E is found
+            X=[]
+            for line in lines:
+                if (key + "X") in line:
+                    break
+
+            # Parse X
+            for line in lines:
+                if "]" in line:
+
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                X +=[parts]
+            Y=[]
+            for line in lines:
+                if (key + "Y") in line:
+                    break
+
+            # Parse Y
+            for line in lines:
+                if "]" in line:
+
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                Y +=[parts]
+            Z=[]
+            for line in lines:
+                if (key + "Z") in line:
+                    break
+
+            # Parse Z
+            for line in lines:
+                if "]" in line:
+
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                Z +=[parts]
+        return E,np.array(v),np.multiply(v,s),np.array(X),np.array(Y),np.array(Z)
     return E,v,np.multiply(v,s)
 
 
