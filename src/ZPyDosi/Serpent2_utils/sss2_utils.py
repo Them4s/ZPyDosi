@@ -113,7 +113,6 @@ def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_
                 else:
                     E.append(float(parts[2]))
         if spatial:
-            # Skip lines until key+E is found
             X=[]
             for line in lines:
                 if (key + "X") in line:
