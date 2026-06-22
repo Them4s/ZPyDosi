@@ -150,7 +150,7 @@ def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_
                     break
                 parts = lmap(lambda s: float(s),line.split())
                 Z +=[parts]
-        return E,np.array(v),np.multiply(v,s),np.array(X),np.array(Y),np.array(Z)
+            return E,np.array(v),np.multiply(v,s),np.array(X),np.array(Y),np.array(Z)
     return E,v,np.multiply(v,s)
 
 
