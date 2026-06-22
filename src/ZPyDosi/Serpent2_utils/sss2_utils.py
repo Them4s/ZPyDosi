@@ -121,7 +121,6 @@ def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_
             # Parse X
             for line in lines:
                 if "]" in line:
-
                     break
                 parts = lmap(lambda s: float(s),line.split())
                 X +=[parts]
@@ -133,7 +132,6 @@ def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_
             # Parse Y
             for line in lines:
                 if "]" in line:
-
                     break
                 parts = lmap(lambda s: float(s),line.split())
                 Y +=[parts]
@@ -145,7 +143,6 @@ def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_
             # Parse Z
             for line in lines:
                 if "]" in line:
-
                     break
                 parts = lmap(lambda s: float(s),line.split())
                 Z +=[parts]
