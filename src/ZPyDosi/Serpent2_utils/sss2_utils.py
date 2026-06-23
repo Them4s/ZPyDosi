@@ -36,7 +36,7 @@ def get_sss_res(path, key):   #key : get_res
         v = float(lines[0].split()[-2])
         return v
 
-def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_res
+def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False,time=False):   #key : get_res
     """
     Extract detector spectral data from an Serpent2 detector file.
 
@@ -58,20 +58,27 @@ def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_
         If ``True``, leave the energy list empty.
     spatial : bool, optional
         If ``True``, load the detector spatial discretization.
+    time : bool, optional
+        If ``True``, load the detector time discretization.
     
 
     Returns
     -------
     tuple
-        Tuple ``(E, v, dv)`` where:
-        - ``E`` is a list of energy values (if any),
+        Tuple ``(E, v, dv,[T,X,Y,V)]`` where:
+        - ``E`` is a list of energy values (empty if no_E is True),
         - ``v`` is a list of detector values,
         - ``dv`` is a list or array of absolute uncertainties associated
-          with ``v``.
+          with ``v``,
+        - ``T`` is a list of time values (if time is True not included otherwise),
+        - ``X`` is a list of X coord. values (if spatial is True not included otherwise),
+        - ``Y`` is a list of Y coord. values (if spatial is True not included otherwise),
+        - ``Z`` is a list of Z coord. values (if spatial is True not included otherwise).
     """
     # if not os.path.isfile(path):
         # path=path[:-6]+"1_res.m"
         # print("Warning in get_sss_res for "+str(key)+", change from tmp to tmp1")
+
     E = []
     v = []
     s = []
@@ -112,6 +119,20 @@ def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_
                     E.append(float(parts[0]))
                 else:
                     E.append(float(parts[2]))
+        l_list=[np.array(E),np.array(v),np.multiply(v,s)]
+        if time:
+            T=[]
+            for line in lines:
+                if (key + "T") in line:
+                    break
+
+            # Parse X
+            for line in lines:
+                if "]" in line:
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                T +=[parts]
+            l_list+=[np.array(T)]
         if spatial:
             X=[]
             for line in lines:
@@ -146,8 +167,8 @@ def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False):   #key : get_
                     break
                 parts = lmap(lambda s: float(s),line.split())
                 Z +=[parts]
-            return E,np.array(v),np.multiply(v,s),np.array(X),np.array(Y),np.array(Z)
-    return E,v,np.multiply(v,s)
+            l_list+=[np.array(X),np.array(Y),np.array(Z)]
+    return tuple(l_list)
 
 
 def get_sss_out(path, key):
