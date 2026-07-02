@@ -30,7 +30,11 @@ def get_sss_res(path, key):   #key : get_res
     lines = open(path).readlines()
     while key not in lines[0]: lines.pop(0)
     if lines[0].split()[-3] != "=" :
-        v,s = map(lambda s:float(s), lines[0].split()[-3:-1])
+        vals = lines[0].split("]")[1].split("[")[1].split()
+        v = np.array(lmap(lambda s:float(s), vals[0:-1:2]))
+        s = np.array(lmap(lambda s:float(s), vals[1::2]))
+        if len(v)==1:
+            return v[0], v[0]*s[0]
         return v, v*s
     else :
         v = float(lines[0].split()[-2])
