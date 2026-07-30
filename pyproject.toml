@@ -32,4 +32,22 @@ Issues = "https://gitlab.epfl.ch/zero-power-dosimetry/zpydosi/issues"
 [tool.ruff]
 exclude = ["Scripts"]
 [tool.ruff.lint]
-ignore = ["E701","E741","E402","E721","F841","F601","E712","E401","E711","E722"]
+ignore = ["E701","E741","E402","E721","F841","F601","E712","E401","E711","E722","I001"] # not good, ti modify someday
+extend-select = [
+    "F",        # Pyflakes rules
+    "W",        # PyCodeStyle warnings
+    "E",        # PyCodeStyle errors
+    "I",        # Sort imports properly
+    "UP",       # Warn if certain things can changed due to newer Python versions
+    "C4",       # Catch incorrect use of comprehensions, dict, list, etc
+    "FA",       # Enforce from __future__ import annotations
+    "ISC",      # Good use of string concatenation
+    "ICN",      # Use common import conventions
+    "RET",      # Good return practices
+    "SIM",      # Common simplification rules
+    "TID",      # Some good import practices
+    "TC",       # Enforce importing certain types in a TYPE_CHECKING block
+    "PTH",      # Use pathlib instead of os.path
+    "TD",       # Be diligent with TODO comments
+    "NPY",      # Some numpy-specific things
+]
