@@ -32,9 +32,8 @@ Issues = "https://gitlab.epfl.ch/zero-power-dosimetry/zpydosi/issues"
 [tool.ruff]
 exclude = ["Scripts"]
 [tool.ruff.lint]
-ignore = ["E701","E741","E402","E721","F841","F601","E712","E401","E711","E722","I001"] # not good, ti modify someday
 extend-select = [
     "F",        # Pyflakes rules
-    "W",        # PyCodeStyle warnings
     "E",        # PyCodeStyle errors
 ]
+ignore = ["E701","E741","E402","E721","F841","F601","E712","E401","E711","E722","I001"] # not good, ti modify someday
