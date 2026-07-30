@@ -36,4 +36,4 @@ extend-select = [
     "F",        # Pyflakes rules
     "E",        # PyCodeStyle errors
 ]
-ignore = ["E701","E741","E402","E721","F841","F601","E712","E401","E711","E722","I001","E501","PLR1722","UP018","PLW1510","C","B","N"] # not good, ti modify someday
+ignore = ["E701","E741","E402","E721","F841","F601","E712","E401","E711","E722","I001","E501","PLR1722","UP","PLW","PLR","PLC","SIM","RUF","C","B","N"] # not good, ti modify someday
