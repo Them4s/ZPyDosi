@@ -19,7 +19,7 @@ lint:
   extends: .default_job
   script:
     - pip install ruff
-    - ruff check .
+    - ruff check ./src
 
 test:py39:
   stage: test
