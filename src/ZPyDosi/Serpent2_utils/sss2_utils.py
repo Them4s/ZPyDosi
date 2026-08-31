@@ -1,6 +1,7 @@
 from ..Common.utils_general import lmap, lfilter
 import os
 import numpy as np
+from functools import reduce
 def get_sss_res(path, key):   #key : get_res
     """
     Extract a result value (and uncertainty, if available) from an Serpent2 result file.
@@ -174,6 +175,226 @@ def get_sss_det(path, key, mid_E=False, no_E=False,spatial=False,time=False):   
             l_list+=[np.array(X),np.array(Y),np.array(Z)]
     return tuple(l_list)
 
+def get_sss_det2(path,name,l_reac=["any"])->tuple:    
+    """
+    New Version of load get_sss_det
+        automaticly loads the detector and its attribute attributes from a Serpent det file
+
+    Parameters
+    ----------
+    path : str
+        Path to the Serpent2 detector output file.
+    key : str
+        Identifier used to locate the detector data block in the file.
+    l_reac : list[str], optionnal
+        The list reaction (cannot be parsed from the output file). 
+        The reactions will be replaced by "any" if not specify.
+    
+
+    Returns
+    -------
+    tuple
+        Tuple ``(l_attributes, dim_txt, val,sig)`` where:
+        - ``l_attributes`` is a list continaying the detector attibutes, e.g., reaction, energy, time, spatial mesh
+        - ``dim_txt`` is the list of attributes in ``l_attributes``
+        - ``val`` is the array of detector values.
+        - ``sig`` is the array of absolute uncertainties associated with ``val``.
+
+    """
+    E = []
+    v = []
+    s = []
+    T=[]
+    X=[]
+    Y=[]
+    R=[]
+    PHI=[]
+    THETA=[]
+    Z=[]
+    dim_txt=[]
+    l_attributes=[]
+    ene=False
+    time =False
+
+    dim_txt+=["reac"]
+    l_attributes+=[l_reac]
+    txt=open(path, 'r').read()
+    if (name + "E") in txt:
+        ene=True
+    if (name + "T") in txt:
+        time=True
+    with open(path, 'r') as file:
+        lines = iter(file)
+        # Skip lines until key is found
+        for line in lines:
+            if name in line:
+                break
+
+        # Parse v and s
+        for line in lines:
+            if "]" in line:
+                break
+            parts = line.split()
+            v.append(float(parts[-2]))
+            s.append(float(parts[-1])*float(parts[-2]))
+
+        if time:
+            for line in lines:
+                if (name + "T") in line:
+                    break
+
+            # Parse T
+            for line in lines:
+                if "]" in line:
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                T +=[parts]
+            T=np.array(T)
+            dim_txt+=["T"]
+            l_attributes+=[T]
+
+        if ene:
+            # Skip lines until name+E is found
+            for line in lines:
+                if (name + "E") in line:
+                    break
+
+            # Parse E
+            for line in lines:
+                if "]" in line:
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                E +=[parts]
+            E=np.array(E)
+            dim_txt+=["E"]
+            l_attributes+=[E]
+
+        if (name + "X") in txt:
+            for line in lines:
+                if (name + "X") in line:
+                    break
+
+            # Parse X
+            for line in lines:
+                if "]" in line:
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                X +=[parts]
+            dim_txt+=["X"]
+            X = np.array(X)
+            l_attributes+=[X]
+
+        if (name + "Y") in txt:
+            for line in lines:
+                if (name + "Y") in line:
+                    break
+
+            # Parse Y
+            for line in lines:
+                if "]" in line:
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                Y +=[parts]
+            dim_txt+=["Y"]
+            Y = np.array(Y)
+            l_attributes+=[Y]
+
+        if (name + "R") in txt:
+            for line in lines:
+                if (name + "R") in line:
+                    break
+
+            # Parse Y
+            for line in lines:
+                if "]" in line:
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                R +=[parts]
+            dim_txt+=["R"]
+            R = np.array(R)
+            l_attributes+=[R]
+
+        if (name + "PHI") in txt:
+            for line in lines:
+                if (name + "PHI") in line:
+                    break
+
+            # Parse Y
+            for line in lines:
+                if "]" in line:
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                PHI +=[parts]
+            dim_txt+=["PHI"]
+            PHI = np.array(PHI)
+            l_attributes+=[PHI]
+
+        if (name + "THETA") in txt:
+            for line in lines:
+                if (name + "THETA") in line:
+                    break
+
+            # Parse Y
+            for line in lines:
+                if "]" in line:
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                THETA +=[parts]
+            dim_txt+=["THETA"]
+            THETA = np.array(THETA)
+            l_attributes+=[THETA]
+
+        if (name + "Z") in txt:
+            for line in lines:
+                if (name + "Z") in line:
+                    break
+                
+            # Parse Z
+            for line in lines:
+                if "]" in line:
+                    break
+                parts = lmap(lambda s: float(s),line.split())
+                Z +=[parts]
+            dim_txt+=["Z"]
+            Z=np.array(Z)
+            l_attributes+=[Z]
+        Nt=len(T)
+        Ne=len(E)
+        Nr=len(l_reac) 
+        Nx=len(X) 
+        Ny=len(Y) 
+        NR=len(R) 
+        Nphi=len(PHI) 
+        Ntheta=len(THETA) 
+        Nz=len(Z)
+        # Why are the R PHI and Z not in the same order in the value array ?
+        # Asks SERPENT2 devs!
+        dim=np.array([Nt,Ne,Nr,Nx,Ny,Nz,Ntheta,Nphi,NR])
+        dim=dim[dim!=0]
+        if "THETA" in dim_txt:
+            print("Warning spherical coord not tested order of array should be checked")
+            dim_txt [-3]="THETA"
+            dim_txt [-2]="PHI"
+            dim_txt [-1]="R"
+        elif "PHI" in dim_txt:
+            dim_txt [-3]="Z"
+            dim_txt [-2]="PHI"
+            dim_txt [-1]="R"
+        if len(l_reac)==1 and l_reac[0]=="any": #default behaviour
+            tmp= len(v)/reduce(np.multiply,dim)
+            if tmp!=1 and tmp.is_integer():
+                print("Size of the detector is a multiple of the its dimensions -> assuming multiple reaction are present")
+                tmp2=int(tmp)
+                Nr=tmp2
+                dim=np.array([Nt,Ne,Nr,Nx,Ny,Nz,Ntheta,Nphi,NR])
+                dim=dim[dim!=0]
+                l_reac=["any"]*Nr
+                l_attributes=[l_reac]+l_attributes[1:]
+        dim_txt=tuple(dim_txt)
+        val_shape=tuple(dim.tolist())
+        val=np.reshape(v,shape=tuple(dim.tolist()))
+        sig=np.reshape(s,shape=tuple(dim.tolist()))
+    return tuple(l_attributes,dim_txt,val,sig)
 
 def get_sss_out(path, key):
     """
