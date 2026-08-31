@@ -26,5 +26,5 @@ GENERATE_LATEX         = NO
 HAVE_DOT               = YES
 UML_LOOK               = YES
 
-QUIET                  = YES
+QUIET                  = NO
 WARN_IF_UNDOCUMENTED   = YES
