@@ -4,7 +4,7 @@
 
 PROJECT_NAME           = "ZPyDosi"
 PROJECT_BRIEF          = "Dosimetry functions package"
-OUTPUT_DIRECTORY       = docs/doxygen
+OUTPUT_DIRECTORY       = ./docs/html
 
 INPUT                  = src/ZPyDosi README.md
 RECURSIVE              = YES
