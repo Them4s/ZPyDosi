@@ -1,0 +1,30 @@
+# Doxyfile for ZPyDosi
+# Run with: doxygen Doxyfile
+# Only options that differ from Doxygen's built-in defaults are listed here.
+
+PROJECT_NAME           = "ZPyDosi"
+PROJECT_BRIEF          = "Dosimetry functions package"
+OUTPUT_DIRECTORY       = docs/doxygen
+
+INPUT                  = src/ZPyDosi README.md
+RECURSIVE              = YES
+FILE_PATTERNS          = *.py
+USE_MDFILE_AS_MAINPAGE = README.md
+EXCLUDE_PATTERNS       = */__pycache__/*
+
+JAVADOC_AUTOBRIEF      = YES
+PYTHON_DOCSTRING       = YES
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_LATEX         = NO
+
+HAVE_DOT               = YES
+UML_LOOK               = YES
+
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = YES

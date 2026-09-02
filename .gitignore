@@ -16,4 +16,4 @@ htmlcov/
 .DS_Store
 junit.xml
 .claude/
-docs/doxygen/
+docs
