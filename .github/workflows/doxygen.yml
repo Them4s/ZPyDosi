@@ -1,21 +1,47 @@
-name: Doxygen GitHub Pages Deploy Action
+name: Doxygen docs
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  build:
+    name: Build docs
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: DenverCoder1/doxygen-github-pages-action@v2.0.0
+      - uses: actions/checkout@v4
+
+      - name: Install Doxygen + Graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+
+      - name: Generate docs
+        run: doxygen Doxyfile
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
-          folder: docs/html
-          config_file: Doxyfile
-          doxygen_version: 1.9.6
+          path: docs/doxygen/html
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
