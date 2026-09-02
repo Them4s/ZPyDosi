@@ -1,3 +1,3 @@
 # ZPyDosi
-Package and scripts used and developed for the PETALE program
+Package and scripts used and developed for the PETALE program\n
 The docs: https://them4s.github.io/ZPyDosi/html/index.html
