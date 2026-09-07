@@ -39,7 +39,7 @@ class DataIrrad:
             group_order=0,                      # exponent for the grouping of spectra
             keff_only=False,
             load_Factor=False,
-            load_ratio=True,
+            load_ratio=False,
             unique_only=False       #For activity plotting
             ):                   #To load only the keff values not the dosimeters, used for analysis of critical experiments
         """

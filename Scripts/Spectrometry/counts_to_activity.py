@@ -78,6 +78,7 @@ data_irrad = DataIrrad(    path_csv_data,
             load_hpge_eff=True,
             load_sss_results=False,
             load_ndup=False,
+            load_ratio=True,
             remove_data=False)
 
 data_irrad.aff_description()

@@ -124,6 +124,7 @@ data_irrad = DataIrrad  (   path_csv_data,
                             load_up_pos=Do_load_pos,
                             remove_data=do_remove,
                             load_Factor=load_Factor,
+                            load_ratio=True,
                             unique_only=True  )
 
 # print("COUCOU2")
