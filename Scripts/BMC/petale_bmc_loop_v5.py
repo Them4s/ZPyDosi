@@ -69,11 +69,11 @@ add_csv_path="ref_calc_dir_{}_{}".format(lib,mat)
 if not No_MAYA:
     bd = "{}_crocus_bmc_".format(lib)+socket.gethostname()
     socket_name=socket.gethostname()
-    # paf_xs = f"/msfrdata1/data/xsdata/sss/jeff33_crocus_bmc_{socket.gethostname()}/ace"
-    # paf_bp = f"/msfrdata1/data/xsdata/sss/jeff33_crocus_bmc_{socket.gethostname()}"+"/"+bd
-    paf_bp = "/msfrdata1/data/xsdata/sss/"+bd
+    # paf_xs = f"/path/data/xsdata/sss/jeff33_crocus_bmc_{socket.gethostname()}/ace"
+    # paf_bp = f"/path/data/xsdata/sss/jeff33_crocus_bmc_{socket.gethostname()}"+"/"+bd
+    paf_bp = "/path/data/xsdata/sss/"+bd
 else:
-    paf_bp="/media/thomasligonnet/sup_disk_1/jeff33_pert"
+    paf_bp="/media/YourFolder/sup_disk_1/jeff33_pert"
     socket_name="s1"
 do_sample     = True
 do_plot      = False
@@ -607,34 +607,6 @@ def get_samp(zz,elt,aaa,num):
     return samp
 
 
-if __name__ == '__main__' and False:
-    # if len(sys.argv) != 2:
-    #     print("Usage: {} <ace_file>".format(sys.argv[0]))
-    #     sys.exit(1)
-
-    # ace_filename = "/home/thomasligonnet/sim_far_away/NI_reflector_BMC_test/XS/ace/26-Fe-057-g0-300.ace"
-    ace_filename = "/home/thomasligonnet/sim_local/PETALE/JEFF-3.3/BMC/Fe_In2_test/XS_out/ace/26-Fe-056-ga-0300.ace"
-    ace_filename2 = "/home/thomasligonnet/Documents/XS/xs_lib/JEFF4T4/ace/26-Fe-56g"
-    try:
-        xs_data = parse_ace_file(ace_filename)
-        xs_data2 = parse_ace_file(ace_filename2)
-    except Exception as e:
-        print("Error parsing ACE file:", e)
-        sys.exit(1)
-    nrj=xs_data["102"]['l_nrj']
-    totXS=xs_data["102"]['l_xs']
-    nrj2=xs_data2["102"]['l_nrj']
-    totXS2=xs_data2["102"]['l_xs']
-    plt.figure()
-    # plt.plot(nrj,nrj)
-    plt.plot(nrj,totXS)
-    plt.plot(nrj2,totXS2)
-    plt.xlabel("Energy [MeV]")
-    plt.ylabel("XS [barn]")
-    plt.xscale("log")
-    plt.yscale("log")
-    plt.show()
-
 if No_MAYA:
     cp = shutil.copyfile
     class Dummy:
@@ -888,7 +860,7 @@ for i_loop in range(1 if not Looping else 123456789):
 
             # os.chdir("Calc/num"+str(int(num)))
             if No_MAYA:
-                bashcommand="/home/thomasligonnet/Serpent/sss_tfm_2.5_wgt_map_src/sss2 input -omp "+str(omp)
+                bashcommand="/home/YourFolder/Serpent/sss_tfm_2.5_wgt_map_src/sss2 input -omp "+str(omp)
             else:
                 bashcommand="../../SERPENT/sss2 input -omp "+str(omp)
             # bashcommand="../SERPENT/sss2 input -omp "+str(omp)
